@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<!-- Templates -->
+	<definition name="layout.login" template="/WEB-INF/views/login/login.jsp">
+		<put-attribute name="body" value="" />
+	</definition>
+	
+	<definition name="layout.basic" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="Spring Boot" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="navbar" value="/WEB-INF/views/layout/navbar.jsp" />
+		<put-attribute name="sidebar" value="/WEB-INF/views/layout/sidebar.jsp" />
+		<put-attribute name="breadcrumbs" value="/WEB-INF/views/layout/breadcrumbs.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+		<put-attribute name="script" value="/WEB-INF/views/layout/script.jsp" />
+		<put-attribute name="inline" value="" />
+	</definition>
+	
+	<!-- Pages -->	
+	<definition name="login" extends="layout.login">
+		<put-attribute name="body" value="/WEB-INF/views/login/body.jsp" />
+	</definition>
+	
+	<definition name="home" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/home/index.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/home/home_inline.jsp" />
+	</definition>
+	
+	<definition name="societyRegistration" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/society/registration.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/society/society_inline.jsp" />
+	</definition>
+	
+	<definition name="registrationStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/society/registration_status.jsp" />
+	</definition>
+	
+	<definition name="about" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/home/about.jsp" />
+	</definition>
+	
+	<definition name="memberRow" template="/WEB-INF/views/society/member_row.jsp">	
+	</definition>
+	
+	<definition name="createUser" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/societyUser/createUser.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/societyUser/society_user_inline.jsp" />
+	</definition>
+	
+	<definition name="userList" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/societyUser/user_list.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/societyUser/society_user_inline.jsp" />
+	</definition>
+	
+	<definition name="createUserStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/societyUser/create_user_status.jsp" />
+	</definition>
+	<definition name="reminder" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/reminder/reminder.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/reminder/reminder_inline.jsp" />
+	</definition>
+	
+</tiles-definitions>

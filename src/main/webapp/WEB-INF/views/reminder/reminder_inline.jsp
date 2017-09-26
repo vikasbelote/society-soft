@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/reminder/reminder.js"></script>
