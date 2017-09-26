@@ -22,6 +22,12 @@ public class MenuRightsDomain {
 	private boolean isEnabledMaintainceReport = false;
 	//6 Menu Id
 	private boolean isEnabledUserListMenu = false;
+	//branch menu
+	private boolean isEnabledSettingMenu = false;
+	//7 Menu Id
+	private boolean isEnabledGeneralHeadMenu = false;
+	//8 Menu Id
+	private boolean isEnabledReocrdTransactionMenu = false;
 
 	public void initMenuRights(LoginDomain loginDomain) {
 
@@ -29,7 +35,7 @@ public class MenuRightsDomain {
 			isEnabledRegistrationMenu = true;
 
 		if (loginDomain.getRoleName().equals("Admin")) {
-			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = isEnabledMaintainceReport = isEnabledUserListMenu = true;
+			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = true;
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -61,6 +67,14 @@ public class MenuRightsDomain {
 					isEnabledUserListMenu = true;
 					break;
 				}
+				case 7: {
+					isEnabledGeneralHeadMenu = true;
+					break;
+				}
+				case 8: {
+					isEnabledReocrdTransactionMenu = true;
+					break;
+				}
 				}
 			}
 		}
@@ -70,6 +84,9 @@ public class MenuRightsDomain {
 		
 		if(isEnabledBlanceSheetMenu || isEnabledIncomeAndExpenseMenu || isEnabledMaintainceReport)
 			isEnabledReportMenu = true;
+		
+		if(isEnabledGeneralHeadMenu || isEnabledReocrdTransactionMenu)
+			isEnabledSettingMenu = true;
 	}
 
 	public boolean isEnabledSocietyMenu() {
@@ -142,5 +159,30 @@ public class MenuRightsDomain {
 
 	public void setEnabledUserListMenu(boolean isEnabledUserListMenu) {
 		this.isEnabledUserListMenu = isEnabledUserListMenu;
+	}
+
+	public boolean isEnabledGeneralHeadMenu() {
+		return isEnabledGeneralHeadMenu;
+	}
+
+	public void setEnabledGeneralHeadMenu(boolean isEnabledGeneralHeadMenu) {
+		this.isEnabledGeneralHeadMenu = isEnabledGeneralHeadMenu;
+	}
+
+	public boolean isEnabledReocrdTransactionMenu() {
+		return isEnabledReocrdTransactionMenu;
+	}
+
+	public void setEnabledReocrdTransactionMenu(
+			boolean isEnabledReocrdTransactionMenu) {
+		this.isEnabledReocrdTransactionMenu = isEnabledReocrdTransactionMenu;
+	}
+
+	public boolean isEnabledSettingMenu() {
+		return isEnabledSettingMenu;
+	}
+
+	public void setEnabledSettingMenu(boolean isEnabledSettingMenu) {
+		this.isEnabledSettingMenu = isEnabledSettingMenu;
 	}
 }

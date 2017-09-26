@@ -38,6 +38,10 @@ $(document).ready(function() {
 			'report' : {
 				text : 'Report',
 				type : 'folder'
+			},
+			'setting' : {
+				text : 'Setting',
+				type : 'folder'
 			}
 		}
 		tree_data['society']['additionalParameters'] = {
@@ -73,7 +77,40 @@ $(document).ready(function() {
 				}
 			}
 		}
+	tree_data['report']['additionalParameters'] = {
+			'children' : {
+				'balanceSheet' : {
+					id : 3,
+					text : 'Balance Sheet',
+					type : 'item'
+				},
+				'incomeAndExpense' : {
+					id : 4,
+					text : 'Income & Expense',
+					type : 'item'
+				},
+				'maintenence' : {
+					id : 5,
+					text : 'Maintenence',
+					type : 'item'
+				}
+			}
+		}
 	
+	tree_data['setting']['additionalParameters'] = {
+			'children' : {
+				'generalHead' : {
+					id : 7,
+					text : 'General Head',
+					type : 'item'
+				},
+				'recordTransaction' : {
+					id : 8,
+					text : 'Record Transaction',
+					type : 'item'
+				}
+			}
+		}
 	
 	var menuIdArr = $("#rights").val().split(",");
 	selectMenuItem(menuIdArr, tree_data);

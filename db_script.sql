@@ -1,23 +1,23 @@
-create table sa_menu
+create table sa_general_head
 (
-	 menu_id int auto_increment
-    ,menu_name varchar(100)
+	 general_head_id int auto_increment
+    ,general_head_name varchar(100)
     
-    ,primary key(menu_id)
+    ,primary key(general_head_id)
 );
 
-create table sa_user_access_rights
+create table sa_transaction
 (
-	 user_id int
-    ,menu_id int
+	 transaction_id int auto_increment
+    ,general_head_id int
+    ,transaction_type varchar(10)
+    ,transaction_amount double
+    ,transaction_description varchar(500)
+    ,transaction_date datetime
     
-    ,primary key(user_id, menu_id)
+    ,primary key(transaction_id)
+    ,foreign key(general_head_id)references sa_general_head(general_head_id)on delete set null on update cascade
 );
 
-
-INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('1', 'Create User');
-INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('2', 'Reminder');
-INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('3', 'Balance Sheet');
-INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('4', 'Income & Expense');
-INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('5', 'Maintenence');
-INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('6', 'User List');
+INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('7', 'General Head');
+INSERT INTO `society_app`.`sa_menu` (`menu_id`, `menu_name`) VALUES ('8', 'Record Transaction');

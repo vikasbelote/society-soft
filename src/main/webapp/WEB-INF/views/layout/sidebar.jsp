@@ -62,7 +62,7 @@
 								class="menu-icon fa fa-user"></i> Create User
 						</a> <b class="arrow"></b></li>
 					</c:if>
-					
+
 					<c:if test="${sessionScope.MENURIGHTS.isEnabledCreateUserMenu()}">
 						<li class=""><a href="userList"> <i
 								class="menu-icon fa fa-user"></i> User List
@@ -91,7 +91,8 @@
 								class="menu-icon fa fa-caret-right"></i> Balance Sheet
 						</a> <b class="arrow"></b></li>
 					</c:if>
-					<c:if test="${sessionScope.MENURIGHTS.isEnabledIncomeAndExpenseMenu()}">
+					<c:if
+						test="${sessionScope.MENURIGHTS.isEnabledIncomeAndExpenseMenu()}">
 						<li class=""><a href="balanceSheet"> <i
 								class="menu-icon fa fa-caret-right"></i> Income & Expense
 						</a> <b class="arrow"></b></li>
@@ -103,6 +104,27 @@
 					</c:if>
 
 				</ul></li>
+			<c:if test="${sessionScope.MENURIGHTS.isEnabledSettingMenu()}">
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+						class="menu-icon fa fa-cog"></i> <span class="menu-text">
+							Setting </span> <b class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+
+					<ul class="submenu">
+
+						<c:if test="${sessionScope.MENURIGHTS.isEnabledGeneralHeadMenu()}">
+							<li class=""><a href="generalHead"> <i
+									class="menu-icon fa fa-caret-right"></i> General Head
+							</a> <b class="arrow"></b></li>
+						</c:if>
+
+						<c:if test="${sessionScope.MENURIGHTS.isEnabledReocrdTransactionMenu()}">
+							<li class=""><a href="recordTransaction"> <i
+									class="menu-icon fa fa-caret-right"></i> Record Transaction
+							</a> <b class="arrow"></b></li>
+						</c:if>
+					</ul></li>
+			</c:if>
 		</c:if>
 	</ul>
 	<!-- /.nav-list -->
