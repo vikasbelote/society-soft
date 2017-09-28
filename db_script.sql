@@ -14,6 +14,8 @@ create table sa_general_head
     ,foreign key(section_id)references sa_general_head_section(section_id)on delete set null on update cascade
 );
 
+
+
 create table sa_transaction
 (
 	 transaction_id int auto_increment
