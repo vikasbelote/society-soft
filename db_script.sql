@@ -1,9 +1,17 @@
+create table sa_general_head_section
+(
+	 section_id int auto_increment
+    ,section_name varchar(100)
+    ,primary key(section_id)
+);
+
 create table sa_general_head
 (
 	 general_head_id int auto_increment
     ,general_head_name varchar(100)
-    
+    ,section_id int
     ,primary key(general_head_id)
+    ,foreign key(section_id)references sa_general_head_section(section_id)on delete set null on update cascade
 );
 
 create table sa_transaction

@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/setting/general_head.js"></script>

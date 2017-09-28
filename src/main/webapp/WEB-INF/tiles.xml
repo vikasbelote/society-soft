@@ -64,5 +64,13 @@
 		<put-attribute name="body" value="/WEB-INF/views/reminder/reminder.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/reminder/reminder_inline.jsp" />
 	</definition>
+	<definition name="generalHead" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/setting/generalHead/general_head.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/setting/generalHead/general_head_inline.jsp" />
+	</definition>
+	<definition name="transaction" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/setting/transaction/transaction.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/setting/transaction/transaction_inline.jsp" />
+	</definition>
 	
 </tiles-definitions>

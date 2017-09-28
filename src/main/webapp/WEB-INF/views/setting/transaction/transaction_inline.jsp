@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/setting/transaction.js"></script>
