@@ -18,3 +18,4 @@ INSERT INTO `society_app`.`sa_general_head` (`general_head_id`, `general_head_na
 INSERT INTO `society_app`.`sa_general_head` (`general_head_id`, `general_head_name`, `section_id`, `isDefault`) VALUES ('8', 'INVESTMENTS', '2', b'1');
 INSERT INTO `society_app`.`sa_general_head` (`general_head_id`, `general_head_name`, `section_id`, `isDefault`) VALUES ('9', 'CASH & BANK BALANCE', '2', b'1');
 INSERT INTO `society_app`.`sa_general_head` (`general_head_id`, `general_head_name`, `section_id`, `isDefault`) VALUES ('10', 'EXCESS OF INCOME OVER EXPENDITURE ', '2', b'1');
+
