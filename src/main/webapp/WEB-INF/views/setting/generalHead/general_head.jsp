@@ -48,18 +48,60 @@
 				</div>
 			</div>
 
-			<div class="clearfix form-actions">
+			<div class="">
 				<div class="col-sm-offset-3">
 					<button id="generalHeadSubmitBtn" type="submit"
-						class="btn btn-success">
+						class="btn btn-sm btn-success">
 						<i class="ace-icon fa fa-check bigger-110"></i>Submit
 					</button>
 					&nbsp; &nbsp; &nbsp;
-					<button class="btn" type="reset">
+					<button class="btn btn-sm" type="reset">
 						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
 					</button>
 				</div>
 			</div>
 		</form:form>
+		<div class="space-8"></div>
+		<c:choose>
+			<c:when test="${not empty generalHeadList}">
+				<table id="simple-table"
+					class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th><strong>General Head</strong></th>
+							<th><strong>Balance Sheet Section</strong></th>
+							<th><strong>Is Default</strong></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${ generalHeadList }" var="item">
+							<tr>
+								<td>${ item.generalHeadName }</td>
+								<td data-sectionId="${ item.sectionId }">${ item.sectionName }</td>
+								<td>${ item.isDefault }</td>
+								<td><c:if test="${not item.isDefault }">
+										<a id="editGeneralHeadId" data-generalHeadId="${ item.generalHeadId }"
+											href="#"
+											class="btn btn-xs btn-info editGeneralHead"> <i
+											class="ace-icon fa fa-pencil bigger-120"></i>
+										</a>
+										<button class="btn btn-xs btn-danger deleteGeneralHead" data-generalHeadId="${ item.generalHeadId }">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</button>
+
+									</c:if></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</c:when>
+			<c:otherwise>
+				<div style="text-align: center;">
+					<h2>There is no data present for this search criteria.</h2>
+				</div>
+			</c:otherwise>
+		</c:choose>
+
 	</div>
 </div>

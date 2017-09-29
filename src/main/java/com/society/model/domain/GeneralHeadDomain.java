@@ -5,13 +5,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class GenaralHeadDomain {
+public class GeneralHeadDomain {
 	
 	private Integer generalHeadId;
 	
 	private String generalHeadName;
 	
 	private Integer sectionId;
+	
+	private String sectionName;
+	
+	private Boolean isDefault;
+	
+	private Integer societyId;
 
 	public Integer getGeneralHeadId() {
 		return generalHeadId;
@@ -37,4 +43,27 @@ public class GenaralHeadDomain {
 		this.sectionId = sectionId;
 	}
 	
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	public Integer getSocietyId() {
+		return societyId;
+	}
+
+	public void setSocietyId(Integer societyId) {
+		this.societyId = societyId;
+	}
+
+	public String getSectionName() {
+		return sectionName;
+	}
+
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
+	}
 }
