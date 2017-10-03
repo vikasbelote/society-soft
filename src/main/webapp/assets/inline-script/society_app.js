@@ -8,3 +8,8 @@ function showValidationMsg(titleName, msgText) {
 		class_name: 'gritter-error'
 	});
 }
+
+$('.date-picker').datepicker({
+	autoclose: true,
+	todayHighlight: true
+});

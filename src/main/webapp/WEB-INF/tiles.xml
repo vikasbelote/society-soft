@@ -75,5 +75,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/setting/transaction/transaction.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/setting/transaction/transaction_inline.jsp" />
 	</definition>
+	<definition name="recordTransactionStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/setting/transaction/transaction_status.jsp" />
+	</definition>
 	
 </tiles-definitions>

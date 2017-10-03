@@ -22,6 +22,7 @@
 	<script src="./assets/js/jquery-ui.custom.js"></script>
 	<script src="./assets/js/jquery.ui.touch-punch.js"></script>
 	<script src="./assets/js/chosen.jquery.js"></script>
+	<script src="./assets/js/date-time/bootstrap-datepicker.js"></script>
 	<script src="./assets/js/markdown/markdown.js"></script>
 	<script src="./assets/js/markdown/bootstrap-markdown.js"></script>
 	<script src="./assets/js/jquery.hotkeys.js"></script>

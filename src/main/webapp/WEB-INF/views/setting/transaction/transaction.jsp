@@ -81,8 +81,8 @@
 				</label>
 				<div class="col-sm-9 inputGroupContainer">
 					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<form:input path="transactionDate" class="col-xs-10 col-sm-4"
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<form:input cssClass="col-xs-10 col-sm-4 date-picker" path="transactionDate" data-date-format="yyyy-mm-dd"
 							placeholder="Transaction Date" />
 					</div>
 				</div>
@@ -90,7 +90,7 @@
 
 			<div class="">
 				<div class="col-sm-offset-3">
-					<button id="generalHeadSubmitBtn" type="submit"
+					<button id="transactionSubmitBtn" type="submit"
 						class="btn btn-sm btn-success">
 						<i class="ace-icon fa fa-check bigger-110"></i>Submit
 					</button>
@@ -101,7 +101,7 @@
 				</div>
 			</div>
 		</form:form>
-		<form:form id="deleteForm" commandName="genaralHeadDomain"
+		<form:form id="deleteForm" commandName="transactionDomain"
 			class="form-horizontal hide" action="deleteTransaction">
 
 			<input type="hidden" name="transactionId" id="deleteTransactionId" />
@@ -110,34 +110,38 @@
 		</form:form>
 		<div class="space-8"></div>
 		<c:choose>
-			<c:when test="${not empty transactionList}">
+			<c:when test="${not empty transactionDomainList}">
 				<table id="simple-table" class="table table-bordered table-hover">
 					<thead>
 						<tr>
 							<th><strong>General Head</strong></th>
-							<th><strong>Balance Sheet Section</strong></th>
-							<th><strong>Is Default</strong></th>
+							<th><strong>Type</strong></th>
+							<th><strong>Amount</strong></th>
+							<th><strong>Description</strong></th>
+							<th><strong>Date</strong></th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${ generalHeadList }" var="item">
+						<c:forEach items="${ transactionDomainList }" var="item">
 							<tr>
-								<td>${ item.generalHeadName }</td>
-								<td data-sectionId="${ item.sectionId }">${ item.sectionName }</td>
-								<td>${ item.isDefault }</td>
-								<td><c:if test="${not item.isDefault }">
-										<a id="editGeneralHeadId"
-											data-generalHeadId="${ item.generalHeadId }" href="#"
-											class="btn btn-xs btn-info editGeneralHead"> <i
+								<td data-generalHeadId="${item.generalHeadId}">${ item.generalHeadName }</td>
+								<td data-transactionTypeId="${item.transactionTypeId}">${ item.transactionTypeName }</td>
+								<td>${ item.transactionAmount }</td>
+								<td>${ item.transactionDescription }</td>
+								<td>${ item.transactionDate }</td>
+								<td>
+										<a id="editTransactionId"
+											data-transactionId="${ item.transactionId }" href="#"
+											class="btn btn-xs btn-info editTransaction"> <i
 											class="ace-icon fa fa-pencil bigger-120"></i>
 										</a>
-										<button class="btn btn-xs btn-danger deleteGeneralHead"
-											data-generalHeadId="${ item.generalHeadId }">
+										<button class="btn btn-xs btn-danger deleteTransaction"
+											data-transactionId="${ item.transactionId }">
 											<i class="ace-icon fa fa-trash-o bigger-120"></i>
 										</button>
 
-									</c:if></td>
+									</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -145,7 +149,7 @@
 			</c:when>
 			<c:otherwise>
 				<div style="text-align: center;">
-					<h2>There is no data present for this search criteria.</h2>
+					<h2>There is no single transaction entry recorded.</h2>
 				</div>
 			</c:otherwise>
 		</c:choose>

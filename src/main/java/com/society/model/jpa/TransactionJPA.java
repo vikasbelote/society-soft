@@ -92,4 +92,8 @@ public class TransactionJPA {
 	public void setSociety(SocietyJPA society) {
 		this.society = society;
 	}
+
+	public TransactionTypeJPA getTransactionType() {
+		return transactionType;
+	}
 }
