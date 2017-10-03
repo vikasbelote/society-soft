@@ -54,4 +54,14 @@ public class GeneralHeadController extends BaseController {
 	public ModelAndView registrationStatus() {
 		return new ModelAndView("generalHeadStatus");
 	}
+	
+	@RequestMapping(value = "deleteGeneralHead", method = RequestMethod.POST)
+	public String deleteGeneralHead(@ModelAttribute("genaralHeadDomain") GeneralHeadDomain generalHeadDomain, RedirectAttributes redirectAttributes) {
+		
+		if(generalHeadService.deleteGeneralHead(generalHeadDomain))
+			redirectAttributes.addFlashAttribute("successMsg", "Congrats!!! General head information deeleted successfully.");
+		else
+			redirectAttributes.addFlashAttribute("successMsg", "There is problem with saving information.");
+		return "redirect:/generalHeadStatus";
+	}
 }

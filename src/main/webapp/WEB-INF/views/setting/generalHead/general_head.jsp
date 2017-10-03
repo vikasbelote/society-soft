@@ -14,7 +14,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<form:form id="some-form" commandName="genaralHeadDomain"
+		<form:form id="inserAndUpdateForm" commandName="genaralHeadDomain"
 			class="form-horizontal" action="generalHead">
 
 			<form:hidden path="generalHeadId" />
@@ -61,11 +61,19 @@
 				</div>
 			</div>
 		</form:form>
+		<form:form id="deleteForm" commandName="genaralHeadDomain"
+			class="form-horizontal hide" action="deleteGeneralHead">
+
+			
+			<input type="hidden" name="generalHeadId" id="deleteGeneralHeadId" />
+			<button id="deleteGeneralHeadBtn" type="submit">Submit
+			</button>
+
+		</form:form>
 		<div class="space-8"></div>
 		<c:choose>
 			<c:when test="${not empty generalHeadList}">
-				<table id="simple-table"
-					class="table table-bordered table-hover">
+				<table id="simple-table" class="table table-bordered table-hover">
 					<thead>
 						<tr>
 							<th><strong>General Head</strong></th>
@@ -81,12 +89,13 @@
 								<td data-sectionId="${ item.sectionId }">${ item.sectionName }</td>
 								<td>${ item.isDefault }</td>
 								<td><c:if test="${not item.isDefault }">
-										<a id="editGeneralHeadId" data-generalHeadId="${ item.generalHeadId }"
-											href="#"
+										<a id="editGeneralHeadId"
+											data-generalHeadId="${ item.generalHeadId }" href="#"
 											class="btn btn-xs btn-info editGeneralHead"> <i
 											class="ace-icon fa fa-pencil bigger-120"></i>
 										</a>
-										<button class="btn btn-xs btn-danger deleteGeneralHead" data-generalHeadId="${ item.generalHeadId }">
+										<button class="btn btn-xs btn-danger deleteGeneralHead"
+											data-generalHeadId="${ item.generalHeadId }">
 											<i class="ace-icon fa fa-trash-o bigger-120"></i>
 										</button>
 

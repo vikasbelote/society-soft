@@ -33,11 +33,11 @@
 	});
 	
 	$(".deleteGeneralHead").on(ace.click_event, function() {
+		var generalHeadId = $(this).attr("data-generalHeadId");
 		bootbox.confirm("Are you sure?", function(result) {
 			if(result) {
-				var generalHeadId = $(this).attr("data-generalHeadId");
-				$("#generalHeadId").val(generalHeadId);
-				$("#generalHeadSubmitBtn").trigger("click");
+				$("#deleteGeneralHeadId").val(generalHeadId);
+				$("#deleteGeneralHeadBtn").trigger("click");
 			}
 		});
 	});

@@ -20,8 +20,13 @@ public class TransactionJPA {
 	@Column(name = "transaction_id")
 	private Integer transactionId;
 	
-	@Column(name = "transaction_type")
-	private String transactionType;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "general_head_id")
+	private GeneralHeadJPA generalHead;
+	
+	@ManyToOne(fetch =FetchType.LAZY)
+	@JoinColumn(name = "transaction_type_id")
+	private TransactionTypeJPA transactionType;
 	
 	@Column(name = "transaction_amount")
 	private Double transactionAmount;
@@ -33,8 +38,8 @@ public class TransactionJPA {
 	private Date transactionDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "general_head_id")
-	private GeneralHeadJPA generalHead;
+	@JoinColumn(name = "society_id")
+	private SocietyJPA society;
 
 	public Integer getTransactionId() {
 		return transactionId;
@@ -42,14 +47,6 @@ public class TransactionJPA {
 
 	public void setTransactionId(Integer transactionId) {
 		this.transactionId = transactionId;
-	}
-
-	public String getTransactionType() {
-		return transactionType;
-	}
-
-	public void setTransactionType(String transactionType) {
-		this.transactionType = transactionType;
 	}
 
 	public Double getTransactionAmount() {
@@ -82,5 +79,17 @@ public class TransactionJPA {
 
 	public void setGeneralHead(GeneralHeadJPA generalHead) {
 		this.generalHead = generalHead;
+	}
+
+	public void setTransactionType(TransactionTypeJPA transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public SocietyJPA getSociety() {
+		return society;
+	}
+
+	public void setSociety(SocietyJPA society) {
+		this.society = society;
 	}
 }

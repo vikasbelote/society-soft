@@ -1,6 +1,5 @@
 package com.society.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,20 +8,18 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.society.model.jpa.GeneralHeadJPA;
 
 @Repository
-public class GeneralHeadRepository extends BaseRepository {
+public class TransactionRepository extends BaseRepository {
 	
 	public List<GeneralHeadJPA> getGeneralHeadList(Integer societyId) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<GeneralHeadJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadJPA.class);
 		Root<GeneralHeadJPA> root = criteriaQuery.from(GeneralHeadJPA.class);
-		root.join("section", JoinType.INNER);
 		criteriaQuery.select(root);
 		
 		Predicate nullSocietyIdPredicate = criteriaBuilder.isNull(root.<Integer>get("society").get("societyId"));
@@ -40,53 +37,5 @@ public class GeneralHeadRepository extends BaseRepository {
 			generalHeadList = null;
 		}
 		return generalHeadList;
-	}
-	
-	
-	public boolean insertGeneralHead(GeneralHeadJPA generalHead) {
-		
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			
-			session.saveOrUpdate(generalHead);
-			
-			session.getTransaction().commit();
-			return true;
-		}
-		catch(Exception e) {
-			if(session != null)
-				session.getTransaction().rollback();
-			return false;
-		}
-		finally {
-			if(session != null)
-				session.close();
-		}
-	}
-	
-	public boolean deleteGeneralHead(GeneralHeadJPA generalHead) {
-		
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			
-			
-			session.delete(session.merge(generalHead));
-			
-			session.getTransaction().commit();
-			return true;
-		}
-		catch(Exception e) {
-			if(session != null)
-				session.getTransaction().rollback();
-			return false;
-		}
-		finally {
-			if(session != null)
-				session.close();
-		}
 	}
 }

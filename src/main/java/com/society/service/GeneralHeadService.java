@@ -65,5 +65,12 @@ public class GeneralHeadService {
 		
 		return generalHeadRepository.insertGeneralHead(generalHead);
 	}
+	
+	public boolean deleteGeneralHead(GeneralHeadDomain generalHeadDomain) {
+		
+		GeneralHeadJPA generalHead = new GeneralHeadJPA();
+		generalHead.setGeneralHeadId(generalHeadDomain.getGeneralHeadId());
+		return generalHeadRepository.deleteGeneralHead(generalHead);
+	}
 
 }
