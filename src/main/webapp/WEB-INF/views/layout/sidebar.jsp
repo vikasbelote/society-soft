@@ -93,12 +93,12 @@
 					</c:if>
 					<c:if
 						test="${sessionScope.MENURIGHTS.isEnabledIncomeAndExpenseMenu()}">
-						<li class=""><a href="balanceSheet"> <i
+						<li class=""><a href="incomeAndExpense"> <i
 								class="menu-icon fa fa-caret-right"></i> Income & Expense
 						</a> <b class="arrow"></b></li>
 					</c:if>
 					<c:if test="${sessionScope.MENURIGHTS.isEnabledMaintainceReport()}">
-						<li class=""><a href="balanceSheet"> <i
+						<li class=""><a href="maintaince"> <i
 								class="menu-icon fa fa-caret-right"></i> Member Maintenance
 						</a> <b class="arrow"></b></li>
 					</c:if>
