@@ -4,25 +4,17 @@ import java.util.List;
 
 public class SectionReportModel {
 	
-	private String sectionName;
-	
 	private String currentYear;
 	
 	private String prevYear;
 	
 	private List<GeneralHeadReportModel> generalHeadList;
 	
+	private List<TransactionReportModel> defaultTransactionList;
+	
 	private Double grossTotalCurrentYear;
 	
 	private Double grossTotalPrevYear;
-
-	public String getSectionName() {
-		return sectionName;
-	}
-
-	public void setSectionName(String sectionName) {
-		this.sectionName = sectionName;
-	}
 
 	public String getCurrentYear() {
 		return currentYear;
@@ -46,5 +38,30 @@ public class SectionReportModel {
 
 	public void setGeneralHeadList(List<GeneralHeadReportModel> generalHeadList) {
 		this.generalHeadList = generalHeadList;
+	}
+
+	public Double getGrossTotalCurrentYear() {
+		return grossTotalCurrentYear;
+	}
+
+	public void setGrossTotalCurrentYear(Double grossTotalCurrentYear) {
+		this.grossTotalCurrentYear = grossTotalCurrentYear;
+	}
+
+	public Double getGrossTotalPrevYear() {
+		return grossTotalPrevYear;
+	}
+
+	public void setGrossTotalPrevYear(Double grossTotalPrevYear) {
+		this.grossTotalPrevYear = grossTotalPrevYear;
+	}
+
+	public List<TransactionReportModel> getDefaultTransactionList() {
+		return defaultTransactionList;
+	}
+
+	public void setDefaultTransactionList(
+			List<TransactionReportModel> defaultTransactionList) {
+		this.defaultTransactionList = defaultTransactionList;
 	}
 }

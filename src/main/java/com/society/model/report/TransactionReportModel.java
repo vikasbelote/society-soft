@@ -4,9 +4,11 @@ public class TransactionReportModel {
 	
 	private String description;
 	
-	private Double amount;
+	private Double currentYearAmount;
 	
-	private String year;
+	private Double lastYearAmount;
+	
+	private Double totalAmount;
 
 	public String getDescription() {
 		return description;
@@ -16,19 +18,29 @@ public class TransactionReportModel {
 		this.description = description;
 	}
 
-	public Double getAmount() {
-		return amount;
+	public Double getCurrentYearAmount() {
+		return currentYearAmount;
 	}
 
-	public void setAmount(Double amount) {
-		this.amount = amount;
+	public void setCurrentYearAmount(Double currentYearAmount) {
+		this.currentYearAmount = currentYearAmount;
 	}
 
-	public String getYear() {
-		return year;
+	public Double getLastYearAmount() {
+		return lastYearAmount;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setLastYearAmount(Double lastYearAmount) {
+		this.lastYearAmount = lastYearAmount;
 	}
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	
 }

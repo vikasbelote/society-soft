@@ -1,5 +1,7 @@
 package com.society.model.jpa;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -32,6 +35,9 @@ public class GeneralHeadJPA {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "society_id")
 	private SocietyJPA society;
+	
+	@OneToMany(mappedBy = "generalHead", fetch = FetchType.LAZY)
+	private List<TransactionJPA> transactionList;
 
 	public Integer getGeneralHeadId() {
 		return generalHeadId;
@@ -71,6 +77,14 @@ public class GeneralHeadJPA {
 
 	public void setSociety(SocietyJPA society) {
 		this.society = society;
+	}
+
+	public List<TransactionJPA> getTransactionList() {
+		return transactionList;
+	}
+
+	public void setTransactionList(List<TransactionJPA> transactionList) {
+		this.transactionList = transactionList;
 	}
 	
 }
