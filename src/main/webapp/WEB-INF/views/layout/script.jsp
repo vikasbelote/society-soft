@@ -15,6 +15,8 @@
 
 	<!-- page specific plugin scripts -->
 	<script src="./assets/js/fuelux/fuelux.tree.js"></script>
+	<script src="./assets/js/jquery-ui.js"></script>
+    <script src="./assets/js/jquery.ui.touch-punch.js"></script>
 
 	<!--[if lte IE 8]>
 		  <script src="./assets/js/excanvas.js"></script>

@@ -45,7 +45,7 @@ jQuery(function($) {
 			$this.markdown()
 
 		$this.parent().find('.btn').addClass('btn-white');
-	})
+	});
 
 	function showErrorAlert(reason, detail) {
 		var msg = '';

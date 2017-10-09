@@ -18,6 +18,19 @@
 			class="form-horizontal" action="recordTransaction">
 
 			<form:hidden path="transactionId" />
+			
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right">Transaction Description
+					<i class="fa fa-asterisk" style="color: red;"></i>
+				</label>
+				<div class="col-sm-9 inputGroupContainer">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<form:input path="transactionDescription" class="col-xs-10 col-sm-4"
+							placeholder="Transaction Description" />
+					</div>
+				</div>
+			</div>
 
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right">General
@@ -58,19 +71,6 @@
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
 						<form:input path="transactionAmount" class="col-xs-10 col-sm-4"
 							placeholder="Transaction Amount" />
-					</div>
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-sm-3 control-label no-padding-right">Transaction Description
-					<i class="fa fa-asterisk" style="color: red;"></i>
-				</label>
-				<div class="col-sm-9 inputGroupContainer">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<form:input path="transactionDescription" class="col-xs-10 col-sm-4"
-							placeholder="Transaction Description" />
 					</div>
 				</div>
 			</div>

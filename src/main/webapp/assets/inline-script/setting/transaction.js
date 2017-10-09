@@ -1,5 +1,11 @@
 (function($){
 	
+	//custom autocomplete (category selection)
+	
+
+	
+	
+	
 	$(".editTransaction").click(function(){
 		
 		var transactionId = $(this).attr("data-transactionId");

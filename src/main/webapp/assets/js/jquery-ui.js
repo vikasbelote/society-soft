@@ -7241,7 +7241,11 @@ $.widget( "ui.autocomplete", {
 			menuselect: function( event, ui ) {
 				var item = ui.item.data( "ui-autocomplete-item" ),
 					previous = this.previous;
-
+							
+				//setting custom atrribute
+				this.element.attr("data-descId", ui.item.attr("data-descId"));
+				this.element.attr("data-generalHeadId", ui.item.attr("data-generalHeadId"));
+				
 				// only trigger when focus was lost (click on menu)
 				if ( this.element[ 0 ] !== this.document[ 0 ].activeElement ) {
 					this.element.focus();
