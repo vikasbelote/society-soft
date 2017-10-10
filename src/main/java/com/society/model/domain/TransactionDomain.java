@@ -10,11 +10,9 @@ public class TransactionDomain {
 	
 	private String generalHeadName;
 	
-	private Integer transactionTypeId;
-	
-	private String transactionTypeName;
-	
 	private Double transactionAmount;
+	
+	private Integer transactionDescriptionId;
 	
 	private String transactionDescription;
 	
@@ -70,14 +68,6 @@ public class TransactionDomain {
 		this.societyId = societyId;
 	}
 
-	public Integer getTransactionTypeId() {
-		return transactionTypeId;
-	}
-
-	public void setTransactionTypeId(Integer transactionTypeId) {
-		this.transactionTypeId = transactionTypeId;
-	}
-
 	public String getGeneralHeadName() {
 		return generalHeadName;
 	}
@@ -86,11 +76,11 @@ public class TransactionDomain {
 		this.generalHeadName = generalHeadName;
 	}
 
-	public String getTransactionTypeName() {
-		return transactionTypeName;
+	public Integer getTransactionDescriptionId() {
+		return transactionDescriptionId;
 	}
 
-	public void setTransactionTypeName(String transactionTypeName) {
-		this.transactionTypeName = transactionTypeName;
+	public void setTransactionDescriptionId(Integer transactionDescriptionId) {
+		this.transactionDescriptionId = transactionDescriptionId;
 	}
 }

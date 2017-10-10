@@ -37,51 +37,7 @@ public class TransactionController extends BaseController {
 		Map<String, List<DropDownHelper>> dropDownMap = transactionService.getMasterData(societyId);
 		
 		List<TransactionDomain> transactionDomainList = transactionService.getTransactionEntry(societyId);
-		
-		List<TransactionDescriptionDomain> tranDescDomainList = new ArrayList<TransactionDescriptionDomain>();
-		
-		TransactionDescriptionDomain tranDescDomain = new TransactionDescriptionDomain();
-		tranDescDomain.setDescId(1);
-		tranDescDomain.setLabel("Default 1");
-		tranDescDomain.setGeneralHeadId(99999);
-		tranDescDomain.setGeneralHeadName("");
-		
-		TransactionDescriptionDomain tranDescDomain1 = new TransactionDescriptionDomain();
-		tranDescDomain1.setDescId(2);
-		tranDescDomain1.setLabel("Default 2");
-		tranDescDomain1.setGeneralHeadId(99999);
-		tranDescDomain1.setGeneralHeadName("");
-		
-		TransactionDescriptionDomain tranDescDomain2 = new TransactionDescriptionDomain();
-		tranDescDomain2.setDescId(3);
-		tranDescDomain2.setLabel("Default 3");
-		tranDescDomain2.setGeneralHeadId(99999);
-		tranDescDomain2.setGeneralHeadName("");
-		
-		TransactionDescriptionDomain tranDescDomain3 = new TransactionDescriptionDomain();
-		tranDescDomain3.setDescId(4);
-		tranDescDomain3.setLabel("SH 1");
-		tranDescDomain3.setGeneralHeadId(1);
-		tranDescDomain3.setGeneralHeadName("Share Capital");
-		
-		TransactionDescriptionDomain tranDescDomain4 = new TransactionDescriptionDomain();
-		tranDescDomain4.setDescId(5);
-		tranDescDomain4.setLabel("SH 2");
-		tranDescDomain4.setGeneralHeadId(1);
-		tranDescDomain4.setGeneralHeadName("Share Capital");
-		
-		TransactionDescriptionDomain tranDescDomain5 = new TransactionDescriptionDomain();
-		tranDescDomain5.setDescId(6);
-		tranDescDomain5.setLabel("SH 3");
-		tranDescDomain5.setGeneralHeadId(1);
-		tranDescDomain5.setGeneralHeadName("Share Capital");
-		
-		tranDescDomainList.add(tranDescDomain);
-		tranDescDomainList.add(tranDescDomain1);
-		tranDescDomainList.add(tranDescDomain2);
-		tranDescDomainList.add(tranDescDomain3);
-		tranDescDomainList.add(tranDescDomain4);
-		tranDescDomainList.add(tranDescDomain5);
+		List<TransactionDescriptionDomain> tranDescDomainList = transactionService.getTransactionDescriptionDomainList(societyId);
 		
 		ModelAndView modelAndView = new ModelAndView("transaction", "transactionDomain", new TransactionDomain());
 		modelAndView.addObject(breadCrumbList);

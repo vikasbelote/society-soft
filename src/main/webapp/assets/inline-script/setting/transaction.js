@@ -1,28 +1,22 @@
 (function($){
 	
-	//custom autocomplete (category selection)
-	
-
-	
-	
-	
 	$(".editTransaction").click(function(){
 		
 		var transactionId = $(this).attr("data-transactionId");
 		
 		var editTr = $(this).parents('tr');
 		var generalHeadId = editTr.find("td:eq(0)").attr("data-generalHeadId");
-		var tranTypeId = editTr.find("td:eq(1)").attr("data-transactionTypeId");
+		var transactionDescriptionId = editTr.find("td:eq(1)").attr("data-transactionDescriptionId");
+		var transactionDescription = editTr.find("td:eq(1)").text();
 		var transactionAmout = editTr.find("td:eq(2)").text();
-		var transactionDescription = editTr.find("td:eq(3)").text();
-		var transactionDate = editTr.find("td:eq(4)").text();
+		var transactionDate = editTr.find("td:eq(3)").text();
 		
 		clear();
 		$("#transactionId").val(transactionId);
 		$("#generalHeadId").val(generalHeadId);
-		$("#transactionTypeId").val(tranTypeId);
-		$("#transactionAmount").val(transactionAmout);
+		$("#transactionDescriptionId").val(transactionDescriptionId);
 		$("#transactionDescription").val(transactionDescription);
+		$("#transactionAmount").val(transactionAmout);
 		$("#transactionDate").val(transactionDate);
 	});
 	
@@ -68,6 +62,16 @@
 				$("#deleteTransactionBtn").trigger("click");
 			}
 		});
+	});
+	
+//	$("#transactionDescription").change(function() {
+//		//alert("Inline Function is called");
+//	
+//	});
+	
+	$('#transactionDescription').on('keydown keyup', function() {
+		$("#transactionDescriptionId").val("");
+		$("#generalHeadId").val("-1");
 	});
 	
 })(jQuery);

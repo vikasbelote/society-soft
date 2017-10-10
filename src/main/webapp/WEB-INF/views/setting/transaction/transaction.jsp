@@ -26,6 +26,7 @@
 				<div class="col-sm-9 inputGroupContainer">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<form:hidden path="transactionDescriptionId" />
 						<form:input path="transactionDescription" class="col-xs-10 col-sm-4"
 							placeholder="Transaction Description" />
 					</div>
@@ -42,21 +43,6 @@
 						<form:select path="generalHeadId" class="col-xs-10 col-sm-4">
 							<form:option value="-1" label="--- Select ---" />
 							<form:options itemLabel="text" itemValue="value" items="${generalHeadList}" />
-						</form:select>
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-sm-3 control-label no-padding-right">Transaction Type
-					<i class="fa fa-asterisk" style="color: red;"></i>
-				</label>
-				<div class="col-sm-9 inputGroupContainer">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-home"></i></span>
-						<form:select path="transactionTypeId" class="col-xs-10 col-sm-4">
-							<form:option value="-1" label="--- Select ---" />
-							<form:options itemLabel="text" itemValue="value" items="${transactionTypeList}" />
 						</form:select>
 					</div>
 				</div>
@@ -115,9 +101,8 @@
 					<thead>
 						<tr>
 							<th><strong>General Head</strong></th>
-							<th><strong>Type</strong></th>
-							<th><strong>Amount</strong></th>
 							<th><strong>Description</strong></th>
+							<th><strong>Amount</strong></th>
 							<th><strong>Date</strong></th>
 							<th></th>
 						</tr>
@@ -126,9 +111,8 @@
 						<c:forEach items="${ transactionDomainList }" var="item">
 							<tr>
 								<td data-generalHeadId="${item.generalHeadId}">${ item.generalHeadName }</td>
-								<td data-transactionTypeId="${item.transactionTypeId}">${ item.transactionTypeName }</td>
+								<td data-transactionDescriptionId="${item.transactionDescriptionId}">${ item.transactionDescription }</td>
 								<td>${ item.transactionAmount }</td>
-								<td>${ item.transactionDescription }</td>
 								<td>${ item.transactionDate }</td>
 								<td>
 										<a id="editTransactionId"

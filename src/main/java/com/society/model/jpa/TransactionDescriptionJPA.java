@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "sa_transaction_description")
-public class TransactionDescription {
+public class TransactionDescriptionJPA {
 	
 	@Id
 	@GeneratedValue

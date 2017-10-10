@@ -25,14 +25,11 @@ public class TransactionJPA {
 	private GeneralHeadJPA generalHead;
 	
 	@ManyToOne(fetch =FetchType.LAZY)
-	@JoinColumn(name = "transaction_type_id")
-	private TransactionTypeJPA transactionType;
+	@JoinColumn(name = "transaction_description_id")
+	private TransactionDescriptionJPA transactionDescription;
 	
 	@Column(name = "transaction_amount")
 	private Double transactionAmount;
-	
-	@Column(name = "transaction_description")
-	private String transactionDescription;
 	
 	@Column(name = "transaction_date")
 	private Date transactionDate;
@@ -57,13 +54,6 @@ public class TransactionJPA {
 		this.transactionAmount = transactionAmount;
 	}
 
-	public String getTransactionDescription() {
-		return transactionDescription;
-	}
-
-	public void setTransactionDescription(String transactionDescription) {
-		this.transactionDescription = transactionDescription;
-	}
 
 	public Date getTransactionDate() {
 		return transactionDate;
@@ -81,10 +71,6 @@ public class TransactionJPA {
 		this.generalHead = generalHead;
 	}
 
-	public void setTransactionType(TransactionTypeJPA transactionType) {
-		this.transactionType = transactionType;
-	}
-
 	public SocietyJPA getSociety() {
 		return society;
 	}
@@ -93,7 +79,12 @@ public class TransactionJPA {
 		this.society = society;
 	}
 
-	public TransactionTypeJPA getTransactionType() {
-		return transactionType;
+	public TransactionDescriptionJPA getTransactionDescription() {
+		return transactionDescription;
+	}
+
+	public void setTransactionDescription(
+			TransactionDescriptionJPA transactionDescription) {
+		this.transactionDescription = transactionDescription;
 	}
 }

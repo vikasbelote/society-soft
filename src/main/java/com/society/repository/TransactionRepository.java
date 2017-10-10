@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.RoleJPA;
 import com.society.model.jpa.SocietyMemberJPA;
+import com.society.model.jpa.TransactionDescriptionJPA;
 import com.society.model.jpa.TransactionJPA;
 
 @Repository
@@ -49,7 +50,7 @@ public class TransactionRepository extends BaseRepository {
 		CriteriaQuery<TransactionJPA> criteriaQuery = criteriaBuilder.createQuery(TransactionJPA.class);
 		Root<TransactionJPA> root = criteriaQuery.from(TransactionJPA.class);
 		root.join("generalHead", JoinType.INNER);
-		root.join("transactionType", JoinType.INNER);
+		root.join("transactionDescription", JoinType.INNER);
 		criteriaQuery.select(root);
 		criteriaQuery.where(criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), societyId));
 		
@@ -63,12 +64,34 @@ public class TransactionRepository extends BaseRepository {
 		return transactionList;
 	}
 	
-	public boolean insertTransactionEntry(TransactionJPA transaction) {
+	public List<TransactionDescriptionJPA> getTransactionDescription(Integer societyId) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<TransactionDescriptionJPA> criteriaQuery = criteriaBuilder.createQuery(TransactionDescriptionJPA.class);
+		Root<TransactionDescriptionJPA> root = criteriaQuery.from(TransactionDescriptionJPA.class);
+		root.join("generalHead", JoinType.INNER);
+		criteriaQuery.select(root);
+		criteriaQuery.where(criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), societyId));
+		
+		List<TransactionDescriptionJPA> transactionDescriptionList;
+		try {
+			transactionDescriptionList = entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			transactionDescriptionList = null;
+		}
+		return transactionDescriptionList;
+	}
+	
+	public boolean insertTransactionEntry(TransactionJPA transaction , TransactionDescriptionJPA transactionDescription) {
 		
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
+			
+			if(transactionDescription.getDescId() == null)
+				session.save(transactionDescription);
 			
 			session.saveOrUpdate(transaction);
 			

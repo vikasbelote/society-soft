@@ -8,7 +8,9 @@ public class GeneralHeadReportModel {
 	
 	private List<TransactionReportModel> transactionList;
 	
-	private Double totalGeneralHeadAmount;
+	private Double totalCurrentYearGeneralHeadAmount;
+	
+	private Double totalLastYearGeneralHeadAmount;
 
 	public String getGeneralHeadName() {
 		return generalHeadName;
@@ -26,11 +28,24 @@ public class GeneralHeadReportModel {
 		this.transactionList = transactionList;
 	}
 
-	public Double getTotalGeneralHeadAmount() {
-		return totalGeneralHeadAmount;
+	public Double getTotalCurrentYearGeneralHeadAmount() {
+		return totalCurrentYearGeneralHeadAmount;
 	}
 
-	public void setTotalGeneralHeadAmount(Double totalGeneralHeadAmount) {
-		this.totalGeneralHeadAmount = totalGeneralHeadAmount;
+	public void setTotalCurrentYearGeneralHeadAmount(
+			Double totalCurrentYearGeneralHeadAmount) {
+		this.totalCurrentYearGeneralHeadAmount = totalCurrentYearGeneralHeadAmount;
 	}
+
+	public Double getTotalLastYearGeneralHeadAmount() {
+		return totalLastYearGeneralHeadAmount;
+	}
+
+	public void setTotalLastYearGeneralHeadAmount(
+			Double totalLastYearGeneralHeadAmount) {
+		this.totalLastYearGeneralHeadAmount = totalLastYearGeneralHeadAmount;
+	}
+
+	
+	
 }

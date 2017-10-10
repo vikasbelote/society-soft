@@ -4,8 +4,16 @@
 			_create: function() {
 				this._super();
 				this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
-				//this.element.attr("data-dId", "123");
+				this._on( this.menu.element, {
+					menuselect: function( event, ui ) {
+						this.element.attr("data-descId", ui.item.attr("data-descId"));
+						this.element.attr("data-generalHeadId", ui.item.attr("data-generalHeadId"));
+						$("#generalHeadId").val(ui.item.attr("data-generalHeadId"));
+						$("#transactionDescriptionId").val(ui.item.attr("data-descId"));
+					}
+				});
 			},
+			
 			_renderMenu: function( ul, items ) {
 				var that = this,
 				currentGeneralHeadName = "";
@@ -42,6 +50,22 @@
 			delay: 0,
 			source: data
 		});
+		
+		$("#transactionDescription").change(function() {
+			
+			var transactionDescriptionId = $("#transactionDescriptionId").val();
+			if(transactionDescriptionId != "")
+				return;
+			
+			var description = $(this).val();
+			$.each(data, function( index, item ){
+				if(description == item.label) {
+					$("#generalHeadId").val(item.generalHeadId);
+					$("#transactionDescriptionId").val(item.descId);
+				}
+			});
+		});
+		
 	})(jQuery);
 </script>
 
