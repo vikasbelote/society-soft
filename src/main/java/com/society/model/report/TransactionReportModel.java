@@ -7,8 +7,6 @@ public class TransactionReportModel {
 	private Double currentYearAmount;
 	
 	private Double lastYearAmount;
-	
-	private Double totalAmount;
 
 	public String getDescription() {
 		return description;
@@ -33,14 +31,4 @@ public class TransactionReportModel {
 	public void setLastYearAmount(Double lastYearAmount) {
 		this.lastYearAmount = lastYearAmount;
 	}
-
-	public Double getTotalAmount() {
-		return totalAmount;
-	}
-
-	public void setTotalAmount(Double totalAmount) {
-		this.totalAmount = totalAmount;
-	}
-
-	
 }
