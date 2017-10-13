@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.helper.model.BreadCrumb;
 import com.society.model.domain.GeneralHeadDomain;
+import com.society.model.domain.SectionDomain;
 import com.society.service.GeneralHeadService;
 
 @Controller
@@ -30,10 +31,12 @@ public class GeneralHeadController extends BaseController {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		List<GeneralHeadDomain> generalHeadList = generalHeadService.getGeneralHeadList(societyId);
+		List<SectionDomain> sectionList = generalHeadService.getSectionList();
 		
 		ModelAndView modelAndView = new ModelAndView("generalHead", "genaralHeadDomain", new GeneralHeadDomain());
 		modelAndView.addObject(breadCrumbList);
 		modelAndView.addObject("generalHeadList", generalHeadList);
+		modelAndView.addObject("sectionList", sectionList);
 		return modelAndView;
 	}
 	

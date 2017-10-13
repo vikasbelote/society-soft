@@ -18,6 +18,8 @@ public class GeneralHeadDomain {
 	private Boolean isDefault;
 	
 	private Integer societyId;
+	
+	private String reportName;
 
 	public Integer getGeneralHeadId() {
 		return generalHeadId;
@@ -65,5 +67,13 @@ public class GeneralHeadDomain {
 
 	public void setSectionName(String sectionName) {
 		this.sectionName = sectionName;
+	}
+
+	public String getReportName() {
+		return reportName;
+	}
+
+	public void setReportName(String reportName) {
+		this.reportName = reportName;
 	}
 }

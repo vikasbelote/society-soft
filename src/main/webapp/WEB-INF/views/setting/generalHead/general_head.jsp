@@ -41,8 +41,7 @@
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
 						<form:select path="sectionId" class="col-xs-10 col-sm-4">
 							<form:option value="-1" label="--- Select ---" />
-							<form:option value="1" label="Calpital & Liabilities" />
-							<form:option value="2" label="Assets" />
+							<form:options items="${ sectionList }" itemValue="sectionId" itemLabel="sectionName" />
 						</form:select>
 					</div>
 				</div>
@@ -76,8 +75,9 @@
 				<table id="simple-table" class="table table-bordered table-hover">
 					<thead>
 						<tr>
+							<th><strong>Report Name</strong></th>
 							<th><strong>General Head</strong></th>
-							<th><strong>Balance Sheet Section</strong></th>
+							<th><strong>Section</strong></th>
 							<th><strong>Is Default</strong></th>
 							<th></th>
 						</tr>
@@ -85,6 +85,7 @@
 					<tbody>
 						<c:forEach items="${ generalHeadList }" var="item">
 							<tr>
+								<td>${ item.reportName }</td>
 								<td>${ item.generalHeadName }</td>
 								<td data-sectionId="${ item.sectionId }">${ item.sectionName }</td>
 								<td>${ item.isDefault }</td>

@@ -9,6 +9,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.society.constant.SectionEnum;
 import com.society.model.domain.BalanceSheetDomain;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.TransactionJPA;
@@ -35,7 +36,7 @@ public class BalanceSheetService {
 	    String currentYearRange = getYear(balanceSheetDomain.getCurrentYearStartDate()) + "-" + getYear(balanceSheetDomain.getCurrentYearEndDate());
 	    String lastYearRange = getYear(balanceSheetDomain.getLastYearStartDate()) + "-" + getYear(balanceSheetDomain.getLastYearEndDate());
 	    
-		List<GeneralHeadJPA> generalHeadList = balanceSheetRepository.getBalanceSheetData(balanceSheetDomain.getSocietyId());
+		List<GeneralHeadJPA> generalHeadList = balanceSheetRepository.getBalanceSheetData(balanceSheetDomain);
 		
 		List<GeneralHeadReportModel> liabilitesGeneralHeadList = new ArrayList<GeneralHeadReportModel>();
 		List<GeneralHeadReportModel> assetsGeneralHeadList = new ArrayList<GeneralHeadReportModel>();
@@ -98,9 +99,9 @@ public class BalanceSheetService {
 			generalHead.setTotalCurrentYearGeneralHeadAmount(totalCurrentYearGeneralHeadAmount);
 			generalHead.setTotalLastYearGeneralHeadAmount(totalLastYearGeneralHeadAmount);
 			
-			if(generalHeadDB.getSection().getSectionId() == 1)
+			if(generalHeadDB.getSection().getSectionName().equals(SectionEnum.LC.value()))
 				liabilitesGeneralHeadList.add(generalHead);
-			else
+			else if(generalHeadDB.getSection().getSectionName().equals(SectionEnum.PA.value()))
 				assetsGeneralHeadList.add(generalHead);
 		}
 		
