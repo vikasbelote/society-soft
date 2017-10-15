@@ -98,6 +98,11 @@
                     }
                     handle = handle.closest('.' + list.options.handleClass);
                 }
+                
+                if(handle.parents("ol").hasClass("custom-nodrag"))
+                	return;
+                
+                
 				//ACE
                 if (!handle.length || list.dragEl || ('button' in e && e.button !== 0) || ('touches' in e && e.touches.length !== 1)) {
                     return;

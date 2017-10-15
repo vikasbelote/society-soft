@@ -10,6 +10,7 @@
 		var transactionDescription = editTr.find("td:eq(1)").text();
 		var transactionAmout = editTr.find("td:eq(2)").text();
 		var transactionDate = editTr.find("td:eq(3)").text();
+		var transactionType = editTr.find("td:eq(4)").text();
 		
 		clear();
 		$("#transactionId").val(transactionId);
@@ -18,6 +19,7 @@
 		$("#transactionDescription").val(transactionDescription);
 		$("#transactionAmount").val(transactionAmout);
 		$("#transactionDate").val(transactionDate);
+		$("#transactionType").val(transactionType);
 	});
 	
 	$("#transactionSubmitBtn").click(function(){

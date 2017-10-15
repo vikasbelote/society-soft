@@ -123,6 +123,12 @@
 									class="menu-icon fa fa-caret-right"></i> Record Transaction
 							</a> <b class="arrow"></b></li>
 						</c:if>
+						
+						<c:if test="${sessionScope.MENURIGHTS.isEnableSocietyConfigurationMenu()}">
+							<li class=""><a href="societyConfig"> <i
+									class="menu-icon fa fa-caret-right"></i> Society Configuration
+							</a> <b class="arrow"></b></li>
+						</c:if>
 					</ul></li>
 			</c:if>
 		</c:if>

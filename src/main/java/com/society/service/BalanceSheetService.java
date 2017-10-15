@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.society.constant.SectionEnum;
+import com.society.constant.TypeEnum;
 import com.society.model.domain.BalanceSheetDomain;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.TransactionJPA;
@@ -33,10 +34,178 @@ public class BalanceSheetService {
 	
 	public BalanceSheet getBalanceSheetData(BalanceSheetDomain balanceSheetDomain) {
 		
+		String currentYearRange = getYear(balanceSheetDomain.getCurrentYearStartDate()) + "-" + getYear(balanceSheetDomain.getCurrentYearEndDate());
+	    String lastYearRange = getYear(balanceSheetDomain.getLastYearStartDate()) + "-" + getYear(balanceSheetDomain.getLastYearEndDate());
+	    
+	    List<GeneralHeadReportModel> liabilitesGeneralHeadList = new ArrayList<GeneralHeadReportModel>();
+		List<GeneralHeadReportModel> assetsGeneralHeadList = new ArrayList<GeneralHeadReportModel>();
+	    
+	    List<TransactionJPA> transactionListDB = balanceSheetRepository.getBalanceSheetData(balanceSheetDomain);
+	    for(TransactionJPA transactionDB : transactionListDB) {
+	    	
+	    	//Find General Head for this transaction
+	    	GeneralHeadJPA generalHeadDB = transactionDB.getGeneralHead();
+	    	GeneralHeadReportModel currentGeneralHeadReportModel = null;
+	    	//Liabilities General Head
+	    	for(GeneralHeadReportModel generalHeadReportModel : liabilitesGeneralHeadList) {
+	    		if(generalHeadReportModel.getGeneralHeadName().equals(generalHeadDB.getGeneralHeadName())){
+	    			currentGeneralHeadReportModel = generalHeadReportModel;
+	    			break;
+	    		}
+	    	}
+	    	//Assest General Head
+	    	if(currentGeneralHeadReportModel == null) {
+		    	for(GeneralHeadReportModel generalHeadReportModel : assetsGeneralHeadList) {
+		    		if(generalHeadReportModel.getGeneralHeadName().equals(generalHeadDB.getGeneralHeadName())){
+		    			currentGeneralHeadReportModel = generalHeadReportModel;
+		    			break;
+		    		}
+		    	}
+	    	}
+	    	//Create General Head Report Model and add to respective list
+	    	if(currentGeneralHeadReportModel == null) {
+	    		currentGeneralHeadReportModel = new GeneralHeadReportModel();
+	    		currentGeneralHeadReportModel.setGeneralHeadName(generalHeadDB.getGeneralHeadName());
+	    		if(generalHeadDB.getSection().getSectionName().equals(SectionEnum.LC.value()))
+					liabilitesGeneralHeadList.add(currentGeneralHeadReportModel);
+				else if(generalHeadDB.getSection().getSectionName().equals(SectionEnum.PA.value()))
+					assetsGeneralHeadList.add(currentGeneralHeadReportModel);
+	    	}
+	    	
+	    	//Transaction
+	    	String transactionDescription = transactionDB.getTransactionDescription().getTransactionDescription();
+	    	TransactionReportModel existTransaction = null;
+	    	if(CollectionUtils.isNotEmpty(currentGeneralHeadReportModel.getTransactionList())) {
+	    		for(TransactionReportModel transaction : currentGeneralHeadReportModel.getTransactionList()){
+		    		if(transaction.getDescription().equals(transactionDescription)){
+		    			existTransaction = transaction;
+		    		}
+		    	}
+	    	}
+	    	
+	    	if(existTransaction != null) {
+	    		Date transactionDate = transactionDB.getTransactionDate();
+				if(transactionDate.after(balanceSheetDomain.getCurrentYearStartDate()) && transactionDate.before(balanceSheetDomain.getCurrentYearEndDate())){
+					existTransaction.setCurrentYearAmount(transactionDB.getTransactionAmount());
+					existTransaction.setCurrentYearType(transactionDB.getTransactionType());
+				}
+				if(transactionDate.after(balanceSheetDomain.getLastYearStartDate()) && transactionDate.before(balanceSheetDomain.getLastYearEndDate())){
+					existTransaction.setLastYearAmount(transactionDB.getTransactionAmount());
+					existTransaction.setLastYearType(transactionDB.getTransactionType());
+				}
+	    	}
+	    	else {
+	    		TransactionReportModel transaction = new TransactionReportModel();
+	    		transaction.setDescription(transactionDB.getTransactionDescription().getTransactionDescription());
+	    		
+	    		Date transactionDate = transactionDB.getTransactionDate();
+				if(transactionDate.after(balanceSheetDomain.getCurrentYearStartDate()) && transactionDate.before(balanceSheetDomain.getCurrentYearEndDate())){
+					transaction.setCurrentYearAmount(transactionDB.getTransactionAmount());
+					transaction.setCurrentYearType(transactionDB.getTransactionType());
+				}
+				if(transactionDate.after(balanceSheetDomain.getLastYearStartDate()) && transactionDate.before(balanceSheetDomain.getLastYearEndDate())){
+					transaction.setLastYearAmount(transactionDB.getTransactionAmount());
+					transaction.setLastYearType(transactionDB.getTransactionType());
+				}
+				if(currentGeneralHeadReportModel.getTransactionList() == null){
+					List<TransactionReportModel> transactionReportModelList = new ArrayList<TransactionReportModel>(); 
+					transactionReportModelList.add(transaction);
+					currentGeneralHeadReportModel.setTransactionList(transactionReportModelList);
+				}
+				else {
+					currentGeneralHeadReportModel.getTransactionList().add(transaction);
+				}
+	    	}	
+	    }
+	    
+	    for(int i = 0; i < liabilitesGeneralHeadList.size(); i++) {
+	    	
+	    	GeneralHeadReportModel generalHead = liabilitesGeneralHeadList.get(i);
+	    	
+	    	List<TransactionReportModel> transactionList = generalHead.getTransactionList();
+	    	Double currentYearGeneralHeadToatl = new Double(0);
+			Double lastYearGeneralHeadTotal = new Double(0);
+	    	for(TransactionReportModel transaction : transactionList) {
+	    		if(transaction.getCurrentYearType() != null && transaction.getCurrentYearType().equals(TypeEnum.ADD.value()))
+	    			currentYearGeneralHeadToatl = currentYearGeneralHeadToatl + (transaction.getCurrentYearAmount() == null ? 0.0 : transaction.getCurrentYearAmount());
+	    		else if(transaction.getCurrentYearType() != null && transaction.getCurrentYearType().equals(TypeEnum.SUBTRACT.value()))
+	    			currentYearGeneralHeadToatl = currentYearGeneralHeadToatl - (transaction.getCurrentYearAmount() == null ? 0.0 : transaction.getCurrentYearAmount());
+	    		
+	    		if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.ADD.value()))
+	    			lastYearGeneralHeadTotal = lastYearGeneralHeadTotal + (transaction.getLastYearAmount() == null ? 0.0 : transaction.getLastYearAmount());
+	    		else if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.SUBTRACT.value()))
+	    			lastYearGeneralHeadTotal = lastYearGeneralHeadTotal - (transaction.getLastYearAmount() == null ? 0.0 : transaction.getLastYearAmount());
+	    	}
+	    	generalHead.setTotalCurrentYearGeneralHeadAmount(currentYearGeneralHeadToatl);
+	    	generalHead.setTotalLastYearGeneralHeadAmount(lastYearGeneralHeadTotal);
+	    }
+	    
+	    for(int i = 0; i < assetsGeneralHeadList.size(); i++) {
+	    	
+	    	GeneralHeadReportModel generalHead = assetsGeneralHeadList.get(i);
+	    	
+	    	List<TransactionReportModel> transactionList = generalHead.getTransactionList();
+	    	Double currentYearGeneralHeadToatl = new Double(0);
+			Double lastYearGeneralHeadTotal = new Double(0);
+	    	for(TransactionReportModel transaction : transactionList) {
+	    		if(transaction.getCurrentYearType() != null && transaction.getCurrentYearType().equals(TypeEnum.ADD.value()))
+	    			currentYearGeneralHeadToatl = currentYearGeneralHeadToatl + (transaction.getCurrentYearAmount() == null ? 0.0 : transaction.getCurrentYearAmount());
+	    		else if(transaction.getCurrentYearType() != null && transaction.getCurrentYearType().equals(TypeEnum.SUBTRACT.value()))
+	    			currentYearGeneralHeadToatl = currentYearGeneralHeadToatl - (transaction.getCurrentYearAmount() == null ? 0.0 : transaction.getCurrentYearAmount());
+	    		
+	    		if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.ADD.value()))
+	    			lastYearGeneralHeadTotal = lastYearGeneralHeadTotal + (transaction.getLastYearAmount() == null ? 0.0 : transaction.getLastYearAmount());
+	    		else if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.SUBTRACT.value()))
+	    			lastYearGeneralHeadTotal = lastYearGeneralHeadTotal - (transaction.getLastYearAmount() == null ? 0.0 : transaction.getLastYearAmount());
+	    	}
+	    	generalHead.setTotalCurrentYearGeneralHeadAmount(currentYearGeneralHeadToatl);
+	    	generalHead.setTotalLastYearGeneralHeadAmount(lastYearGeneralHeadTotal);
+	    }
+	   
+	    
+	    Double grossTotalCurrentYearLiabilities = new Double(0);
+		Double grossTotalLastYearLiabilities = new Double(0);
+		for(GeneralHeadReportModel generalHead : liabilitesGeneralHeadList) {
+			
+			grossTotalCurrentYearLiabilities = grossTotalCurrentYearLiabilities + (generalHead.getTotalCurrentYearGeneralHeadAmount() == null ? 0.0 : generalHead.getTotalCurrentYearGeneralHeadAmount());
+			grossTotalLastYearLiabilities = grossTotalLastYearLiabilities + (generalHead.getTotalLastYearGeneralHeadAmount() == null ? 0.0 : generalHead.getTotalLastYearGeneralHeadAmount());
+		}
+		
+		SectionReportModel liabilities = new SectionReportModel();
+		liabilities.setCurrentYear(currentYearRange);
+		liabilities.setPrevYear(lastYearRange);
+		liabilities.setGrossTotalCurrentYear(grossTotalCurrentYearLiabilities);
+		liabilities.setGrossTotalPrevYear(grossTotalLastYearLiabilities);
+		liabilities.setGeneralHeadList(liabilitesGeneralHeadList);
+		
+		Double grossTotalCurrentYearAssets = new Double(0);
+		Double grossTotalLastYearAssets = new Double(0);
+		for(GeneralHeadReportModel generalHead : assetsGeneralHeadList) {
+			
+			grossTotalCurrentYearAssets = grossTotalCurrentYearAssets + (generalHead.getTotalCurrentYearGeneralHeadAmount() == null ? 0.0 : generalHead.getTotalCurrentYearGeneralHeadAmount());
+			grossTotalLastYearAssets = grossTotalLastYearAssets + (generalHead.getTotalLastYearGeneralHeadAmount() == null ? 0.0 : generalHead.getTotalLastYearGeneralHeadAmount());
+		}
+		
+		SectionReportModel assets = new SectionReportModel();
+		assets.setCurrentYear(currentYearRange);
+		assets.setPrevYear(lastYearRange);
+		assets.setGrossTotalCurrentYear(grossTotalCurrentYearAssets);
+		assets.setGrossTotalPrevYear(grossTotalLastYearAssets);
+		assets.setGeneralHeadList(assetsGeneralHeadList);
+
+		BalanceSheet balanceSheet = new BalanceSheet();
+		balanceSheet.setLiabilities(liabilities);
+		balanceSheet.setAssets(assets);
+		balanceSheet.setAsOnDate(balanceSheetDomain.getCurrentYearEndDate().toString());
+		return balanceSheet;
+	}
+	
+	public BalanceSheet getBalanceSheetData1(BalanceSheetDomain balanceSheetDomain) {
+		
 	    String currentYearRange = getYear(balanceSheetDomain.getCurrentYearStartDate()) + "-" + getYear(balanceSheetDomain.getCurrentYearEndDate());
 	    String lastYearRange = getYear(balanceSheetDomain.getLastYearStartDate()) + "-" + getYear(balanceSheetDomain.getLastYearEndDate());
 	    
-		List<GeneralHeadJPA> generalHeadList = balanceSheetRepository.getBalanceSheetData(balanceSheetDomain);
+		List<GeneralHeadJPA> generalHeadList = balanceSheetRepository.getBalanceSheetData1(balanceSheetDomain);
 		
 		List<GeneralHeadReportModel> liabilitesGeneralHeadList = new ArrayList<GeneralHeadReportModel>();
 		List<GeneralHeadReportModel> assetsGeneralHeadList = new ArrayList<GeneralHeadReportModel>();
@@ -141,5 +310,4 @@ public class BalanceSheetService {
 		balanceSheet.setAsOnDate(balanceSheetDomain.getCurrentYearEndDate().toString());
 		return balanceSheet;
 	}
-
 }

@@ -78,6 +78,13 @@
 	<definition name="recordTransactionStatus" extends="layout.basic">
 		<put-attribute name="body" value="/WEB-INF/views/setting/transaction/transaction_status.jsp" />
 	</definition>
+	<definition name="societyConfig" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/setting/societyConfig/society_config.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/setting/societyConfig/society_config_inline.jsp" />
+	</definition>
+	<definition name="societyConfigStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/setting/societyConfig/society_config_status.jsp" />
+	</definition>
 	
 	<!-- Report -->	
 	<definition name="balanceSheet" extends="layout.basic">

@@ -19,6 +19,8 @@ public class TransactionDomain {
 	private Date transactionDate;
 	
 	private Integer societyId;
+	
+	private String transactionType;
 
 	public Integer getTransactionId() {
 		return transactionId;
@@ -82,5 +84,13 @@ public class TransactionDomain {
 
 	public void setTransactionDescriptionId(Integer transactionDescriptionId) {
 		this.transactionDescriptionId = transactionDescriptionId;
+	}
+
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 }

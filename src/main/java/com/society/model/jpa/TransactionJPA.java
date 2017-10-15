@@ -37,6 +37,9 @@ public class TransactionJPA {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "society_id")
 	private SocietyJPA society;
+	
+	@Column(name = "transaction_type")
+	private String transactionType;
 
 	public Integer getTransactionId() {
 		return transactionId;
@@ -86,5 +89,13 @@ public class TransactionJPA {
 	public void setTransactionDescription(
 			TransactionDescriptionJPA transactionDescription) {
 		this.transactionDescription = transactionDescription;
+	}
+
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 }

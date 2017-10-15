@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -23,7 +22,32 @@ import com.society.model.jpa.TransactionJPA;
 @Repository
 public class BalanceSheetRepository extends BaseRepository {
 	
-	public List<GeneralHeadJPA> getBalanceSheetData(BalanceSheetDomain balanceSheetDomain){
+	public List<TransactionJPA> getBalanceSheetData(BalanceSheetDomain balanceSheetDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<TransactionJPA> criteriaQuery = criteriaBuilder.createQuery(TransactionJPA.class);
+		Root<TransactionJPA> root = criteriaQuery.from(TransactionJPA.class);
+		root.fetch("transactionDescription", JoinType.INNER);
+		root.fetch("generalHead", JoinType.INNER).fetch("section" , JoinType.INNER);
+		criteriaQuery.select(root);
+		
+		Predicate reportName = criteriaBuilder.equal(root.<String>get("generalHead").get("section").get("report").get("reportName"), ReportEnum.BS.value());
+		Predicate societyId = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), balanceSheetDomain.getSocietyId());
+		Predicate transactionDate = criteriaBuilder.between(root.<Date>get("transactionDate"), balanceSheetDomain.getLastYearStartDate(), balanceSheetDomain.getCurrentYearEndDate());
+		
+		criteriaQuery.where(reportName, societyId, transactionDate);
+		
+		List<TransactionJPA> transactionList;
+		try {
+			transactionList = entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			transactionList = null;
+		}
+		return transactionList;
+	}
+	
+	public List<GeneralHeadJPA> getBalanceSheetData1(BalanceSheetDomain balanceSheetDomain){
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<GeneralHeadJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadJPA.class);
@@ -50,7 +74,7 @@ public class BalanceSheetRepository extends BaseRepository {
 		return generalHeadList;
 	}
 	
-	public List<GeneralHeadJPA> getBalanceSheetData1(BalanceSheetDomain balanceSheetDomain){
+	public List<GeneralHeadJPA> getBalanceSheetData2(BalanceSheetDomain balanceSheetDomain){
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<GeneralHeadJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadJPA.class);

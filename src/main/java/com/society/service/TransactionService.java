@@ -94,6 +94,7 @@ public class TransactionService {
 			transactionDomain.setTransactionDescription(transaction.getTransactionDescription().getTransactionDescription());
 			transactionDomain.setTransactionAmount(transaction.getTransactionAmount());
 			transactionDomain.setTransactionDate(transaction.getTransactionDate());
+			transactionDomain.setTransactionType(transaction.getTransactionType());
 			transactionDomainList.add(transactionDomain);
 		}
 		return transactionDomainList;
@@ -122,6 +123,7 @@ public class TransactionService {
 		transaction.setTransactionDescription(transactionDescription);
 		transaction.setTransactionAmount(transactionDomain.getTransactionAmount());
 		transaction.setTransactionDate(transactionDomain.getTransactionDate());
+		transaction.setTransactionType(transactionDomain.getTransactionType());
 		transaction.setSociety(society);
 		
 		return transactionRepository.insertTransactionEntry(transaction, transactionDescription);

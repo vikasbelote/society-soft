@@ -28,6 +28,8 @@ public class MenuRightsDomain {
 	private boolean isEnabledGeneralHeadMenu = false;
 	//8 Menu Id
 	private boolean isEnabledReocrdTransactionMenu = false;
+	//9 Menu Id
+	private boolean isEnableSocietyConfigurationMenu = false;
 
 	public void initMenuRights(LoginDomain loginDomain) {
 
@@ -35,7 +37,7 @@ public class MenuRightsDomain {
 			isEnabledRegistrationMenu = true;
 
 		if (loginDomain.getRoleName().equals("Admin")) {
-			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = true;
+			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = isEnableSocietyConfigurationMenu = true;
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -75,6 +77,10 @@ public class MenuRightsDomain {
 					isEnabledReocrdTransactionMenu = true;
 					break;
 				}
+				case 9: {
+					isEnableSocietyConfigurationMenu = true;
+					break;
+				}
 				}
 			}
 		}
@@ -85,7 +91,7 @@ public class MenuRightsDomain {
 		if(isEnabledBlanceSheetMenu || isEnabledIncomeAndExpenseMenu || isEnabledMaintainceReport)
 			isEnabledReportMenu = true;
 		
-		if(isEnabledGeneralHeadMenu || isEnabledReocrdTransactionMenu)
+		if(isEnabledGeneralHeadMenu || isEnabledReocrdTransactionMenu || isEnableSocietyConfigurationMenu)
 			isEnabledSettingMenu = true;
 	}
 
@@ -184,5 +190,13 @@ public class MenuRightsDomain {
 
 	public void setEnabledSettingMenu(boolean isEnabledSettingMenu) {
 		this.isEnabledSettingMenu = isEnabledSettingMenu;
+	}
+
+	public boolean isEnableSocietyConfigurationMenu() {
+		return isEnableSocietyConfigurationMenu;
+	}
+
+	public void setEnableSocietyConfigurationMenu(boolean isEnableSocietyConfigurationMenu) {
+		this.isEnableSocietyConfigurationMenu = isEnableSocietyConfigurationMenu;
 	}
 }

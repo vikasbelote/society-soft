@@ -108,6 +108,11 @@ $(document).ready(function() {
 					id : 8,
 					text : 'Record Transaction',
 					type : 'item'
+				},
+				'societyConfiguration' : {
+					id : 9,
+					text : 'Society Configuration',
+					type : 'item'
 				}
 			}
 		}

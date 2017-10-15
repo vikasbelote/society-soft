@@ -7,6 +7,10 @@ public class TransactionReportModel {
 	private Double currentYearAmount;
 	
 	private Double lastYearAmount;
+	
+	private String currentYearType;
+	
+	private String lastYearType;
 
 	public String getDescription() {
 		return description;
@@ -31,4 +35,22 @@ public class TransactionReportModel {
 	public void setLastYearAmount(Double lastYearAmount) {
 		this.lastYearAmount = lastYearAmount;
 	}
+
+	public String getCurrentYearType() {
+		return currentYearType;
+	}
+
+	public void setCurrentYearType(String currentYearType) {
+		this.currentYearType = currentYearType;
+	}
+
+	public String getLastYearType() {
+		return lastYearType;
+	}
+
+	public void setLastYearType(String lastYearType) {
+		this.lastYearType = lastYearType;
+	}
+
+	
 }

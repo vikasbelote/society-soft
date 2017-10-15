@@ -73,6 +73,22 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right">Transaction Type
+					 <i class="fa fa-asterisk" style="color: red;"></i>
+				</label>
+				<div class="col-sm-9 inputGroupContainer">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-home"></i></span>
+						<form:select path="transactionType" class="col-xs-10 col-sm-4">
+							<form:option value="ADD" label="ADD" />
+							<form:option value="SUBTRACT" label="SUBTRACT" />
+							<form:option value="DISPLAY" label="DISPLAY" />
+						</form:select>
+					</div>
+				</div>
+			</div>
 
 			<div class="">
 				<div class="col-sm-offset-3">
@@ -104,6 +120,7 @@
 							<th><strong>Description</strong></th>
 							<th><strong>Amount</strong></th>
 							<th><strong>Date</strong></th>
+							<th><strong>Type</strong></th>
 							<th></th>
 						</tr>
 					</thead>
@@ -114,6 +131,7 @@
 								<td data-transactionDescriptionId="${item.transactionDescriptionId}">${ item.transactionDescription }</td>
 								<td>${ item.transactionAmount }</td>
 								<td>${ item.transactionDate }</td>
+								<td>${ item.transactionType }</td>
 								<td>
 										<a id="editTransactionId"
 											data-transactionId="${ item.transactionId }" href="#"
