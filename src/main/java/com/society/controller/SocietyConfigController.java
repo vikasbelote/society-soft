@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.constant.ReportEnum;
 import com.society.model.domain.GeneralHeadDomain;
+import com.society.model.domain.GeneralHeadOrderDomain;
 import com.society.model.domain.SocietyConfigDomain;
 import com.society.service.SocietyConfigService;
 
@@ -29,8 +30,9 @@ public class SocietyConfigController {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		SocietyConfigDomain societyConfigDomian = societyConfigService.getSocietyConfig(societyId);
-		List<GeneralHeadDomain> balanceSheetGeneralHeadList = societyConfigService.getGeneralHeadDomain(ReportEnum.BS.value());
-		List<GeneralHeadDomain> incomeAndExpenseGeneralHeadList = societyConfigService.getGeneralHeadDomain(ReportEnum.IE.value());
+		
+		List<GeneralHeadDomain> balanceSheetGeneralHeadList = societyConfigService.getGeneralHeadDomain(ReportEnum.BS.value(), societyConfigDomian);
+		List<GeneralHeadDomain> incomeAndExpenseGeneralHeadList = societyConfigService.getGeneralHeadDomain(ReportEnum.IE.value(), societyConfigDomian);
 		
 		ModelAndView modelAndView = new ModelAndView("societyConfig", "societyConfigDomain" , societyConfigDomian);
 		modelAndView.addObject("balanceSheetGeneralHeadList", balanceSheetGeneralHeadList);

@@ -20,6 +20,16 @@
 				return $(this).attr("data-id");
 			}).get().join();
 			$("#liabilitesGeneralHeadIds").val(lcGeneralHeadList);
+			
+			var lcOrderList = $("#lcGeneralHeadList").find("li").map(function(){
+				var orderId = $(this).attr("data-orderId");
+				if(orderId == "")
+					return "0";
+				else
+					return $(this).attr("data-orderId");
+				
+			}).get().join();
+			$("#liabilitesOrderIds").val(lcOrderList);
 		}
 		
 		var isPaCheck = $("#paSectionId").prop("checked");
@@ -28,6 +38,15 @@
 				return $(this).attr("data-id");
 			}).get().join();
 			$("#assetGeneralHeadIds").val(paGeneralHeadList);
+			
+			var paOrderList = $("#paGeneralHeadList").find("li").map(function(){
+				var orderId = $(this).attr("data-orderId");
+				if(orderId == "")
+					return "0";
+				else
+					return $(this).attr("data-orderId");
+			}).get().join();
+			$("#assetOrderIds").val(paOrderList);
 		}
 		
 		return true;

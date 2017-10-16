@@ -6,7 +6,11 @@ public class SocietyConfigDomain {
 	
 	private String liabilitesGeneralHeadIds;
 	
+	private String liabilitesOrderIds;
+	
 	private String assetGeneralHeadIds;
+	
+	private String assetOrderIds;
 	
 	private Integer societyId;
 
@@ -40,5 +44,21 @@ public class SocietyConfigDomain {
 
 	public void setSocietyId(Integer societyId) {
 		this.societyId = societyId;
+	}
+
+	public String getLiabilitesOrderIds() {
+		return liabilitesOrderIds;
+	}
+
+	public void setLiabilitesOrderIds(String liabilitesOrderIds) {
+		this.liabilitesOrderIds = liabilitesOrderIds;
+	}
+
+	public String getAssetOrderIds() {
+		return assetOrderIds;
+	}
+
+	public void setAssetOrderIds(String assetOrderIds) {
+		this.assetOrderIds = assetOrderIds;
 	}
 }

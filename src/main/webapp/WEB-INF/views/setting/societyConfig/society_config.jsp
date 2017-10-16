@@ -44,7 +44,7 @@
 														value="<%=SectionEnum.LC.value()%>" />
 													<c:if
 														test="${generalHead.sectionName eq LiabilitiesSectionName}">
-														<li class="dd-item" data-id="${ generalHead.generalHeadId }">
+														<li class="dd-item" data-id="${ generalHead.generalHeadId }" data-orderId="${generalHead.orderId}">
 															<div class="dd-handle">${ generalHead.generalHeadName }</div>
 														</li>
 													</c:if>
@@ -76,8 +76,7 @@
 													<c:set var="AssetSectionName"
 														value="<%=SectionEnum.PA.value()%>" />
 													<c:if test="${generalHead.sectionName eq AssetSectionName}">
-														<li class="dd-item"
-															data-id="${ generalHead.generalHeadId }">
+														<li class="dd-item" data-id="${ generalHead.generalHeadId }" data-orderId="${generalHead.orderId}">
 															<div class="dd-handle">${ generalHead.generalHeadName }</div>
 														</li>
 													</c:if>
@@ -118,7 +117,9 @@
 			
 			<form:hidden path="configId" />
 			<form:hidden path="liabilitesGeneralHeadIds" />
+			<form:hidden path="liabilitesOrderIds" />
 			<form:hidden path="assetGeneralHeadIds" />
+			<form:hidden path="assetOrderIds" />
 
 			<div class="clearfix form-actions">
 				<div class="col-sm-offset-3">

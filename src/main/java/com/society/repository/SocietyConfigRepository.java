@@ -10,6 +10,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.society.model.domain.SocietyConfigDomain;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadOrderJPA;
 import com.society.model.jpa.RoleJPA;
@@ -55,6 +56,24 @@ public class SocietyConfigRepository extends BaseRepository  {
 		return societyConfig;
 	}
 	
+	public List<GeneralHeadOrderJPA> getGeneralHeadOrder(SocietyConfigDomain societyConfigDomian) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<GeneralHeadOrderJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadOrderJPA.class);
+		Root<GeneralHeadOrderJPA> root = criteriaQuery.from(GeneralHeadOrderJPA.class);
+		criteriaQuery.select(root);
+		criteriaQuery.where(criteriaBuilder.equal(root.<Integer>get("societyConfig").get("configId"), societyConfigDomian.getConfigId()));
+		
+		List<GeneralHeadOrderJPA> generalHeadOrderList;
+		try {
+			generalHeadOrderList =  entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			generalHeadOrderList = null;
+		}
+		return generalHeadOrderList;
+	}
+	
 	public boolean saveSocietyConfig(List<GeneralHeadOrderJPA> generalHeadOrderList, SocietyConfigJPA societyConfig) {
 		
 		Session session = null;
@@ -62,11 +81,10 @@ public class SocietyConfigRepository extends BaseRepository  {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			
-			session.save(societyConfig);
+			session.saveOrUpdate(societyConfig);
 			for(GeneralHeadOrderJPA generalHeadOrder : generalHeadOrderList) {
-				session.save(generalHeadOrder);
+				session.saveOrUpdate(generalHeadOrder);
 			}
-			
 			
 			session.getTransaction().commit();
 			return true;

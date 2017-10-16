@@ -20,6 +20,8 @@ public class GeneralHeadDomain {
 	private Integer societyId;
 	
 	private String reportName;
+	
+	private Integer orderId;
 
 	public Integer getGeneralHeadId() {
 		return generalHeadId;
@@ -75,5 +77,13 @@ public class GeneralHeadDomain {
 
 	public void setReportName(String reportName) {
 		this.reportName = reportName;
+	}
+
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 }
