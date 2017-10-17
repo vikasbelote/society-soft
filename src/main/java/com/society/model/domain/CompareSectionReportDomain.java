@@ -15,6 +15,10 @@ public class CompareSectionReportDomain {
 	private Integer societyId;
 	
 	private String reportName;
+	
+	private String leftSectionName;
+	
+	private String rightSectionName;
 
 	public Date getCurrentYearStartDate() {
 		return currentYearStartDate;
@@ -62,6 +66,22 @@ public class CompareSectionReportDomain {
 
 	public void setReportName(String reportName) {
 		this.reportName = reportName;
+	}
+
+	public String getLeftSectionName() {
+		return leftSectionName;
+	}
+
+	public void setLeftSectionName(String leftSectionName) {
+		this.leftSectionName = leftSectionName;
+	}
+
+	public String getRightSectionName() {
+		return rightSectionName;
+	}
+
+	public void setRightSectionName(String rightSectionName) {
+		this.rightSectionName = rightSectionName;
 	}
 
 }

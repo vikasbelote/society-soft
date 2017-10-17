@@ -99,6 +99,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/report/incomeAndExpense/income_and_expense.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/report/incomeAndExpense/income_and_expense_inline.jsp" />
 	</definition>
+	<definition name="incomeAndExpenseData" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/report/incomeAndExpense/income_and_expense_data.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/report/incomeAndExpense/income_and_expense_inline.jsp" />
+	</definition>
 	<definition name="maintaince" extends="layout.basic">
 		<put-attribute name="body" value="/WEB-INF/views/report/maintaince/maintaince.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/report/maintaince/maintaince_inline.jsp" />

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.constant.ReportEnum;
+import com.society.constant.SectionEnum;
 import com.society.model.domain.BalanceSheetDomain;
 import com.society.model.domain.CompareSectionReportDomain;
 import com.society.model.report.BalanceSheet;
@@ -62,6 +63,8 @@ public class BalanceSheetController extends BaseController {
 		}
 			
 		compareSectionReportDomain.setReportName(ReportEnum.BS.value());
+		compareSectionReportDomain.setLeftSectionName(SectionEnum.LC.value());
+		compareSectionReportDomain.setRightSectionName(SectionEnum.PA.value());
 		CompareSectionReport balanceSheet = balanceSheetService.getCompareSectionReportData(compareSectionReportDomain);
 		
 		ModelAndView modelAndView = new ModelAndView("balanceSheetData");

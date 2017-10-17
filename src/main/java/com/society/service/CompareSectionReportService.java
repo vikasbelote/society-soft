@@ -67,9 +67,9 @@ public class CompareSectionReportService {
 	    	if(currentGeneralHeadReportModel == null) {
 	    		currentGeneralHeadReportModel = new GeneralHeadReportModel();
 	    		currentGeneralHeadReportModel.setGeneralHeadName(generalHeadDB.getGeneralHeadName());
-	    		if(generalHeadDB.getSection().getSectionName().equals(SectionEnum.LC.value()))
+	    		if(generalHeadDB.getSection().getSectionName().equals(compareSectionReportDomain.getLeftSectionName()))
 	    			leftSectionHeadList.add(currentGeneralHeadReportModel);
-				else if(generalHeadDB.getSection().getSectionName().equals(SectionEnum.PA.value()))
+				else if(generalHeadDB.getSection().getSectionName().equals(compareSectionReportDomain.getRightSectionName()))
 					rightSectionHeadList.add(currentGeneralHeadReportModel);
 	    	}
 	    	
@@ -132,11 +132,16 @@ public class CompareSectionReportService {
 	    			currentYearGeneralHeadToatl = currentYearGeneralHeadToatl + (transaction.getCurrentYearAmount() == null ? 0.0 : transaction.getCurrentYearAmount());
 	    		else if(transaction.getCurrentYearType() != null && transaction.getCurrentYearType().equals(TypeEnum.SUBTRACT.value()))
 	    			currentYearGeneralHeadToatl = currentYearGeneralHeadToatl - (transaction.getCurrentYearAmount() == null ? 0.0 : transaction.getCurrentYearAmount());
+	    		else if(transaction.getCurrentYearType() != null && transaction.getCurrentYearType().equals(TypeEnum.DISPLAY.value()))
+	    			currentYearGeneralHeadToatl = null;
 	    		
 	    		if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.ADD.value()))
 	    			lastYearGeneralHeadTotal = lastYearGeneralHeadTotal + (transaction.getLastYearAmount() == null ? 0.0 : transaction.getLastYearAmount());
 	    		else if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.SUBTRACT.value()))
 	    			lastYearGeneralHeadTotal = lastYearGeneralHeadTotal - (transaction.getLastYearAmount() == null ? 0.0 : transaction.getLastYearAmount());
+	    		else if(transaction.getLastYearType() != null && transaction.getLastYearType().equals(TypeEnum.DISPLAY.value()))
+	    			lastYearGeneralHeadTotal = null;
+	    		
 	    	}
 	    	generalHead.setTotalCurrentYearGeneralHeadAmount(currentYearGeneralHeadToatl);
 	    	generalHead.setTotalLastYearGeneralHeadAmount(lastYearGeneralHeadTotal);
