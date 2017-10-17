@@ -15,7 +15,9 @@ import org.springframework.stereotype.Repository;
 
 import com.society.constant.ReportEnum;
 import com.society.model.domain.BalanceSheetDomain;
+import com.society.model.domain.SocietyConfigDomain;
 import com.society.model.jpa.GeneralHeadJPA;
+import com.society.model.jpa.GeneralHeadOrderJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
 import com.society.model.jpa.TransactionJPA;
 
@@ -45,6 +47,30 @@ public class BalanceSheetRepository extends BaseRepository {
 			transactionList = null;
 		}
 		return transactionList;
+	}
+	
+	public List<GeneralHeadOrderJPA> getGeneralHeadOrder(BalanceSheetDomain balanceSheetDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<GeneralHeadOrderJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadOrderJPA.class);
+		Root<GeneralHeadOrderJPA> root = criteriaQuery.from(GeneralHeadOrderJPA.class);
+		root.fetch("generalHead", JoinType.INNER);
+		criteriaQuery.select(root);
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.<Integer>get("sequenceNumber")));
+		
+		Predicate reportNamePredicate = criteriaBuilder.equal(root.<String>get("generalHead").get("section").get("report").get("reportName"), ReportEnum.BS.value());
+		Predicate societyId = criteriaBuilder.equal(root.<Integer>get("societyConfig").get("society").get("societyId"), balanceSheetDomain.getSocietyId());
+		
+		criteriaQuery.where(reportNamePredicate, societyId);
+		
+		List<GeneralHeadOrderJPA> generalHeadOrderList;
+		try {
+			generalHeadOrderList =  entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			generalHeadOrderList = null;
+		}
+		return generalHeadOrderList;
 	}
 	
 	public List<GeneralHeadJPA> getBalanceSheetData1(BalanceSheetDomain balanceSheetDomain){
@@ -90,4 +116,6 @@ public class BalanceSheetRepository extends BaseRepository {
 		}
 		return generalHeadList;
 	}
+	
+	
 }

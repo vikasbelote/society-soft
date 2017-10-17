@@ -10,8 +10,6 @@ public class SectionReportModel {
 	
 	private List<GeneralHeadReportModel> generalHeadList;
 	
-	private List<TransactionReportModel> defaultTransactionList;
-	
 	private Double grossTotalCurrentYear;
 	
 	private Double grossTotalPrevYear;
@@ -54,14 +52,5 @@ public class SectionReportModel {
 
 	public void setGrossTotalPrevYear(Double grossTotalPrevYear) {
 		this.grossTotalPrevYear = grossTotalPrevYear;
-	}
-
-	public List<TransactionReportModel> getDefaultTransactionList() {
-		return defaultTransactionList;
-	}
-
-	public void setDefaultTransactionList(
-			List<TransactionReportModel> defaultTransactionList) {
-		this.defaultTransactionList = defaultTransactionList;
 	}
 }

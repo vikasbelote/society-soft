@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.society.constant.ReportEnum;
+import com.society.constant.SectionEnum;
 import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.GeneralHeadOrderDomain;
 import com.society.model.domain.SocietyConfigDomain;
@@ -39,16 +41,16 @@ public class SocietyConfigService {
 			generalHeadDomainList.add(generalHead);
 		}
 		//Get the order of general head belong to report
-		List<GeneralHeadOrderDomain> generalHeadOrderDomainList = this.getGeneralHeadOrder(societyConfigDomain);
+		List<GeneralHeadOrderDomain> generalHeadOrderDomainList = this.getGeneralHeadOrder(societyConfigDomain, reportName);
 		return this.getOrderGeneralHeadDomainList(generalHeadDomainList, generalHeadOrderDomainList);
 	}
 	
-	public List<GeneralHeadOrderDomain> getGeneralHeadOrder(SocietyConfigDomain societyConfigDomian) {
+	public List<GeneralHeadOrderDomain> getGeneralHeadOrder(SocietyConfigDomain societyConfigDomian, String reportName) {
 		
 		if(societyConfigDomian.getConfigId() == null)
 			return null;
-			
-		List<GeneralHeadOrderJPA> generalHeadOrderList = societyConfigRepository.getGeneralHeadOrder(societyConfigDomian);
+		
+		List<GeneralHeadOrderJPA> generalHeadOrderList = societyConfigRepository.getGeneralHeadOrder(societyConfigDomian, reportName);
 		if(CollectionUtils.isEmpty(generalHeadOrderList))
 			return null;
 		
@@ -85,6 +87,25 @@ public class SocietyConfigService {
 				}
 			}
 			orderGenealHeadDomainList.add(generalHeadDomain);
+		}
+		
+		//Add newly added general added which is not present in general head order table
+		for(GeneralHeadDomain generalHeadDomain : generalHeadDomainList) {
+			boolean isNotPresent = true;
+			for(GeneralHeadDomain finalGeneralHeadDomain : orderGenealHeadDomainList) {
+				if(generalHeadDomain.getGeneralHeadId() == finalGeneralHeadDomain.getGeneralHeadId()){
+					isNotPresent = false;
+					break;
+				}
+			}
+			if(isNotPresent) {
+				GeneralHeadDomain newGeneralHeadDomain = new GeneralHeadDomain();
+				newGeneralHeadDomain.setGeneralHeadId(generalHeadDomain.getGeneralHeadId());
+				newGeneralHeadDomain.setGeneralHeadName(generalHeadDomain.getGeneralHeadName());
+				newGeneralHeadDomain.setSectionId(generalHeadDomain.getSectionId());
+				newGeneralHeadDomain.setSectionName(generalHeadDomain.getSectionName());
+				orderGenealHeadDomainList.add(newGeneralHeadDomain);
+			}
 		}
 		return orderGenealHeadDomainList;
 	}

@@ -14,6 +14,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.society.model.jpa.GeneralHeadJPA;
+import com.society.model.jpa.GeneralHeadOrderJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
 import com.society.model.jpa.TransactionJPA;
 

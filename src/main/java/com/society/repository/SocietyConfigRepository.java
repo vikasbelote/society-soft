@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
@@ -56,13 +57,18 @@ public class SocietyConfigRepository extends BaseRepository  {
 		return societyConfig;
 	}
 	
-	public List<GeneralHeadOrderJPA> getGeneralHeadOrder(SocietyConfigDomain societyConfigDomian) {
+	public List<GeneralHeadOrderJPA> getGeneralHeadOrder(SocietyConfigDomain societyConfigDomian, String reportName) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<GeneralHeadOrderJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadOrderJPA.class);
 		Root<GeneralHeadOrderJPA> root = criteriaQuery.from(GeneralHeadOrderJPA.class);
 		criteriaQuery.select(root);
-		criteriaQuery.where(criteriaBuilder.equal(root.<Integer>get("societyConfig").get("configId"), societyConfigDomian.getConfigId()));
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.<Integer>get("sequenceNumber")));
+		
+		Predicate reportNamePredicate = criteriaBuilder.equal(root.<String>get("generalHead").get("section").get("report").get("reportName"), reportName);
+		Predicate societyId = criteriaBuilder.equal(root.<Integer>get("societyConfig").get("configId"), societyConfigDomian.getConfigId());
+		
+		criteriaQuery.where(reportNamePredicate, societyId);
 		
 		List<GeneralHeadOrderJPA> generalHeadOrderList;
 		try {

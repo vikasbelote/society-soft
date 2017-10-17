@@ -17,19 +17,19 @@
 		<div class="row">
 			<h1 class="center">Balance Sheet As on ${balanceSheetData.asOnDate }</h1>
 			
-			<c:if test="${not empty balanceSheetData.liabilities}">
+			<c:if test="${not empty balanceSheetData.leftSection}">
 				<h3 class="header smaller lighter green">Capital & Liabilities</h3>
 				<div class="col-xs-12">
 					<table id="simple-table" class="table  table-bordered table-hover">
 						<thead>
 							<tr>
-								<th class="col-xs-2">F.Y. ${ balanceSheetData.liabilities.prevYear}</th>
+								<th class="col-xs-2">F.Y. ${ balanceSheetData.leftSection.prevYear}</th>
 								<th class="col-xs-8">LIABILITIES</th>
-								<th class="col-xs-2" colspan="2">F.Y. ${ balanceSheetData.liabilities.currentYear}</th>
+								<th class="col-xs-2" colspan="2">F.Y. ${ balanceSheetData.leftSection.currentYear}</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${ balanceSheetData.liabilities.generalHeadList }" var="generalHead">
+							<c:forEach items="${ balanceSheetData.leftSection.generalHeadList }" var="generalHead">
 								<tr>	
 									<td></td>
 									<td><strong style="text-decoration: underline;">${ generalHead.generalHeadName }</strong></td>
@@ -63,28 +63,28 @@
 								</tr>
 							</c:forEach>
 							<tr>
-								<td>${ balanceSheetData.liabilities.grossTotalPrevYear }</td>
+								<td>${ balanceSheetData.leftSection.grossTotalPrevYear }</td>
 								<td colspan="2"><strong>Gross Total ....</strong></td>
-								<td>${ balanceSheetData.liabilities.grossTotalCurrentYear }</td>
+								<td>${ balanceSheetData.leftSection.grossTotalCurrentYear }</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</c:if>
 
-			<c:if test="${not empty balanceSheetData.assets}">
+			<c:if test="${not empty balanceSheetData.rightSection}">
 				<h3 class="header smaller lighter green">Assets</h3>
 				<div class="col-xs-12">
 					<table id="simple-table" class="table  table-bordered table-hover">
 						<thead>
 							<tr>
-								<th class="col-xs-2">F.Y. ${ balanceSheetData.assets.prevYear}</th>
+								<th class="col-xs-2">F.Y. ${ balanceSheetData.rightSection.prevYear}</th>
 								<th class="col-xs-8">ASSETS</th>
-								<th class="col-xs-2" colspan="2">F.Y. ${ balanceSheetData.assets.currentYear}</th>
+								<th class="col-xs-2" colspan="2">F.Y. ${ balanceSheetData.rightSection.currentYear}</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${ balanceSheetData.assets.generalHeadList }" var="generalHead">
+							<c:forEach items="${ balanceSheetData.rightSection.generalHeadList }" var="generalHead">
 								<tr>	
 									<td></td>
 									<td><strong style="text-decoration: underline;">${ generalHead.generalHeadName }</strong></td>
@@ -118,9 +118,9 @@
 								</tr>
 							</c:forEach>
 							<tr>
-								<td>${ balanceSheetData.assets.grossTotalPrevYear }</td>
+								<td>${ balanceSheetData.rightSection.grossTotalPrevYear }</td>
 								<td colspan="2"><strong>Gross Total ....</strong></td>
-								<td>${ balanceSheetData.assets.grossTotalCurrentYear }</td>
+								<td>${ balanceSheetData.rightSection.grossTotalCurrentYear }</td>
 							</tr>
 						</tbody>
 					</table>

@@ -1,6 +1,5 @@
 package com.society.controller;
 
-import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.constant.ReportEnum;
 import com.society.model.domain.GeneralHeadDomain;
-import com.society.model.domain.GeneralHeadOrderDomain;
 import com.society.model.domain.SocietyConfigDomain;
 import com.society.service.SocietyConfigService;
 

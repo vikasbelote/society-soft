@@ -13,6 +13,7 @@ import com.society.constant.SectionEnum;
 import com.society.constant.TypeEnum;
 import com.society.model.domain.BalanceSheetDomain;
 import com.society.model.jpa.GeneralHeadJPA;
+import com.society.model.jpa.GeneralHeadOrderJPA;
 import com.society.model.jpa.TransactionJPA;
 import com.society.model.report.BalanceSheet;
 import com.society.model.report.GeneralHeadReportModel;
@@ -171,6 +172,14 @@ public class BalanceSheetService {
 			grossTotalLastYearLiabilities = grossTotalLastYearLiabilities + (generalHead.getTotalLastYearGeneralHeadAmount() == null ? 0.0 : generalHead.getTotalLastYearGeneralHeadAmount());
 		}
 		
+		//order general head list
+		List<GeneralHeadOrderJPA> generalHeadOrderList = balanceSheetRepository.getGeneralHeadOrder(balanceSheetDomain);
+		if(CollectionUtils.isNotEmpty(generalHeadOrderList)) {
+			liabilitesGeneralHeadList = this.getOrderGeneralHeadReportModel(liabilitesGeneralHeadList, generalHeadOrderList);
+			assetsGeneralHeadList = this.getOrderGeneralHeadReportModel(assetsGeneralHeadList, generalHeadOrderList);
+		}
+			
+		
 		SectionReportModel liabilities = new SectionReportModel();
 		liabilities.setCurrentYear(currentYearRange);
 		liabilities.setPrevYear(lastYearRange);
@@ -198,6 +207,20 @@ public class BalanceSheetService {
 		balanceSheet.setAssets(assets);
 		balanceSheet.setAsOnDate(balanceSheetDomain.getCurrentYearEndDate().toString());
 		return balanceSheet;
+	}
+	
+	private List<GeneralHeadReportModel> getOrderGeneralHeadReportModel(List<GeneralHeadReportModel> generalHeadReportModelList, List<GeneralHeadOrderJPA> generalHeadOrderList) {
+		
+		List<GeneralHeadReportModel> generalHeadList = new ArrayList<GeneralHeadReportModel>();
+		for(GeneralHeadOrderJPA generalHeadOrderDB : generalHeadOrderList) {
+			for(GeneralHeadReportModel generalHeadReportModel : generalHeadReportModelList) {
+				if(generalHeadOrderDB.getGeneralHead().getGeneralHeadName().equals(generalHeadReportModel.getGeneralHeadName())) {
+					generalHeadList.add(generalHeadReportModel);
+					break;
+				}
+			}
+		}
+		return generalHeadList;
 	}
 	
 	public BalanceSheet getBalanceSheetData1(BalanceSheetDomain balanceSheetDomain) {
