@@ -1,5 +1,7 @@
 package com.society.model.domain;
 
+import java.sql.Date;
+
 public class SocietyConfigDomain {
 	
 	private Integer configId;
@@ -11,6 +13,20 @@ public class SocietyConfigDomain {
 	private String assetGeneralHeadIds;
 	
 	private String assetOrderIds;
+	
+	private String expenseGeneralHeadIds;
+	
+	private String expenseOrderIds;
+	
+	private String incomeGeneralHeadIds;
+	
+	private String incomeOrderIds;
+	
+	private Date startDate;
+	
+	private Date endDate;
+	
+	private Integer maintenanceCycle;
 	
 	private Integer societyId;
 
@@ -60,5 +76,61 @@ public class SocietyConfigDomain {
 
 	public void setAssetOrderIds(String assetOrderIds) {
 		this.assetOrderIds = assetOrderIds;
+	}
+
+	public String getExpenseGeneralHeadIds() {
+		return expenseGeneralHeadIds;
+	}
+
+	public void setExpenseGeneralHeadIds(String expenseGeneralHeadIds) {
+		this.expenseGeneralHeadIds = expenseGeneralHeadIds;
+	}
+
+	public String getExpenseOrderIds() {
+		return expenseOrderIds;
+	}
+
+	public void setExpenseOrderIds(String expenseOrderIds) {
+		this.expenseOrderIds = expenseOrderIds;
+	}
+
+	public String getIncomeGeneralHeadIds() {
+		return incomeGeneralHeadIds;
+	}
+
+	public void setIncomeGeneralHeadIds(String incomeGeneralHeadIds) {
+		this.incomeGeneralHeadIds = incomeGeneralHeadIds;
+	}
+
+	public String getIncomeOrderIds() {
+		return incomeOrderIds;
+	}
+
+	public void setIncomeOrderIds(String incomeOrderIds) {
+		this.incomeOrderIds = incomeOrderIds;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public Integer getMaintenanceCycle() {
+		return maintenanceCycle;
+	}
+
+	public void setMaintenanceCycle(Integer maintenanceCycle) {
+		this.maintenanceCycle = maintenanceCycle;
 	}
 }

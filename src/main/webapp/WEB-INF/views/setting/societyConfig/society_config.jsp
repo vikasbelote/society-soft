@@ -20,7 +20,7 @@
 			Head Order</h3>
 		<div class="row">
 			<div class="col-xs-12">
-				<div class="invisible" id="main-widget-container">
+				<div class="" id="main-widget-container">
 					<div class="row">
 						<div class="col-xs-12 col-sm-6 widget-container-col"
 							id="widget-container-col-9">
@@ -44,8 +44,11 @@
 														value="<%=SectionEnum.LC.value()%>" />
 													<c:if
 														test="${generalHead.sectionName eq LiabilitiesSectionName}">
-														<li class="dd-item" data-id="${ generalHead.generalHeadId }" data-orderId="${generalHead.orderId}">
-															<div class="dd-handle">${ generalHead.generalHeadName }</div>
+														<li class="dd-item"
+															data-id="${ generalHead.generalHeadId }"
+															data-orderId="${generalHead.orderId}">
+															<div class="dd-handle">${
+																generalHead.generalHeadName }</div>
 														</li>
 													</c:if>
 												</c:forEach>
@@ -76,8 +79,11 @@
 													<c:set var="AssetSectionName"
 														value="<%=SectionEnum.PA.value()%>" />
 													<c:if test="${generalHead.sectionName eq AssetSectionName}">
-														<li class="dd-item" data-id="${ generalHead.generalHeadId }" data-orderId="${generalHead.orderId}">
-															<div class="dd-handle">${ generalHead.generalHeadName }</div>
+														<li class="dd-item"
+															data-id="${ generalHead.generalHeadId }"
+															data-orderId="${generalHead.orderId}">
+															<div class="dd-handle">${
+																generalHead.generalHeadName }</div>
 														</li>
 													</c:if>
 												</c:forEach>
@@ -94,36 +100,149 @@
 		<h3 class="header smaller lighter green">Income & Expenditure
 			General Head Order</h3>
 		<div class="row">
-			<div class="col-sm-6">
-				<div class="dd" id="nestable">
-					<ol class="dd-list">
-						<li class="dd-item" data-id="1">
-							<div class="dd-handle">Item 1</div>
-						</li>
-						<li class="dd-item" data-id="11">
-							<div class="dd-handle">Item 11</div>
-						</li>
-
-						<li class="dd-item" data-id="12">
-							<div class="dd-handle">Item 12</div>
-						</li>
-					</ol>
+			<div class="col-xs-12">
+				<div class="" id="main-widget-container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 widget-container-col"
+							id="widget-container-col-9">
+							<div class="widget-box widget-color-pink" id="widget-box-9">
+								<div class="widget-header">
+									<h5 class="widget-title">EXPENSES</h5>
+									<div class="widget-toolbar no-border">
+										<label> <input type="checkbox" id="exSectionId"
+											class="ace ace-switch ace-switch-3 drag-switch" /> <span
+											class="lbl middle"></span>
+										</label>
+									</div>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main">
+										<div class="dd" id="nestable">
+											<ol id="exGeneralHeadList" class="dd-list custom-nodrag">
+												<c:forEach items="${incomeAndExpenseGeneralHeadList}"
+													var="generalHead">
+													<c:set var="ExpensesSectionName"
+														value="<%=SectionEnum.EXPENSES.value()%>" />
+													<c:if
+														test="${generalHead.sectionName eq ExpensesSectionName}">
+														<li class="dd-item"
+															data-id="${ generalHead.generalHeadId }"
+															data-orderId="${generalHead.orderId}">
+															<div class="dd-handle">${
+																generalHead.generalHeadName }</div>
+														</li>
+													</c:if>
+												</c:forEach>
+											</ol>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 widget-container-col"
+							id="widget-container-col-9">
+							<div class="widget-box widget-color-pink" id="widget-box-9">
+								<div class="widget-header">
+									<h5 class="widget-title">INCOME</h5>
+									<div class="widget-toolbar no-border">
+										<label> <input type="checkbox" id="inSectionId"
+											class="ace ace-switch ace-switch-3 drag-switch" /> <span
+											class="lbl middle"></span>
+										</label>
+									</div>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main">
+										<div class="dd" id="nestable">
+											<ol id="inGeneralHeadList" class="dd-list custom-nodrag">
+												<c:forEach items="${incomeAndExpenseGeneralHeadList}"
+													var="generalHead">
+													<c:set var="IncomeSectionName"
+														value="<%=SectionEnum.INCOME.value()%>" />
+													<c:if
+														test="${generalHead.sectionName eq IncomeSectionName}">
+														<li class="dd-item"
+															data-id="${ generalHead.generalHeadId }"
+															data-orderId="${generalHead.orderId}">
+															<div class="dd-handle">${
+																generalHead.generalHeadName }</div>
+														</li>
+													</c:if>
+												</c:forEach>
+											</ol>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
+			</div>
+		</div>
+		<h3 class="header smaller lighter green">Maintenance
+			Configuration</h3>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right"
+							for="form-field-1">Start Date</label>
+						<div class="col-sm-4">
+							<input id="configStartDate" class="col-xs-10 col-sm-5 date-picker" type="text" data-date-format="yyyy-mm-dd" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right"
+							for="form-field-1">End Date</label>
+						<div class="col-sm-4">
+							<input id="configEndDate" class="col-xs-10 col-sm-5 date-picker" type="text" data-date-format="yyyy-mm-dd" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right"
+							for="form-field-1"> Maintenance Cycle </label>
+						<div class="col-sm-4">
+							<select id="configMaintenanceDate" class="col-xs-10 col-sm-5" name="maintenanceCycle">
+								<option value="0">--Select--</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+							</select>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 
 		<form:form id="inserForm" commandName="societyConfigDomain"
 			class="form-horizontal" action="societyConfig">
-			
+
 			<form:hidden path="configId" />
 			<form:hidden path="liabilitesGeneralHeadIds" />
 			<form:hidden path="liabilitesOrderIds" />
 			<form:hidden path="assetGeneralHeadIds" />
 			<form:hidden path="assetOrderIds" />
+			<form:hidden path="expenseGeneralHeadIds" />
+			<form:hidden path="expenseOrderIds" />
+			<form:hidden path="incomeGeneralHeadIds" />
+			<form:hidden path="incomeOrderIds" />
+			<form:hidden path="startDate" />
+			<form:hidden path="endDate" />
+			<form:hidden path="maintenanceCycle" />
 
 			<div class="clearfix form-actions">
 				<div class="col-sm-offset-3">
-					<button id="societyConfigSubmitBtn" type="submit" class="btn btn-success">
+					<button id="societyConfigSubmitBtn" type="submit"
+						class="btn btn-success">
 						<i class="ace-icon fa fa-check bigger-110"></i>Submit
 					</button>
 					&nbsp; &nbsp; &nbsp;
@@ -132,7 +251,7 @@
 					</button>
 				</div>
 			</div>
-		
+
 		</form:form>
 
 	</div>

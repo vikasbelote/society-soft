@@ -5,7 +5,8 @@ public enum SectionEnum {
 	LC("LIABILITIES AND CAPITAL"),
 	PA("PROPERTIES AND ASSETS"),
 	EXPENSES("EXPENSES"),
-	INCOME("INCOME");
+	INCOME("INCOME"),
+	MA("MAINTENANCE");
 	
 	private String value;
 	

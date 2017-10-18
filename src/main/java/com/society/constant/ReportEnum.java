@@ -2,7 +2,7 @@ package com.society.constant;
 
 public enum ReportEnum {
 	
-	BS("Balance Sheet"), IE("Income & Expense");
+	BS("Balance Sheet"), IE("Income & Expense"), MA("Maintenance");
 	
 	private String value;
 	

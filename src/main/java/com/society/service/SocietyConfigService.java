@@ -132,6 +132,9 @@ public class SocietyConfigService {
 		SocietyConfigJPA societyConfig = new SocietyConfigJPA();
 		societyConfig.setConfigId(societyConfigDomain.getConfigId());
 		societyConfig.setSociety(society);
+		societyConfig.setStartDate(societyConfigDomain.getStartDate());
+		societyConfig.setEndDate(societyConfigDomain.getEndDate());
+		societyConfig.setMaintenanceCycle(societyConfigDomain.getMaintenanceCycle());
 		
 		List<GeneralHeadOrderJPA> generalHeadOrderList = new ArrayList<GeneralHeadOrderJPA>();
 		if(StringUtils.isNotEmpty(societyConfigDomain.getLiabilitesGeneralHeadIds())) {
@@ -163,6 +166,48 @@ public class SocietyConfigService {
 				
 				String generalHeadId = paSectionArr[i];
 				Integer orderId = StringUtils.equals(pasOrderIdArr[i], "0") ? null : Integer.valueOf(pasOrderIdArr[i]);
+				
+				GeneralHeadJPA generalHeadJPA = new GeneralHeadJPA();
+				generalHeadJPA.setGeneralHeadId(Integer.valueOf(generalHeadId));
+				
+				GeneralHeadOrderJPA generalHeadOrder = new GeneralHeadOrderJPA();
+				generalHeadOrder.setOrderId(orderId);
+				generalHeadOrder.setSocietyConfig(societyConfig);
+				generalHeadOrder.setGeneralHead(generalHeadJPA);
+				generalHeadOrder.setSequenceNumber((i + 1));
+				
+				generalHeadOrderList.add(generalHeadOrder);
+			}
+		}
+		if(StringUtils.isNotEmpty(societyConfigDomain.getExpenseGeneralHeadIds())) {
+			
+			String[] exSectionArr = societyConfigDomain.getExpenseGeneralHeadIds().split(",");
+			String[] exOrderIdArr = societyConfigDomain.getExpenseOrderIds().split(",");
+			for(int i = 0; i < exSectionArr.length; i++) {
+				
+				String generalHeadId = exSectionArr[i];
+				Integer orderId = StringUtils.equals(exOrderIdArr[i], "0") ? null : Integer.valueOf(exOrderIdArr[i]);
+				
+				GeneralHeadJPA generalHeadJPA = new GeneralHeadJPA();
+				generalHeadJPA.setGeneralHeadId(Integer.valueOf(generalHeadId));
+				
+				GeneralHeadOrderJPA generalHeadOrder = new GeneralHeadOrderJPA();
+				generalHeadOrder.setOrderId(orderId);
+				generalHeadOrder.setSocietyConfig(societyConfig);
+				generalHeadOrder.setGeneralHead(generalHeadJPA);
+				generalHeadOrder.setSequenceNumber((i + 1));
+				
+				generalHeadOrderList.add(generalHeadOrder);
+			}
+		}
+		if(StringUtils.isNotEmpty(societyConfigDomain.getIncomeGeneralHeadIds())) {
+			
+			String[] inSectionArr = societyConfigDomain.getIncomeGeneralHeadIds().split(",");
+			String[] inOrderIdArr = societyConfigDomain.getIncomeOrderIds().split(",");
+			for(int i = 0; i < inSectionArr.length; i++) {
+				
+				String generalHeadId = inSectionArr[i];
+				Integer orderId = StringUtils.equals(inOrderIdArr[i], "0") ? null : Integer.valueOf(inOrderIdArr[i]);
 				
 				GeneralHeadJPA generalHeadJPA = new GeneralHeadJPA();
 				generalHeadJPA.setGeneralHeadId(Integer.valueOf(generalHeadId));

@@ -49,6 +49,52 @@
 			$("#assetOrderIds").val(paOrderList);
 		}
 		
+		var isExCheck = $("#exSectionId").prop("checked");
+		if(isExCheck) {
+			var exGeneralHeadList = $("#exGeneralHeadList").find("li").map(function(){
+				return $(this).attr("data-id");
+			}).get().join();
+			$("#expenseGeneralHeadIds").val(exGeneralHeadList);
+			
+			var exOrderList = $("#exGeneralHeadList").find("li").map(function(){
+				var orderId = $(this).attr("data-orderId");
+				if(orderId == "")
+					return "0";
+				else
+					return $(this).attr("data-orderId");
+			}).get().join();
+			$("#expenseOrderIds").val(exOrderList);
+		}
+		
+		var isInCheck = $("#inSectionId").prop("checked");
+		if(isInCheck) {
+			var inGeneralHeadList = $("#inGeneralHeadList").find("li").map(function(){
+				return $(this).attr("data-id");
+			}).get().join();
+			$("#incomeGeneralHeadIds").val(inGeneralHeadList);
+			
+			var inOrderList = $("#inGeneralHeadList").find("li").map(function(){
+				var orderId = $(this).attr("data-orderId");
+				if(orderId == "")
+					return "0";
+				else
+					return $(this).attr("data-orderId");
+			}).get().join();
+			$("#incomeOrderIds").val(inOrderList);
+		}
+		
+		var startDate = $("#configStartDate").val();
+		if(startDate != '')
+			$("#startDate").val(startDate);
+		
+		var endDate = $("#configEndDate").val();
+		if(endDate != '')
+			$("#endDate").val(endDate);
+		
+		var maintenanceCycle = $("#configMaintenanceDate").val();
+		if(maintenanceCycle != 0)
+			$("#maintenanceCycle").val(maintenanceCycle);
+		
 		return true;
 	});
 
