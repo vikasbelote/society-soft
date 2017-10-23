@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.society.model.domain.GeneralHeadDomain;
+import com.society.model.domain.MaintenanceTableDomain;
 import com.society.service.MaintenanceService;
 
 @Controller
@@ -38,20 +38,20 @@ public class MaintenanceController extends BaseController {
 	@RequestMapping(value = "maintaince", method = RequestMethod.POST)
 	public String postMaintenance(HttpSession session, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		
-		Map<String, String[]> generalHeadIdChargeMap = request.getParameterMap();
+		Map<Integer, String> generalHeadIdChargeMap = maintenanceService.getGenralHeadIdChargeMap(request.getParameterMap());
 		redirectAttributes.addFlashAttribute("generalHeadIdChargeMap", generalHeadIdChargeMap);
 		
 		return "redirect:/maintenanceTable";
 	}
 	
 	@RequestMapping(value = "maintenanceTable", method = RequestMethod.GET)
-	public ModelAndView getMaintainceTable(@ModelAttribute("generalHeadIdChargeMap") Map<String, String[]> generalHeadIdChargeMap, HttpServletRequest request) {
+	public ModelAndView getMaintainceTable(@ModelAttribute("generalHeadIdChargeMap")Map<Integer, String> generalHeadIdChargeMap, HttpSession session) {
 		
-		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
-		
-		flashMap.get("generalHeadIdChargeMap");
+		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
+		MaintenanceTableDomain maintenanceTable = maintenanceService.getMaintenanceTableList(generalHeadIdChargeMap, societyId);
 		
 		ModelAndView modelAndView = new ModelAndView("maintenanceTable");
+		modelAndView.addObject("maintenanceTable", maintenanceTable);
 		return modelAndView;
 	}
 	
