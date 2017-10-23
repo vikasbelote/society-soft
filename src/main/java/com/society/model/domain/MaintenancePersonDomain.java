@@ -6,7 +6,7 @@ public class MaintenancePersonDomain {
 	
 	private String name;
 	
-	private List<String> generalHeadValue;
+	private List<String> generalHeadValues;
 
 	public String getName() {
 		return name;
@@ -16,11 +16,13 @@ public class MaintenancePersonDomain {
 		this.name = name;
 	}
 
-	public List<String> getGeneralHeadValue() {
-		return generalHeadValue;
+	public List<String> getGeneralHeadValues() {
+		return generalHeadValues;
 	}
 
-	public void setGeneralHeadValue(List<String> generalHeadValue) {
-		this.generalHeadValue = generalHeadValue;
+	public void setGeneralHeadValues(List<String> generalHeadValues) {
+		this.generalHeadValues = generalHeadValues;
 	}
+
+	
 }

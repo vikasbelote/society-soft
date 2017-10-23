@@ -20,35 +20,23 @@
 					<thead>
 						<tr>
 							<th><strong>Memeber Name</strong></th>
-							<th><strong>Description</strong></th>
-							<th><strong>Amount</strong></th>
-							<th><strong>Date</strong></th>
-							<th><strong>Type</strong></th>
+							<c:forEach items="${maintenanceTable.columnList}"
+								var="generalHead">
+								<th>${generalHead.generalHeadName}</th>
+							</c:forEach>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<<%-- c:forEach items="${ transactionDomainList }" var="item">
+						<c:forEach items="${maintenanceTable.memberList}" var="member">
 							<tr>
-								<td data-generalHeadId="${item.generalHeadId}">${
-									item.generalHeadName }</td>
-								<td
-									data-transactionDescriptionId="${item.transactionDescriptionId}">${
-									item.transactionDescription }</td>
-								<td>${ item.transactionAmount }</td>
-								<td>${ item.transactionDate }</td>
-								<td>${ item.transactionType }</td>
-								<td><a id="editTransactionId"
-									data-transactionId="${ item.transactionId }" href="#"
-									class="btn btn-xs btn-info editTransaction"> <i
-										class="ace-icon fa fa-pencil bigger-120"></i>
-								</a>
-									<button class="btn btn-xs btn-danger deleteTransaction"
-										data-transactionId="${ item.transactionId }">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</button></td>
+								<td>${member.name}</td>
+								<c:forEach items="${member.generalHeadValues}" var="chargeValue">
+									<td>${chargeValue}</td>
+								</c:forEach>
+								<td></td>
 							</tr>
-						</c:forEach> --%>
+						</c:forEach>
 					</tbody>
 				</table>
 			</c:when>

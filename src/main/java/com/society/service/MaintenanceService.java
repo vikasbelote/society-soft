@@ -97,13 +97,15 @@ public class MaintenanceService {
 		MaintenanceTableDomain maintenanceTable = new MaintenanceTableDomain();
 		maintenanceTable.setColumnList(generalHeadDominList);
 		
+		List<MaintenancePersonDomain> memberList = new ArrayList<MaintenancePersonDomain>();
 		for(SocietyMemberJPA societyMember : societyMemberList) {
 			MaintenancePersonDomain maintenancePersonDomain = new MaintenancePersonDomain();
 			maintenancePersonDomain.setName(societyMember.getPerson().getFirstName());
-			maintenancePersonDomain.setGeneralHeadValue(chargeValueList);
+			maintenancePersonDomain.setGeneralHeadValues(chargeValueList);
+			memberList.add(maintenancePersonDomain);
 		}
-		
-		return null;
+		maintenanceTable.setMemberList(memberList);
+		return maintenanceTable;
 	}
 	
 	private List<String> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, Map<Integer, String> generalHeadIdChargeMap) {
