@@ -10,10 +10,22 @@
 	</h1>
 </div>
 <!-- /.page-header -->
+<style type="text/css">
+	@media all {
+		.page-break	{ display: none; }
+	}
+
+	@media print {
+		.page-break	{ display: block; page-break-before: always; }
+	}
+</style>
 
 <div class="row">
-	<div class="col-xs-12">
+	<div id="table-data" class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
+		<a id="generateReceiptId" href="#" class="btn btn-primary">Generate
+			Receipt</a>
+		<div class="space-6"></div>
 		<c:choose>
 			<c:when test="${not empty maintenanceTable}">
 				<table id="simple-table" class="table table-bordered table-hover">
@@ -24,7 +36,6 @@
 								var="generalHead">
 								<th>${generalHead.generalHeadName}</th>
 							</c:forEach>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -32,9 +43,8 @@
 							<tr>
 								<td>${member.name}</td>
 								<c:forEach items="${member.generalHeadValues}" var="chargeValue">
-									<td>${chargeValue}</td>
+									<td contenteditable="true">${chargeValue}</td>
 								</c:forEach>
-								<td></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -47,4 +57,14 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<div class="hidden" id="content">
+		<div>
+			<h1>Content 1</h1>
+		</div>
+		<div class="page-break"></div>
+		<div>
+			<h1>Content 2</h1>
+		</div>
+	</div>
 </div>
+

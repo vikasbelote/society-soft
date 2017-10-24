@@ -68,3 +68,10 @@
 	<!-- numeric scripts -->
 	<script src="./assets/js/numeric/jquery.numeric.min.js"></script>
 	<script src="./assets/js/numeric/numeric_inline.js"></script>
+	
+	<!-- jsPDF scripts -->
+	<script src="./assets/js/jspdf/jspdf.debug.js"></script>
+	<script src="./assets/js/jspdf/from_html.js"></script>
+	<script src="./assets/js/jspdf/split_text_to_size.js"></script>
+	<script src="./assets/js/jspdf/standard_fonts_metrics.js"></script>
+	
