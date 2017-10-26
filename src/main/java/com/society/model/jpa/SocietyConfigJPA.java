@@ -1,5 +1,6 @@
 package com.society.model.jpa;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "sa_society_config")
-public class SocietyConfigJPA {
+public class SocietyConfigJPA implements Serializable {
 	
 	@Id
 	@GeneratedValue
@@ -32,6 +33,12 @@ public class SocietyConfigJPA {
 	
 	@Column(name = "maintenance_cycle")
 	private Integer maintenanceCycle;
+	
+	@Column(name = "maintenance_payment_due_interest")
+	private Integer maintenancePaymentDueInterest;
+	
+	@Column(name = "maintenance_payment_cheque_name")
+	private String maintenancePaymentChequeName;
 
 	public Integer getConfigId() {
 		return configId;
@@ -71,5 +78,22 @@ public class SocietyConfigJPA {
 
 	public void setMaintenanceCycle(Integer maintenanceCycle) {
 		this.maintenanceCycle = maintenanceCycle;
+	}
+
+	public Integer getMaintenancePaymentDueInterest() {
+		return maintenancePaymentDueInterest;
+	}
+
+	public void setMaintenancePaymentDueInterest(
+			Integer maintenancePaymentDueInterest) {
+		this.maintenancePaymentDueInterest = maintenancePaymentDueInterest;
+	}
+
+	public String getMaintenancePaymentChequeName() {
+		return maintenancePaymentChequeName;
+	}
+
+	public void setMaintenancePaymentChequeName(String maintenancePaymentChequeName) {
+		this.maintenancePaymentChequeName = maintenancePaymentChequeName;
 	}
 }

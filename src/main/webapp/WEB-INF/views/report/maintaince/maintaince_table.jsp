@@ -12,12 +12,17 @@
 <div class="row">
 	<div id="table-data" class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<a id="generateReceiptId" href="#" class="btn btn-primary">Generate
-			Receipt</a>
+		<a id="generateReportId" href="#maintenanceReportForm" role="button"
+			class="btn btn-primary" data-toggle="modal">Generate Report</a>
 		<div class="space-6"></div>
 		<c:choose>
 			<c:when test="${not empty maintenanceTable}">
-				<table id="simple-table" class="table table-bordered table-hover">
+				<input type="hidden" id="societyNameId" value="${maintenanceTable.societyName}" />
+				<input type="hidden" id="societyAddressId" value="${maintenanceTable.societyAdrress}" />
+				<input type="hidden" id="maintenancePaymentDueInterestId" value="${maintenanceTable.maintenancePaymentDueInterest}" />
+				<input type="hidden" id="maintenancePaymentChequeNameId" value="${maintenanceTable.maintenancePaymentChequeName}" />
+				<table id="maintenanceTableId"
+					class="table table-bordered table-hover">
 					<thead>
 						<tr>
 							<th><strong>Memeber Name</strong></th>
@@ -46,209 +51,80 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
-	<div class="col-xs-12" id="content">
-		<div>
-			<p style="font-size: 18px; margin-left:150px;">
-				CRYSTAL TOWER CO-OPERTAIVE HOUSING SOCIETY LTD
-			</p>
-			<p style="margin-left:160px;">
-				(REG NO N.B.O.M/CIDCO/HSG(T.C)/6337/ITR/2015-16,DT-02/02/2016)
-			</p>
-			<p style="margin-left:170px;">
-				Add plot no : 23, sector-22, kamothe, navi-mumbau-410209
-			</p>
+	<div class="col-xs-12" id="content"></div>
+	<div id="maintenanceReportForm" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">Enter additional information for Maintenance Receipt</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="row">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right">Payment Due Date
+									 <i class="fa fa-asterisk" style="color: red;"></i>
+								</label>
+								<div class="col-sm-9">
+									<input id="paymentDueDateId" name="paymentDueDate"
+										 class=" col-xs-10 col-sm-9 date-picker" data-date-format="yyyy-mm-dd"
+										type="text">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right">Maintenance Cycle
+									 <i class="fa fa-asterisk" style="color: red;"></i>
+								</label>
+								<div class="col-sm-9">
+									<select class=" col-xs-10 col-sm-9">
+										<option>--Select--</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right">Additional Note
+								</label>
+								<div class="col-sm-9">
+									<div class="widget-box widget-color-green">
+											<div class="widget-header widget-header-small">  </div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<div class="wysiwyg-editor" id="editor2"></div>
+												</div>
+										 </div>
+									</div>
+								</div>
+							</div>
+								
+						</form>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<div id="modelMsgDiv" class="pull-left hide">
+						<h6 id="modelMsg" class="blue bigger"></h6>
+					</div>
+					<button class="btn btn-sm" data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i> Cancel
+					</button>
+
+					<button id="saveReportBtn" class="btn btn-sm btn-primary"
+						data-dismiss="modal">
+						<i class="ace-icon fa fa-check"></i> Save
+					</button>
+
+					<button id="updateMemberBtn" class="btn btn-sm btn-primary hide"
+						data-dismiss="modal">
+						<i class="ace-icon fa fa-check"></i> Update
+					</button>
+				</div>
+			</div>
 		</div>
-		<div>
-			<label style="font-size: 16px;">
-				Bill No : Q3-054
-			</label>
-		</div>
-		<div>
-			<label style="font-size: 16px;">Flat No : 1001</label>
-		</div>
-		<div>
-			<label style="font-size: 16px;">Shri : Vikas Bhaskar Belote</label>
-		</div>
-		<div>
-			<label>For the period from Oct 17 to Dec 17</label>
-		</div>
-		<table id="simple-table-1" class="table table-bordered table-hover">
-			<thead>
-				<tr>
-					<th>Sr No</th>
-					<th>Particulars</th>
-					<th>Amount</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td>Maintenance Charges</td>
-					<td>5700</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>5</td>
-					<td>Maintenance Charges</td>
-					<td>5700</td>
-				</tr>
-				<tr>
-					<td>6</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>7</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>8</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>9</td>
-					<td>Maintenance Charges</td>
-					<td>5700</td>
-				</tr>
-				<tr>
-					<td>10</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>11</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>12</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>13</td>
-					<td>Maintenance Charges</td>
-					<td>5700</td>
-				</tr>
-				<tr>
-					<td>14</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>15</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>16</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>17</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>18</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>19</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>20</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>21</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>22</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>Toatl Amount Payable</td>
-					<td>6795</td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<p style="font-size: 16px; text-align:justify;">
-			If the payment is not received on and before due date, Interest @21% p.a. on entire amount wil be applicable.I am able to solve any problem but thing is that we have differne solution
-		</p>
-		<p style="font-size: 16px;">
-			cheque should be drawan in the favour of "<strong>CRYSTAL TOWER CHS LTD</strong>"
-		</p>
-		<p>Note:</p>
-	    <div style="margin-left:20px">
-	      <ol>
-	        <li>Current bill as per resolution passed in AGM dt. 24.06.2017</li>
-	        <li>Members who have paid contribution towards cultural fund has been adjusted against Maintenance charges in this bill</li>
-	      </ol>
-	    </div>
-		<!-- ADD_PAGE -->
-		<table id="simple-table-2" class="table table-bordered table-hover">
-			<thead>
-				<tr>
-					<th>Sr No</th>
-					<th>Particulars</th>
-					<th>Amount</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td>Maintenance Charges</td>
-					<td>5700</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>Sinking Fund</td>
-					<td>342</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>Repair Fund</td>
-					<td>1023</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td>Culture Program Fund</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>Toatl Amount Payable</td>
-					<td>6795</td>
-				</tr>
-			</tbody>
-		</table>
 	</div>
 </div>
 

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -14,9 +15,12 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import com.society.constant.SectionEnum;
+import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
 import com.society.model.jpa.PersonJPA;
+import com.society.model.jpa.SocietyConfigJPA;
+import com.society.model.jpa.SocietyJPA;
 import com.society.model.jpa.SocietyMemberJPA;
 
 @Repository
@@ -93,5 +97,43 @@ public class MaintenanceRepository extends BaseRepository {
 		return societyMemberList;
 		
 	}
-
+	
+	public SocietyJPA getSocietyDetail(Integer societyId) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<SocietyJPA> criteriaQuery = criteriaBuilder.createQuery(SocietyJPA.class);
+		Root<SocietyJPA> root = criteriaQuery.from(SocietyJPA.class);
+		root.fetch("address", JoinType.INNER);
+		criteriaQuery.select(root);
+		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(root.<Integer>get("societyId"), societyId);
+		criteriaQuery.where(equalSocietyIdPredicate);
+		
+		SocietyJPA Society;
+		try {
+			Society = entityManager.createQuery(criteriaQuery).getSingleResult();
+		}
+		catch(Exception e) {
+			Society = null;
+		}
+		return Society;
+	}
+	
+	public SocietyConfigJPA getSocietyConfigDetail(Integer societyId) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<SocietyConfigJPA> criteriaQuery = criteriaBuilder.createQuery(SocietyConfigJPA.class);
+		Root<SocietyConfigJPA> root = criteriaQuery.from(SocietyConfigJPA.class);
+		Fetch<SocietyConfigJPA, SocietyJPA> society = root.fetch("society", JoinType.INNER);
+		society.fetch("address",JoinType.INNER);
+		criteriaQuery.select(root);
+		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), societyId);
+		criteriaQuery.where(equalSocietyIdPredicate);
+		
+		SocietyConfigJPA societyConfig;
+		try {
+			societyConfig = entityManager.createQuery(criteriaQuery).getSingleResult();
+		}
+		catch(Exception e) {
+			societyConfig = null;
+		}
+		return societyConfig;
+	}
 }

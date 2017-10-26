@@ -1,5 +1,6 @@
 package com.society.model.jpa;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "sa_society")
-public class SocietyJPA {
+public class SocietyJPA implements Serializable {
 	
 	@Id
 	@GeneratedValue

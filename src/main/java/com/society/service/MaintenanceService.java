@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.MaintenancePersonDomain;
 import com.society.model.domain.MaintenanceTableDomain;
+import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
+import com.society.model.jpa.SocietyConfigJPA;
+import com.society.model.jpa.SocietyJPA;
 import com.society.model.jpa.SocietyMemberJPA;
 import com.society.repository.MaintenanceRepository;
 
@@ -75,6 +78,10 @@ public class MaintenanceService {
 	
 	public MaintenanceTableDomain getMaintenanceTableList(Map<Integer, String> generalHeadIdChargeMap, Integer societyId) {
 		
+		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
+		if(societyConfig == null)
+			return null;
+		
 		List<SocietyMemberJPA> societyMemberList = maintenanceRepository.getSocietyMemberList(societyId);
 		if(CollectionUtils.isEmpty(societyMemberList))
 			return null;
@@ -96,6 +103,10 @@ public class MaintenanceService {
 		
 		MaintenanceTableDomain maintenanceTable = new MaintenanceTableDomain();
 		maintenanceTable.setColumnList(generalHeadDominList);
+		maintenanceTable.setSocietyName(societyConfig.getSociety().getSocietyName());
+		maintenanceTable.setSocietyAdrress(this.getAddress(societyConfig.getSociety().getAddress()));
+		maintenanceTable.setMaintenancePaymentDueInterest(societyConfig.getMaintenancePaymentDueInterest());
+		maintenanceTable.setMaintenancePaymentChequeName(societyConfig.getMaintenancePaymentChequeName());
 		
 		List<MaintenancePersonDomain> memberList = new ArrayList<MaintenancePersonDomain>();
 		for(SocietyMemberJPA societyMember : societyMemberList) {
@@ -117,5 +128,19 @@ public class MaintenanceService {
 			generalHeadChargeValueList.add(chargeValue);
 		}
 		return generalHeadChargeValueList;
+	}
+	
+	private String getAddress(AddressJPA address) {
+		
+		if(address == null)
+			return null;
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Add:");
+		sb.append(" Plot no : " + address.getPlotNo());
+		sb.append(", Sector : " + address.getSectorNo());
+		sb.append(", " + address.getAreaName());
+		sb.append(", " + address.getCity() + "-" + address.getPinCode());
+		return sb.toString();
 	}
 }

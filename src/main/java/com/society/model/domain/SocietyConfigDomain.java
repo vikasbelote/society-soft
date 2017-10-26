@@ -29,6 +29,10 @@ public class SocietyConfigDomain {
 	private Integer maintenanceCycle;
 	
 	private Integer societyId;
+	
+	private Integer maintenancePaymentInterestRate;
+	
+	private String maintenancePaymentChequeName;
 
 	public String getLiabilitesGeneralHeadIds() {
 		return liabilitesGeneralHeadIds;
@@ -132,5 +136,22 @@ public class SocietyConfigDomain {
 
 	public void setMaintenanceCycle(Integer maintenanceCycle) {
 		this.maintenanceCycle = maintenanceCycle;
+	}
+
+	public Integer getMaintenancePaymentInterestRate() {
+		return maintenancePaymentInterestRate;
+	}
+
+	public void setMaintenancePaymentInterestRate(
+			Integer maintenancePaymentInterestRate) {
+		this.maintenancePaymentInterestRate = maintenancePaymentInterestRate;
+	}
+
+	public String getMaintenancePaymentChequeName() {
+		return maintenancePaymentChequeName;
+	}
+
+	public void setMaintenancePaymentChequeName(String maintenancePaymentChequeName) {
+		this.maintenancePaymentChequeName = maintenancePaymentChequeName;
 	}
 }

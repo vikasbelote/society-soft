@@ -95,6 +95,14 @@
 		if(maintenanceCycle != 0)
 			$("#maintenanceCycle").val(maintenanceCycle);
 		
+		var maintenancePaymentInterestRate = $("#maintenancePaymentInterestRate").val();
+		if(maintenancePaymentInterestRate != '')
+			$("#maintenancePaymentInterestRate").val(maintenancePaymentInterestRate);
+		
+		var maintenancePaymentChequeName = $("#maintenancePaymentChequeName").val();
+		if(maintenancePaymentChequeName != '')
+			$("#maintenancePaymentChequeName").val(maintenancePaymentChequeName);
+		
 		return true;
 	});
 

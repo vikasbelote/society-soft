@@ -219,6 +219,20 @@
 							</select>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right"
+							for="form-field-1">Maintenance Payment Interest Rate</label>
+						<div class="col-sm-4">
+							<input id="maintenancePaymentInterestRate" class="col-xs-10 col-sm-5" type="text"  />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right"
+							for="form-field-1">Maintenance Payment Cheque Name</label>
+						<div class="col-sm-4">
+							<input id="maintenancePaymentChequeName" class="col-xs-10 col-sm-5" type="text" />
+						</div>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -238,6 +252,8 @@
 			<form:hidden path="startDate" />
 			<form:hidden path="endDate" />
 			<form:hidden path="maintenanceCycle" />
+			<form:hidden path="maintenancePaymentInterestRate" />
+			<form:hidden path="maintenancePaymentChequeName" />
 
 			<div class="clearfix form-actions">
 				<div class="col-sm-offset-3">

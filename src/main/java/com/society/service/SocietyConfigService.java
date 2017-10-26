@@ -135,6 +135,8 @@ public class SocietyConfigService {
 		societyConfig.setStartDate(societyConfigDomain.getStartDate());
 		societyConfig.setEndDate(societyConfigDomain.getEndDate());
 		societyConfig.setMaintenanceCycle(societyConfigDomain.getMaintenanceCycle());
+		societyConfig.setMaintenancePaymentDueInterest(societyConfigDomain.getMaintenancePaymentInterestRate());
+		societyConfig.setMaintenancePaymentChequeName(societyConfigDomain.getMaintenancePaymentChequeName());
 		
 		List<GeneralHeadOrderJPA> generalHeadOrderList = new ArrayList<GeneralHeadOrderJPA>();
 		if(StringUtils.isNotEmpty(societyConfigDomain.getLiabilitesGeneralHeadIds())) {
