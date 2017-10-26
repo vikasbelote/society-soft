@@ -299,13 +299,13 @@
 		headers = [];
 		i = 0;
 		l = table.rows[0].cells.length;
-		table_with = table.clientWidth;
+		table_with = parseInt(table.width);
 		while (i < l) {
 			cell = table.rows[0].cells[i];
 			headers[i] = {
 				name : cell.textContent.toLowerCase().replace(/\s+/g, ''),
 				prompt : cell.textContent.replace(/\r?\n/g, ''),
-				width : (cell.clientWidth / table_with) * renderer.pdf.internal.pageSize.width
+				width : (parseInt(cell.width) / table_with) * renderer.pdf.internal.pageSize.width
 			};
 			i++;
 		}

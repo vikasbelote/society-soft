@@ -14,16 +14,16 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<form class="form-horizontal" role="form" method="post"
-			action="maintaince">
-
+		<form:form id="inserAndUpdateForm" commandName="maintenanceDomain"
+			class="form-horizontal" action="maintaince">
+			<h3 class="header smaller lighter green">General Head</h3>
 			<c:forEach items="${generalHeadList}" var="twoGeneralHeadList">
 				<div class="form-group">
 					<c:if test="${twoGeneralHeadList.size() > 0}">
 						<label class="col-sm-3 control-label no-padding-right"
 							for="form-field-1">${twoGeneralHeadList.get(0).generalHeadName} </label>
 						<div class="col-sm-2">
-							<input type="text" id="societyNameId" name="${twoGeneralHeadList.get(0).generalHeadId}"
+							<input type="text" id="societyNameId" name="generalHeadChargeMap[${twoGeneralHeadList.get(0).generalHeadId}]"
 								class="col-xs-10 col-sm-12" />
 						</div>
 					</c:if>
@@ -32,12 +32,41 @@
 						<label class="col-sm-2 control-label" for="form-field-1">${twoGeneralHeadList.get(1).generalHeadName}
 						</label>
 						<div class="col-sm-2">
-							<input type="text" id="societyNameId" name="${twoGeneralHeadList.get(1).generalHeadId}"
+							<input type="text" id="societyNameId" name="generalHeadChargeMap[${twoGeneralHeadList.get(1).generalHeadId}]"
 								class="col-xs-10 col-sm-12" />
 						</div>
 					</c:if>
 				</div>
 			</c:forEach>
+			<h3 class="header smaller lighter green">Other Details</h3>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for="form-field-1">Payment Due Date</label>
+				<div class="col-sm-2">	
+					<form:input cssClass="col-xs-10 col-sm-12 date-picker" path="paymentDueDate" 
+					data-date-format="yyyy-mm-dd" />
+				</div>
+				
+				<label class="col-sm-2 control-label" for="form-field-1">Payment Cycle
+				</label>
+				<div class="col-sm-2">
+					<form:input path="paymentCycle" class="col-xs-10 col-sm-12" />
+				</div>				
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for="form-field-1">Additional Note</label>
+				<div class="col-sm-6">
+					<div class="widget-box widget-color-green col-sm-offset-3">
+						<div id="additionalNoteHeader" class="widget-header widget-header-small">  </div>
+						<div class="widget-body">
+							<div class="widget-main no-padding">
+								<div class="wysiwyg-editor" id="editor2"></div>
+							</div>
+					 	</div>
+					</div>
+				</div>
+			</div>
 			<div class="space-10"></div>
 			<div class="">
 				<div class="col-sm-offset-4">
@@ -52,6 +81,6 @@
 				</div>
 			</div>
 
-		</form>
+		</form:form>
 	</div>
 </div>

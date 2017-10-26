@@ -1,5 +1,6 @@
 package com.society.controller;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.model.domain.GeneralHeadDomain;
+import com.society.model.domain.MaintenanceDomain;
 import com.society.model.domain.MaintenanceTableDomain;
 import com.society.service.MaintenanceService;
 
@@ -30,25 +32,30 @@ public class MaintenanceController extends BaseController {
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		List<List<GeneralHeadDomain>> generalHeadList = maintenanceService.getGeneralHeadList(societyId); 
 				
-		ModelAndView modelAndView = new ModelAndView("maintaince");
+		ModelAndView modelAndView = new ModelAndView("maintaince", "maintenanceDomain", new MaintenanceDomain());
 		modelAndView.addObject("generalHeadList", generalHeadList);
 		return modelAndView;
 	}
 	
 	@RequestMapping(value = "maintaince", method = RequestMethod.POST)
-	public String postMaintenance(HttpSession session, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String postMaintenance(@ModelAttribute("maintenanceDomain")MaintenanceDomain maintenanceDomain, RedirectAttributes redirectAttributes) {
 		
-		Map<Integer, String> generalHeadIdChargeMap = maintenanceService.getGenralHeadIdChargeMap(request.getParameterMap());
-		redirectAttributes.addFlashAttribute("generalHeadIdChargeMap", generalHeadIdChargeMap);
-		
+		redirectAttributes.addFlashAttribute("maintenanceDomain", maintenanceDomain);
 		return "redirect:/maintenanceTable";
 	}
 	
 	@RequestMapping(value = "maintenanceTable", method = RequestMethod.GET)
-	public ModelAndView getMaintainceTable(@ModelAttribute("generalHeadIdChargeMap")Map<Integer, String> generalHeadIdChargeMap, HttpSession session) {
+	public ModelAndView getMaintainceTable(@ModelAttribute("maintenanceDomain")MaintenanceDomain maintenanceDomain, HttpSession session) {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
-		MaintenanceTableDomain maintenanceTable = maintenanceService.getMaintenanceTableList(generalHeadIdChargeMap, societyId);
+		if(maintenanceDomain.getPaymentDueDate() == null && maintenanceDomain.getGeneralHeadChargeMap() == null) {
+			List<List<GeneralHeadDomain>> generalHeadList = maintenanceService.getGeneralHeadList(societyId); 
+			ModelAndView modelAndView = new ModelAndView("maintaince", "maintenanceDomain", new MaintenanceDomain());
+			modelAndView.addObject("generalHeadList", generalHeadList);
+			return modelAndView;
+		}
+		
+		MaintenanceTableDomain maintenanceTable = maintenanceService.getMaintenanceTableList(maintenanceDomain, societyId);
 		
 		ModelAndView modelAndView = new ModelAndView("maintenanceTable");
 		modelAndView.addObject("maintenanceTable", maintenanceTable);

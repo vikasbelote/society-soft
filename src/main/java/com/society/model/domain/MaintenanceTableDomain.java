@@ -1,5 +1,6 @@
 package com.society.model.domain;
 
+import java.sql.Date;
 import java.util.List;
 
 public class MaintenanceTableDomain {
@@ -11,6 +12,8 @@ public class MaintenanceTableDomain {
 	private Integer maintenancePaymentDueInterest;
 	
 	private String maintenancePaymentChequeName;
+	
+	private Date paymentDueDate;
 	
 	private List<MaintenancePersonDomain> memberList;
 	
@@ -63,5 +66,13 @@ public class MaintenanceTableDomain {
 
 	public void setMaintenancePaymentChequeName(String maintenancePaymentChequeName) {
 		this.maintenancePaymentChequeName = maintenancePaymentChequeName;
+	}
+
+	public Date getPaymentDueDate() {
+		return paymentDueDate;
+	}
+
+	public void setPaymentDueDate(Date paymentDueDate) {
+		this.paymentDueDate = paymentDueDate;
 	}
 }

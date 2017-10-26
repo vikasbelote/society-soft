@@ -12,8 +12,8 @@
 <div class="row">
 	<div id="table-data" class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<a id="generateReportId" href="#maintenanceReportForm" role="button"
-			class="btn btn-primary" data-toggle="modal">Generate Report</a>
+		<a id="generateReceiptId" href="#" role="button"
+			class="btn btn-primary">Generate Receipt</a>
 		<div class="space-6"></div>
 		<c:choose>
 			<c:when test="${not empty maintenanceTable}">
@@ -21,6 +21,7 @@
 				<input type="hidden" id="societyAddressId" value="${maintenanceTable.societyAdrress}" />
 				<input type="hidden" id="maintenancePaymentDueInterestId" value="${maintenanceTable.maintenancePaymentDueInterest}" />
 				<input type="hidden" id="maintenancePaymentChequeNameId" value="${maintenanceTable.maintenancePaymentChequeName}" />
+				<input type="hidden" id="paymentDueDate" value="${maintenanceTable.paymentDueDate}" />
 				<table id="maintenanceTableId"
 					class="table table-bordered table-hover">
 					<thead>
@@ -51,80 +52,6 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
-	<div class="col-xs-12" id="content"></div>
-	<div id="maintenanceReportForm" class="modal" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="blue bigger">Enter additional information for Maintenance Receipt</h4>
-				</div>
-
-				<div class="modal-body">
-					<div class="row">
-						<form class="form-horizontal" role="form">
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right">Payment Due Date
-									 <i class="fa fa-asterisk" style="color: red;"></i>
-								</label>
-								<div class="col-sm-9">
-									<input id="paymentDueDateId" name="paymentDueDate"
-										 class=" col-xs-10 col-sm-9 date-picker" data-date-format="yyyy-mm-dd"
-										type="text">
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right">Maintenance Cycle
-									 <i class="fa fa-asterisk" style="color: red;"></i>
-								</label>
-								<div class="col-sm-9">
-									<select class=" col-xs-10 col-sm-9">
-										<option>--Select--</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right">Additional Note
-								</label>
-								<div class="col-sm-9">
-									<div class="widget-box widget-color-green">
-											<div class="widget-header widget-header-small">  </div>
-
-											<div class="widget-body">
-												<div class="widget-main no-padding">
-													<div class="wysiwyg-editor" id="editor2"></div>
-												</div>
-										 </div>
-									</div>
-								</div>
-							</div>
-								
-						</form>
-					</div>
-				</div>
-
-				<div class="modal-footer">
-					<div id="modelMsgDiv" class="pull-left hide">
-						<h6 id="modelMsg" class="blue bigger"></h6>
-					</div>
-					<button class="btn btn-sm" data-dismiss="modal">
-						<i class="ace-icon fa fa-times"></i> Cancel
-					</button>
-
-					<button id="saveReportBtn" class="btn btn-sm btn-primary"
-						data-dismiss="modal">
-						<i class="ace-icon fa fa-check"></i> Save
-					</button>
-
-					<button id="updateMemberBtn" class="btn btn-sm btn-primary hide"
-						data-dismiss="modal">
-						<i class="ace-icon fa fa-check"></i> Update
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	<div class="col-xs-12 hide" id="content"></div>
 </div>
 

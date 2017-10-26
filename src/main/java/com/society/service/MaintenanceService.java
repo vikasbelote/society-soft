@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.society.model.domain.GeneralHeadDomain;
+import com.society.model.domain.MaintenanceDomain;
 import com.society.model.domain.MaintenancePersonDomain;
 import com.society.model.domain.MaintenanceTableDomain;
 import com.society.model.jpa.AddressJPA;
@@ -76,7 +77,7 @@ public class MaintenanceService {
 		return generalHeadIdChargeMap;
 	}
 	
-	public MaintenanceTableDomain getMaintenanceTableList(Map<Integer, String> generalHeadIdChargeMap, Integer societyId) {
+	public MaintenanceTableDomain getMaintenanceTableList(MaintenanceDomain maintenanceDomain, Integer societyId) {
 		
 		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
 		if(societyConfig == null)
@@ -86,7 +87,7 @@ public class MaintenanceService {
 		if(CollectionUtils.isEmpty(societyMemberList))
 			return null;
 		
-		List<GeneralHeadJPA> generalHeadListDB = maintenanceRepository.getGeneralHeadList(generalHeadIdChargeMap);
+		List<GeneralHeadJPA> generalHeadListDB = maintenanceRepository.getGeneralHeadList(maintenanceDomain.getGeneralHeadChargeMap());
 		if(CollectionUtils.isEmpty(generalHeadListDB))
 			return null;
 		
@@ -99,7 +100,7 @@ public class MaintenanceService {
 			generalHeadDominList.add(generalHeadDomain);
 		}
 		
-		List<String> chargeValueList = this.getGeneralHeadChargeValueList(generalHeadDominList, generalHeadIdChargeMap);
+		List<String> chargeValueList = this.getGeneralHeadChargeValueList(generalHeadDominList, maintenanceDomain.getGeneralHeadChargeMap());
 		
 		MaintenanceTableDomain maintenanceTable = new MaintenanceTableDomain();
 		maintenanceTable.setColumnList(generalHeadDominList);
@@ -107,6 +108,7 @@ public class MaintenanceService {
 		maintenanceTable.setSocietyAdrress(this.getAddress(societyConfig.getSociety().getAddress()));
 		maintenanceTable.setMaintenancePaymentDueInterest(societyConfig.getMaintenancePaymentDueInterest());
 		maintenanceTable.setMaintenancePaymentChequeName(societyConfig.getMaintenancePaymentChequeName());
+		maintenanceTable.setPaymentDueDate(maintenanceDomain.getPaymentDueDate());
 		
 		List<MaintenancePersonDomain> memberList = new ArrayList<MaintenancePersonDomain>();
 		for(SocietyMemberJPA societyMember : societyMemberList) {
