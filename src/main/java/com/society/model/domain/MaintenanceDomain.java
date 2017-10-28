@@ -6,6 +6,8 @@ import java.util.Map;
 
 public class MaintenanceDomain {
 	
+	private Date paymentCycleStartDate;
+	
 	private Date paymentDueDate;
 	
 	private String paymentCycle;
@@ -13,6 +15,8 @@ public class MaintenanceDomain {
 	private List<String> additionalNote;
 	
 	Map<Integer, String> generalHeadChargeMap;
+	
+	private Integer societyId;
 
 	public Date getPaymentDueDate() {
 		return paymentDueDate;
@@ -44,6 +48,22 @@ public class MaintenanceDomain {
 
 	public void setPaymentCycle(String paymentCycle) {
 		this.paymentCycle = paymentCycle;
+	}
+
+	public Date getPaymentCycleStartDate() {
+		return paymentCycleStartDate;
+	}
+
+	public void setPaymentCycleStartDate(Date paymentCycleStartDate) {
+		this.paymentCycleStartDate = paymentCycleStartDate;
+	}
+
+	public Integer getSocietyId() {
+		return societyId;
+	}
+
+	public void setSocietyId(Integer societyId) {
+		this.societyId = societyId;
 	}
 
 }

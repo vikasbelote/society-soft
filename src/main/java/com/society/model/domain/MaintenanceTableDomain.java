@@ -18,6 +18,8 @@ public class MaintenanceTableDomain {
 	private List<MaintenancePersonDomain> memberList;
 	
 	private List<GeneralHeadDomain> columnList;
+	
+	private String paymentCycle;
 
 	public List<MaintenancePersonDomain> getMemberList() {
 		return memberList;
@@ -75,4 +77,14 @@ public class MaintenanceTableDomain {
 	public void setPaymentDueDate(Date paymentDueDate) {
 		this.paymentDueDate = paymentDueDate;
 	}
+
+	public String getPaymentCycle() {
+		return paymentCycle;
+	}
+
+	public void setPaymentCycle(String paymentCycle) {
+		this.paymentCycle = paymentCycle;
+	}
+
+	
 }

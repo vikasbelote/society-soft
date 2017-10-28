@@ -114,95 +114,104 @@
 	
 	$("#generateMaintenanceReportBtn").click(function() {
 		
+		var isValid = true;
 		try {
 			
-			//alert($("#editor2").text());
+			var paymentDueDate = $("#paymentDueDate").val();
+			if(paymentDueDate == "") {
+				showValidationMsg("Payment Due Date","Please enter value for payment due date.");
+				isValid = false;
+			}
 			
+			var paymentCycle = $("#paymentCycle").val();
+			if(paymentCycle == "") {
+				showValidationMsg("Payment Cycle","Please select payment cycle.");
+				isValid = false;
+			}
+			
+			if(paymentDueDate != "" && paymentCycle != "") {
+				
+				var cycleDueDate = new Date(paymentDueDate);
+				var cycleEndDate = new Date($.trim(paymentCycle.split("to")[1]));
+				
+				if(cycleDueDate < cycleEndDate) {
+					showValidationMsg("Payment Due Date","Please select date which is greater than cycle end date.");
+					isValid = false;
+				}
+			}
 		}
 		catch(err) {
 			return false;
 		}
-		
-		return true;
-		
+		return isValid;
 	});
 	
 	$("#generateReceiptId").click(function(){
+	
+		$("#spinnerId").removeClass("hide");
+		$("body").off("click");
 		
-		var societyName = $("#societyNameId").val();
-		var societyAddress = $("#societyAddressId").val();
-		var maintenancePaymentDueInterest = $("#maintenancePaymentDueInterestId").val();
-		var maintenancePaymentChequeName = $("#maintenancePaymentChequeNameId").val();
 		var paymentDueDate = $("#paymentDueDate").val();
+		var paymentCycle = $("#paymentCycle").val();
+		var paymentCycleDateArr = paymentCycle.split("to");
+		//Object send to server to populate maintenance receipt data
+		var cycle = {};
+		cycle.paymentDueDate = paymentDueDate;
+		cycle.startDate = $.trim(paymentCycleDateArr[0]);
+		cycle.endDate = $.trim(paymentCycleDateArr[1]);;
+		cycle.receipts = [];
 		
-		var maintenanceReceiptObjArr = [];
-		
-		var generalHeadKeyArr = $("#maintenanceTableId thead tr").find("th:gt(0)").map(function(){
+		var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(0)").map(function(){
 			return $(this).text();
 		}).get();
 		
 		$("#maintenanceTableId tbody").find("tr").map(function() {
 			
-			var maintenanceReceiptObj = {};
-			maintenanceReceiptObj.name = $(this).find("td:eq(0)").text();
+			var memberReceipt = {};
+			memberReceipt.memberId = $(this).find("td:eq(0)").attr("data-memberId");
+			memberReceipt.memberName = $(this).find("td:eq(0)").text();
+			memberReceipt.chargeList = [];
 			
-			var generalHeadValueArr = $(this).find("td:gt(0)").map(function(){
-				return $(this).text();
+			var generalHeadIdAndValueArr = $(this).find("td:gt(0)").map(function(){
+				var generalHeadIdAndValue = {
+						id : $(this).attr("data-generalHeadId"),
+						value : $(this).text()
+				}
+				return generalHeadIdAndValue;
 			}).get();
 			
-			var generalHeadMap = [];
-			if(generalHeadKeyArr.length == generalHeadValueArr.length) {
-				for (var i = 0; i < generalHeadKeyArr.length; i++) {
-					var generalHead = {
-						name : generalHeadKeyArr[i],
-						chargeValue : generalHeadValueArr[i]
-					};
-					generalHeadMap.push(generalHead);
+			
+			if(generalHeadNameArr.length == generalHeadIdAndValueArr.length) {
+				for (var i = 0; i < generalHeadNameArr.length; i++) {
+					
+					var charge = {};
+					charge.srNumber = (i + 1);
+					charge.generalHeadId = generalHeadIdAndValueArr[i].id;
+					charge.chargeValue = generalHeadIdAndValueArr[i].value;
+					charge.generalHeadName = generalHeadNameArr[i];
+					memberReceipt.chargeList.push(charge);
 				}
 			}
-			maintenanceReceiptObj.generalHeadMapArr = generalHeadMap;
-			maintenanceReceiptObjArr.push(maintenanceReceiptObj);
+			
+			cycle.receipts.push(memberReceipt);
 		});
 		
-		for(var i = 0; i < maintenanceReceiptObjArr.length; i++) {
-			var maintenanceReceiptObj = maintenanceReceiptObjArr[i];
-			$("#content").append('<p style="font-size: 18px; margin-left: 150px;">'+ societyName +'</p>');
-			$("#content").append('<p style="margin-left: 170px;">'+ societyAddress +'</p>');
-			$("#content").append('<p style="font-size: 16px;">Shri : ' + maintenanceReceiptObj.name + '</p>');
-			
-			var tableHtml = "";
-			tableHtml = tableHtml + '<table  width="400" border="1">';
-			tableHtml = tableHtml + '<thead><tr><th width="60">Sr No</th><th width="220">Particulars</th><th width="120">Amount</th></tr></thead>';
-			tableHtml = tableHtml + '<tbody>';
-			var generalHeadMap = maintenanceReceiptObj.generalHeadMapArr;
-			var totalValue = 0;
-			for(var j = 0; j < generalHeadMap.length; j++) {
-				var generalHead = generalHeadMap[j];
-				totalValue = parseInt(totalValue) + parseInt(generalHead.chargeValue);
-				tableHtml = tableHtml + '<tr>';
-				tableHtml = tableHtml + '<td>' + (parseInt(j) + 1) + '</td>';
-				tableHtml = tableHtml + '<td>' + generalHead.name + '</td>';
-				tableHtml = tableHtml + '<td>' + generalHead.chargeValue + '</td>';
-				tableHtml = tableHtml + '</tr>';
-				$("#content").append('</tr>');
+		var cycleJson = JSON.stringify(cycle);
+		$.ajax({
+			url : 'saveMaintenanceData',
+			contentType : "application/json",
+			type : 'POST',
+			data : cycleJson,
+			success : function(response) {
+				$('#content').append(response);
+				downloadAllMaintenanceReceipt();
+				$("#spinnerId").addClass("hide");
+				$("body").on("click");
+			},
+			error : function(e) {
+				alert("error");
 			}
-			tableHtml = tableHtml + '<tr>';
-			tableHtml = tableHtml + '<td></td>';
-			tableHtml = tableHtml + '<td>Total Payable Amount</td>';
-			tableHtml = tableHtml + '<td>' + totalValue + '</td>';
-			tableHtml = tableHtml + '</tr>';
-			tableHtml = tableHtml + '</tbody>';
-			tableHtml = tableHtml + '</table>';
-			$("#content").append(tableHtml);
-			$("#content").append('<p style="font-size: 16px;">Payment due date : ' + paymentDueDate + '</p>');
-			$("#content").append('<p style="font-size: 16px; text-align: justify;">If the payment is '+
-					 'not received on and before due date, Interest @' + maintenancePaymentDueInterest + '% p.a. on entire '+
-					 'amount wil be applicable</p>');
-			$("#content").append('<p style="font-size: 16px;">cheque should be drawan in the favour of "<strong>' + maintenancePaymentChequeName + '</strong>"</p>');
-			$("#content").append('<!-- ADD_PAGE -->');
-		}
-		
-		downloadAllMaintenanceReceipt();
+		});
 	});
 })(jQuery);
 

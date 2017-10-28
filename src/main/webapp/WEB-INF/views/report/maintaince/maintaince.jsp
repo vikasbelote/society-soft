@@ -3,9 +3,8 @@
 
 <div class="page-header">
 	<h1>
-		Member Maintenance <small> <i
-			class="ace-icon fa fa-angle-double-right"></i> This report display
-			maintenance of every society member
+		Create Maintenance Report <small> <i
+			class="ace-icon fa fa-angle-double-right"></i> Create new maintenance report
 		</small>
 	</h1>
 </div>
@@ -14,9 +13,24 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
+		<c:if test="${cycleExist}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<i class="ace-icon fa fa-times"></i>
+				</button>
+				<strong>
+					<i class="ace-icon fa fa-times"></i>
+					Oh snap!
+				</strong>
+				Select payment cycle is already exist.
+				<br />
+			</div>
+		</c:if>
+		
 		<form:form id="inserAndUpdateForm" commandName="maintenanceDomain"
 			class="form-horizontal" action="maintaince">
 			<h3 class="header smaller lighter green">General Head</h3>
+			<form:hidden path="paymentCycleStartDate" />
 			<c:forEach items="${generalHeadList}" var="twoGeneralHeadList">
 				<div class="form-group">
 					<c:if test="${twoGeneralHeadList.size() > 0}">
@@ -24,7 +38,7 @@
 							for="form-field-1">${twoGeneralHeadList.get(0).generalHeadName} </label>
 						<div class="col-sm-2">
 							<input type="text" id="societyNameId" name="generalHeadChargeMap[${twoGeneralHeadList.get(0).generalHeadId}]"
-								class="col-xs-10 col-sm-12" />
+								class="col-xs-10 col-sm-12 numeric" />
 						</div>
 					</c:if>
 
@@ -33,25 +47,29 @@
 						</label>
 						<div class="col-sm-2">
 							<input type="text" id="societyNameId" name="generalHeadChargeMap[${twoGeneralHeadList.get(1).generalHeadId}]"
-								class="col-xs-10 col-sm-12" />
+								class="col-xs-10 col-sm-12 numeric" />
 						</div>
 					</c:if>
 				</div>
 			</c:forEach>
 			<h3 class="header smaller lighter green">Other Details</h3>
 			<div class="form-group">
-				<label class="col-sm-3 control-label no-padding-right"
+				<label class="col-sm-3 control-label" for="form-field-1">Payment Cycle
+				</label>
+				<div class="col-sm-2">
+					<form:select path="paymentCycle">
+						<form:option value="">Choose Payment cycle</form:option>
+						<form:options items="${cycleDateList}" />
+					</form:select>
+				</div>
+				
+				<label class="col-sm-2 control-label no-padding-right"
 					for="form-field-1">Payment Due Date</label>
 				<div class="col-sm-2">	
 					<form:input cssClass="col-xs-10 col-sm-12 date-picker" path="paymentDueDate" 
 					data-date-format="yyyy-mm-dd" />
 				</div>
-				
-				<label class="col-sm-2 control-label" for="form-field-1">Payment Cycle
-				</label>
-				<div class="col-sm-2">
-					<form:input path="paymentCycle" class="col-xs-10 col-sm-12" />
-				</div>				
+								
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"

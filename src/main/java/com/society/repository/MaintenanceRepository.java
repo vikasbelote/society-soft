@@ -1,5 +1,6 @@
 package com.society.repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,13 +13,18 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.society.constant.SectionEnum;
+import com.society.model.domain.MaintenanceDomain;
 import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
+import com.society.model.jpa.MaintenanceChargeJPA;
+import com.society.model.jpa.MaintenanceCycleJPA;
 import com.society.model.jpa.PersonJPA;
+import com.society.model.jpa.RoleJPA;
 import com.society.model.jpa.SocietyConfigJPA;
 import com.society.model.jpa.SocietyJPA;
 import com.society.model.jpa.SocietyMemberJPA;
@@ -135,5 +141,71 @@ public class MaintenanceRepository extends BaseRepository {
 			societyConfig = null;
 		}
 		return societyConfig;
+	}
+	
+	public boolean saveMaintenanceData(List<MaintenanceChargeJPA> chargeList) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			for(MaintenanceChargeJPA charge : chargeList) {
+				session.save(charge);
+			}
+			
+			session.getTransaction().commit();
+			return true;
+		}
+		catch(Exception e) {
+			if(session != null)
+				session.getTransaction().rollback();
+			return false;
+		}
+		finally {
+			if(session != null)
+				session.close();
+		}
+	}
+	
+	public List<MaintenanceCycleJPA> checkPaymentCycleExist(MaintenanceDomain maintenanceDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MaintenanceCycleJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceCycleJPA.class);
+		Root<MaintenanceCycleJPA> root = criteriaQuery.from(MaintenanceCycleJPA.class);		
+		criteriaQuery.select(root);
+		
+		Predicate cycleStartDate = criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("startDate"), maintenanceDomain.getPaymentCycleStartDate());
+		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), maintenanceDomain.getSocietyId());
+		
+		criteriaQuery.where(cycleStartDate, equalSocietyIdPredicate);
+		
+		List<MaintenanceCycleJPA> maintenanceCycleList;
+		try {
+			maintenanceCycleList = entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			maintenanceCycleList = null;
+		}
+		return maintenanceCycleList;
+	}
+	
+	public List<MaintenanceCycleJPA> getMaintenanceCycleList(Integer societyId) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MaintenanceCycleJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceCycleJPA.class);
+		Root<MaintenanceCycleJPA> root = criteriaQuery.from(MaintenanceCycleJPA.class);		
+		criteriaQuery.select(root);
+		
+		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), societyId);
+		criteriaQuery.where(equalSocietyIdPredicate);
+		
+		List<MaintenanceCycleJPA> maintenanceCycleList;
+		try {
+			maintenanceCycleList = entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			maintenanceCycleList = null;
+		}
+		return maintenanceCycleList;
 	}
 }

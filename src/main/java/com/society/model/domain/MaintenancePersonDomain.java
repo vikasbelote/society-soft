@@ -4,9 +4,19 @@ import java.util.List;
 
 public class MaintenancePersonDomain {
 	
+	private Integer memberId;
+	
 	private String name;
 	
-	private List<String> generalHeadValues;
+	private List<MaintenacneChargeDomain> generalHeadValues;
+
+	public Integer getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(Integer memberId) {
+		this.memberId = memberId;
+	}
 
 	public String getName() {
 		return name;
@@ -16,11 +26,11 @@ public class MaintenancePersonDomain {
 		this.name = name;
 	}
 
-	public List<String> getGeneralHeadValues() {
+	public List<MaintenacneChargeDomain> getGeneralHeadValues() {
 		return generalHeadValues;
 	}
 
-	public void setGeneralHeadValues(List<String> generalHeadValues) {
+	public void setGeneralHeadValues(List<MaintenacneChargeDomain> generalHeadValues) {
 		this.generalHeadValues = generalHeadValues;
 	}
 

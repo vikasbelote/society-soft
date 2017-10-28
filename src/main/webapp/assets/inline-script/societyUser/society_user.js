@@ -92,6 +92,21 @@ $(document).ready(function() {
 				'maintenence' : {
 					id : 5,
 					text : 'Maintenence',
+					type : 'folder'
+				}
+			}
+		}
+	
+	tree_data['report']['additionalParameters']['children']['maintenence']['additionalParameters'] = {
+			'children' : {
+				'create' : {
+					id : 10,
+					text : 'Create',
+					type : 'item'
+				},
+				'view' : {
+					id : 11,
+					text : 'View',
 					type : 'item'
 				}
 			}

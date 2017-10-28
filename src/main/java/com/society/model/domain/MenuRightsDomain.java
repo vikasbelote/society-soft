@@ -30,6 +30,10 @@ public class MenuRightsDomain {
 	private boolean isEnabledReocrdTransactionMenu = false;
 	//9 Menu Id
 	private boolean isEnableSocietyConfigurationMenu = false;
+	//10 Menu Id
+	private boolean isEnableCreateMaintenacneReport = false;
+	//11 Menu Id
+	private boolean isEnableViewMaintenacneReport = false;
 
 	public void initMenuRights(LoginDomain loginDomain) {
 
@@ -37,7 +41,9 @@ public class MenuRightsDomain {
 			isEnabledRegistrationMenu = true;
 
 		if (loginDomain.getRoleName().equals("Admin")) {
-			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = isEnableSocietyConfigurationMenu = true;
+			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = 
+					isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = 
+					isEnableSocietyConfigurationMenu = isEnableCreateMaintenacneReport = isEnableViewMaintenacneReport = true;
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -61,10 +67,6 @@ public class MenuRightsDomain {
 					isEnabledIncomeAndExpenseMenu = true;
 					break;
 				}
-				case 5: {
-					isEnabledMaintainceReport = true;
-					break;
-				}
 				case 6: {
 					isEnabledUserListMenu = true;
 					break;
@@ -81,9 +83,20 @@ public class MenuRightsDomain {
 					isEnableSocietyConfigurationMenu = true;
 					break;
 				}
+				case 10: {
+					isEnableCreateMaintenacneReport = true;
+					break;
+				}
+				case 11: {
+					isEnableViewMaintenacneReport = true;
+					break;
+				}
 				}
 			}
 		}
+		
+		if(isEnableCreateMaintenacneReport || isEnableViewMaintenacneReport)
+			isEnabledMaintainceReport = true;
 		
 		if(isEnabledRegistrationMenu || isEnabledCreateUserMenu || isEnabledUserListMenu)
 			isEnabledSocietyMenu = true;
@@ -198,5 +211,21 @@ public class MenuRightsDomain {
 
 	public void setEnableSocietyConfigurationMenu(boolean isEnableSocietyConfigurationMenu) {
 		this.isEnableSocietyConfigurationMenu = isEnableSocietyConfigurationMenu;
+	}
+
+	public boolean isEnableCreateMaintenacneReport() {
+		return isEnableCreateMaintenacneReport;
+	}
+
+	public void setEnableCreateMaintenacneReport(boolean isEnableCreateMaintenacneReport) {
+		this.isEnableCreateMaintenacneReport = isEnableCreateMaintenacneReport;
+	}
+
+	public boolean isEnableViewMaintenacneReport() {
+		return isEnableViewMaintenacneReport;
+	}
+
+	public void setEnableViewMaintenacneReport(boolean isEnableViewMaintenacneReport) {
+		this.isEnableViewMaintenacneReport = isEnableViewMaintenacneReport;
 	}
 }

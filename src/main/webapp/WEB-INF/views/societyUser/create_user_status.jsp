@@ -45,7 +45,7 @@
 				<div class="space"></div>
 
 				<div class="center">
-					<a href="javascript:history.back()" class="btn btn-grey"> <i
+					<a href="userList" class="btn btn-grey"> <i
 						class="ace-icon fa fa-arrow-left"></i> Go Back
 					</a> <a href="#" class="btn btn-primary"> <i
 						class="ace-icon fa fa-tachometer"></i> Dashboard

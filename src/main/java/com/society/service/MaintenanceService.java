@@ -1,21 +1,29 @@
 package com.society.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.society.model.domain.GeneralHeadDomain;
+import com.society.model.domain.MaintenacneChargeDomain;
+import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.model.domain.MaintenanceDomain;
 import com.society.model.domain.MaintenancePersonDomain;
+import com.society.model.domain.MaintenanceReceiptDomain;
 import com.society.model.domain.MaintenanceTableDomain;
 import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
+import com.society.model.jpa.MaintenanceChargeJPA;
+import com.society.model.jpa.MaintenanceCycleJPA;
+import com.society.model.jpa.MaintenanceReceiptJPA;
 import com.society.model.jpa.SocietyConfigJPA;
 import com.society.model.jpa.SocietyJPA;
 import com.society.model.jpa.SocietyMemberJPA;
@@ -27,6 +35,44 @@ public class MaintenanceService {
 	@Autowired
 	private MaintenanceRepository maintenanceRepository;
 	
+	public List<String> getCycleDateList(MaintenanceDomain maintenanceDomain, Integer societyId) {
+		
+		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
+		if(societyConfig == null)
+			return null;
+		
+		Integer addMonth = societyConfig.getMaintenanceCycle();
+		Date startDate = societyConfig.getStartDate();
+		maintenanceDomain.setPaymentCycleStartDate(startDate);
+		
+		if(addMonth == null || addMonth == 0)
+			addMonth = 2;
+		
+		if(startDate == null) {
+			String str = "2000-04-01";  
+			startDate = Date.valueOf(str);
+		}
+		Calendar c = Calendar.getInstance(); 
+		
+		List<String> cycleDateList = new ArrayList<String>();
+		Integer cycleCount = 12 / addMonth;
+		for(int i = 0; i < cycleCount; i++) {
+			
+			c.setTimeInMillis(startDate.getTime());
+			c.add(Calendar.MONTH, addMonth);
+			c.add(Calendar.DATE, -1);
+			Date endDate = new Date(c.getTimeInMillis());
+			
+			String cycleDate = String.valueOf(startDate) + " to " + String.valueOf(endDate);
+			
+			c.add(Calendar.DATE, 1);
+			startDate = new Date(c.getTimeInMillis());
+			
+			cycleDateList.add(cycleDate);
+		}
+		
+		return cycleDateList;
+	}
 	
 	public List<List<GeneralHeadDomain>> getGeneralHeadList(Integer societyId) {
 		
@@ -79,10 +125,6 @@ public class MaintenanceService {
 	
 	public MaintenanceTableDomain getMaintenanceTableList(MaintenanceDomain maintenanceDomain, Integer societyId) {
 		
-		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
-		if(societyConfig == null)
-			return null;
-		
 		List<SocietyMemberJPA> societyMemberList = maintenanceRepository.getSocietyMemberList(societyId);
 		if(CollectionUtils.isEmpty(societyMemberList))
 			return null;
@@ -100,34 +142,156 @@ public class MaintenanceService {
 			generalHeadDominList.add(generalHeadDomain);
 		}
 		
-		List<String> chargeValueList = this.getGeneralHeadChargeValueList(generalHeadDominList, maintenanceDomain.getGeneralHeadChargeMap());
+		List<MaintenacneChargeDomain> chargeValueList = this.getGeneralHeadChargeValueList(generalHeadDominList, maintenanceDomain.getGeneralHeadChargeMap());
 		
 		MaintenanceTableDomain maintenanceTable = new MaintenanceTableDomain();
 		maintenanceTable.setColumnList(generalHeadDominList);
-		maintenanceTable.setSocietyName(societyConfig.getSociety().getSocietyName());
-		maintenanceTable.setSocietyAdrress(this.getAddress(societyConfig.getSociety().getAddress()));
-		maintenanceTable.setMaintenancePaymentDueInterest(societyConfig.getMaintenancePaymentDueInterest());
-		maintenanceTable.setMaintenancePaymentChequeName(societyConfig.getMaintenancePaymentChequeName());
 		maintenanceTable.setPaymentDueDate(maintenanceDomain.getPaymentDueDate());
 		
 		List<MaintenancePersonDomain> memberList = new ArrayList<MaintenancePersonDomain>();
 		for(SocietyMemberJPA societyMember : societyMemberList) {
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(societyMember.getPerson().getFirstName() + " ");
+			sb.append(societyMember.getPerson().getLastName());
+			
 			MaintenancePersonDomain maintenancePersonDomain = new MaintenancePersonDomain();
-			maintenancePersonDomain.setName(societyMember.getPerson().getFirstName());
+			maintenancePersonDomain.setMemberId(societyMember.getMemberId());
+			maintenancePersonDomain.setName(sb.toString());
 			maintenancePersonDomain.setGeneralHeadValues(chargeValueList);
 			memberList.add(maintenancePersonDomain);
 		}
 		maintenanceTable.setMemberList(memberList);
+		
+		maintenanceTable.setPaymentCycle(maintenanceDomain.getPaymentCycle());
 		return maintenanceTable;
 	}
 	
-	private List<String> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, Map<Integer, String> generalHeadIdChargeMap) {
+	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
 		
-		List<String> generalHeadChargeValueList = new ArrayList<String>();
+		SocietyJPA society = new SocietyJPA();
+		society.setSocietyId(cycleDomain.getSocietyId());
+		
+		MaintenanceCycleJPA cycle = new MaintenanceCycleJPA();
+		cycle.setSociety(society);
+		cycle.setPaymentDueDate(cycleDomain.getPaymentDueDate());
+		cycle.setStartDate(cycleDomain.getStartDate());
+		cycle.setEndDate(cycleDomain.getEndDate());
+		
+		List<MaintenanceChargeJPA> chargeList = new ArrayList<MaintenanceChargeJPA>();
+		for(MaintenanceReceiptDomain receiptDomain : cycleDomain.getReceipts()) {
+			
+			SocietyMemberJPA member = new SocietyMemberJPA();
+			member.setMemberId(receiptDomain.getMemberId());
+			
+			MaintenanceReceiptJPA receipt = new MaintenanceReceiptJPA();
+			receipt.setCycle(cycle);
+			receipt.setMember(member);
+			
+			for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
+				
+				GeneralHeadJPA generalHead = new GeneralHeadJPA();
+				generalHead.setGeneralHeadId(maintenacneChargeDomain.getGeneralHeadId());
+				
+				MaintenanceChargeJPA charge = new MaintenanceChargeJPA();
+				charge.setReceipt(receipt);
+				charge.setGeneralHead(generalHead);
+				charge.setChargeValue(maintenacneChargeDomain.getChargeValue());
+				
+				chargeList.add(charge);
+			}
+		}
+		return maintenanceRepository.saveMaintenanceData(chargeList);
+	}
+	
+	public boolean updateCycle(MaintenanceCycleReceiptDomain cycleDomain) {
+		
+		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(cycleDomain.getSocietyId());
+		if(societyConfig == null)
+			return false;
+		
+		cycleDomain.setSocietyName(societyConfig.getSociety().getSocietyName());
+		cycleDomain.setAddress((this.getAddress(societyConfig.getSociety().getAddress())));
+		cycleDomain.setLateInterestRate(societyConfig.getMaintenancePaymentDueInterest());
+		cycleDomain.setChequeName(societyConfig.getMaintenancePaymentChequeName());
+		return true;
+	}
+	
+	public boolean checkPaymentCycleExist(MaintenanceDomain maintenanceDomain) {
+		
+		List<MaintenanceCycleJPA> maintenanceCycleList = maintenanceRepository.checkPaymentCycleExist(maintenanceDomain);
+		if(maintenanceCycleList == null)
+			throw new RuntimeException("There is problem with retriving data from database.");
+		
+		if(CollectionUtils.isEmpty(maintenanceCycleList))
+			return false;
+		
+		//split payment cycle
+		String[] selectedCycleDateArr = maintenanceDomain.getPaymentCycle().split("to");
+		
+		Date selectedCycleStartDate = Date.valueOf(selectedCycleDateArr[0].trim());
+		Date selectedCycleEndDate = Date.valueOf(selectedCycleDateArr[1].trim());
+		
+		boolean isValid = false;
+		for(MaintenanceCycleJPA cycle : maintenanceCycleList) {
+			
+			// check exist between selectedCycleStartDate and selectedCycleEndDate
+			if(cycle.getStartDate().after(selectedCycleStartDate) && cycle.getStartDate().before(selectedCycleEndDate)) {
+				isValid = true;
+				break;
+			}
+			if(cycle.getEndDate().after(selectedCycleStartDate) && cycle.getEndDate().before(selectedCycleEndDate)){
+				isValid = true;
+				break;
+			}
+			
+			// check equal selected cycle start date
+			if(cycle.getStartDate().equals(selectedCycleStartDate)){
+				isValid = true;
+				break;
+			}
+			if(cycle.getEndDate().equals(selectedCycleEndDate)){
+				isValid = true;
+				break;
+			}
+		}
+		return isValid;
+	}
+	
+	public List<MaintenanceCycleReceiptDomain> getMaintenacneCycleList(Integer societyId) {
+		
+		List<MaintenanceCycleJPA> maintenacneCycleList = maintenanceRepository.getMaintenanceCycleList(societyId);
+		if(CollectionUtils.isEmpty(maintenacneCycleList))
+			return null;
+		
+		List<MaintenanceCycleReceiptDomain> cycleList = new ArrayList<MaintenanceCycleReceiptDomain>();
+		for(MaintenanceCycleJPA maintenanceCycleDB : maintenacneCycleList) {
+			MaintenanceCycleReceiptDomain cycle = new MaintenanceCycleReceiptDomain();
+			cycle.setCycleId(maintenanceCycleDB.getCycleId());
+			cycle.setPaymentDueDate(maintenanceCycleDB.getPaymentDueDate());
+			cycle.setStartDate(maintenanceCycleDB.getStartDate());
+			cycle.setEndDate(maintenanceCycleDB.getEndDate());
+			cycleList.add(cycle);
+		}
+		return cycleList;
+	}
+	
+	private List<MaintenacneChargeDomain> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, 
+			Map<Integer, String> generalHeadIdChargeMap) {
+		
+		List<MaintenacneChargeDomain> generalHeadChargeValueList = new ArrayList<MaintenacneChargeDomain>();
 		for(GeneralHeadDomain generalHeadDomain : generalHeadDominList) {
+			
 			Integer generalHeadId = generalHeadDomain.getGeneralHeadId();
-			String chargeValue = generalHeadIdChargeMap.get(generalHeadId);
-			generalHeadChargeValueList.add(chargeValue);
+			MaintenacneChargeDomain maintenacneChargeDomain = new MaintenacneChargeDomain();
+			maintenacneChargeDomain.setGeneralHeadId(generalHeadId);
+
+			if(NumberUtils.isNumber(generalHeadIdChargeMap.get(generalHeadId)))
+				maintenacneChargeDomain.setChargeValue(Double.valueOf(generalHeadIdChargeMap.get(generalHeadId)));
+			else
+				maintenacneChargeDomain.setChargeValue(new Double(0));
+			
+			generalHeadChargeValueList.add(maintenacneChargeDomain);
 		}
 		return generalHeadChargeValueList;
 	}

@@ -98,9 +98,24 @@
 						</a> <b class="arrow"></b></li>
 					</c:if>
 					<c:if test="${sessionScope.MENURIGHTS.isEnabledMaintainceReport()}">
-						<li class=""><a href="maintaince"> <i
+						<li class=""><a href="#" class="dropdown-toggle"> <i
 								class="menu-icon fa fa-caret-right"></i> Member Maintenance
-						</a> <b class="arrow"></b></li>
+						</a> <b class="arrow"></b>
+						
+							<ul class="submenu">
+								<c:if test="${sessionScope.MENURIGHTS.isEnableCreateMaintenacneReport()}">
+									<li class=""><a href="maintaince"> <i
+										class="menu-icon fa fa-caret-right"></i> Create
+									</a> <b class="arrow"></b></li>
+								</c:if>
+								<c:if test="${sessionScope.MENURIGHTS.isEnableViewMaintenacneReport()}">
+									<li class=""><a href="viewMaintenanceReport"> <i
+										class="menu-icon fa fa-caret-right"></i> View
+									</a> <b class="arrow"></b></li>
+								</c:if>
+							</ul>
+						
+						</li>
 					</c:if>
 
 				</ul></li>
