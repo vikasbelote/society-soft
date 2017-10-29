@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -119,6 +120,16 @@ public class MaintenanceController extends BaseController {
 		modelAndView.addObject(breadCrumbList);
 		modelAndView.addObject("cycleList", cycleList);
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "viewCycleDetails")
+	public ModelAndView viewCycleDetauils(@RequestParam(value="id", required=true)Integer cycleId) {
+		
+		maintenanceService.getMaintenanceReceiptList(cycleId);
+		
+		ModelAndView modelAndView = new ModelAndView("viewMaintenanceReport");
+		return modelAndView;
+		
 	}
 	
 }

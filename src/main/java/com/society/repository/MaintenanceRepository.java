@@ -1,6 +1,7 @@
 package com.society.repository;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,7 @@ import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
 import com.society.model.jpa.MaintenanceChargeJPA;
 import com.society.model.jpa.MaintenanceCycleJPA;
+import com.society.model.jpa.MaintenanceReceiptJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.RoleJPA;
 import com.society.model.jpa.SocietyConfigJPA;
@@ -207,5 +209,29 @@ public class MaintenanceRepository extends BaseRepository {
 			maintenanceCycleList = null;
 		}
 		return maintenanceCycleList;
+	}
+	
+	public Set<MaintenanceReceiptJPA> getMaintenanceReceipt(Integer cycleId) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MaintenanceReceiptJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceReceiptJPA.class);
+		Root<MaintenanceReceiptJPA> root = criteriaQuery.from(MaintenanceReceiptJPA.class);	
+		root.fetch("chargeList", JoinType.INNER);
+		root.fetch("cycle", JoinType.INNER);
+		criteriaQuery.select(root);
+		
+		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), cycleId);
+		criteriaQuery.where(equalCycleIdPredicate);
+		
+		Set<MaintenanceReceiptJPA> maintenanceReceiptSet;
+		try {
+			List<MaintenanceReceiptJPA> maintenanceReceiptList = entityManager.createQuery(criteriaQuery).getResultList();
+			maintenanceReceiptSet = new HashSet<MaintenanceReceiptJPA>(maintenanceReceiptList);
+		}
+		catch(Exception e) {
+			maintenanceReceiptSet = null;
+		}
+		return maintenanceReceiptSet;
+		
 	}
 }

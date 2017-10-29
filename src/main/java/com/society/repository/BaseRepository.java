@@ -1,6 +1,8 @@
 package com.society.repository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,5 +44,11 @@ public class BaseRepository {
 		criteria.where(criteriaBuilder.equal(root.<Integer> get("rowId"), new Integer(entryId)));
 
 		return entityManager.createQuery(criteria).getSingleResult();
+	}
+	
+	public <T> Set<T> convertToSet(List<T> list, Class<T> clazz) {
+		
+		Set<T> set = new HashSet<T>(list);
+		return set;
 	}
 }

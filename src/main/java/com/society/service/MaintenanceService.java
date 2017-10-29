@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -274,6 +275,14 @@ public class MaintenanceService {
 			cycleList.add(cycle);
 		}
 		return cycleList;
+	}
+	
+	public void getMaintenanceReceiptList(Integer cycleId) {
+		
+		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMaintenanceReceipt(cycleId);
+		for(MaintenanceReceiptJPA receipt : receiptSet) {
+			
+		}
 	}
 	
 	private List<MaintenacneChargeDomain> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, 

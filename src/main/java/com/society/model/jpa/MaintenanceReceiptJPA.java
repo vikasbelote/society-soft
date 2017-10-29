@@ -1,5 +1,7 @@
 package com.society.model.jpa;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,6 +32,24 @@ public class MaintenanceReceiptJPA {
 	
 	@Column(name = "bill_number")
 	private String billNumber;
+	
+	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY)
+	private List<MaintenanceChargeJPA> chargeList;
+	
+	@Override
+	public boolean equals(Object otherReceipt){
+		if(otherReceipt == null)
+			return false;
+		
+		if(!(otherReceipt instanceof MaintenanceReceiptJPA))
+			return false;
+		
+		MaintenanceReceiptJPA otherObj = (MaintenanceReceiptJPA)otherReceipt;
+		if(this.receipId == otherObj.receipId)
+			return true;
+		else
+			return false;
+	}
 
 	public MaintenanceCycleJPA getCycle() {
 		return cycle;
