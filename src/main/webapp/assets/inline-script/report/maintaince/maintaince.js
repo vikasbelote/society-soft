@@ -149,16 +149,16 @@
 	$("#generateReceiptId").click(function(){
 	
 		$("#spinnerId").removeClass("hide");
-		$("body").off("click");
 		
 		var paymentDueDate = $("#paymentDueDate").val();
 		var paymentCycle = $("#paymentCycle").val();
 		var paymentCycleDateArr = paymentCycle.split("to");
 		//Object send to server to populate maintenance receipt data
 		var cycle = {};
+		cycle.cycleId = $("#maintenanceTableId").attr("data-cycleId");
 		cycle.paymentDueDate = paymentDueDate;
 		cycle.startDate = $.trim(paymentCycleDateArr[0]);
-		cycle.endDate = $.trim(paymentCycleDateArr[1]);;
+		cycle.endDate = $.trim(paymentCycleDateArr[1]);
 		cycle.receipts = [];
 		
 		var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(0)").map(function(){
@@ -168,15 +168,17 @@
 		$("#maintenanceTableId tbody").find("tr").map(function() {
 			
 			var memberReceipt = {};
+			memberReceipt.receiptId = $(this).attr("data-receiptId");
 			memberReceipt.memberId = $(this).find("td:eq(0)").attr("data-memberId");
 			memberReceipt.memberName = $(this).find("td:eq(0)").text();
 			memberReceipt.chargeList = [];
 			
 			var generalHeadIdAndValueArr = $(this).find("td:gt(0)").map(function(){
 				var generalHeadIdAndValue = {
-						id : $(this).attr("data-generalHeadId"),
-						value : $(this).text()
-				}
+						generalHeadId : $(this).attr("data-generalHeadId"),
+						value : $(this).text(),
+						chargeId : $(this).attr("data-chargeId")
+				};
 				return generalHeadIdAndValue;
 			}).get();
 			
@@ -185,8 +187,9 @@
 				for (var i = 0; i < generalHeadNameArr.length; i++) {
 					
 					var charge = {};
+					charge.chargeId = generalHeadIdAndValueArr[i].chargeId;
 					charge.srNumber = (i + 1);
-					charge.generalHeadId = generalHeadIdAndValueArr[i].id;
+					charge.generalHeadId = generalHeadIdAndValueArr[i].generalHeadId;
 					charge.chargeValue = generalHeadIdAndValueArr[i].value;
 					charge.generalHeadName = generalHeadNameArr[i];
 					memberReceipt.chargeList.push(charge);
@@ -203,13 +206,13 @@
 			type : 'POST',
 			data : cycleJson,
 			success : function(response) {
+				$('#content').html("");
 				$('#content').append(response);
 				downloadAllMaintenanceReceipt();
 				$("#spinnerId").addClass("hide");
-				$("body").on("click");
 			},
 			error : function(e) {
-				alert("error");
+				showValidationMsg("Error","There is error while saving receipt data.");
 			}
 		});
 	});

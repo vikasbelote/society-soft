@@ -4,6 +4,8 @@ import java.util.List;
 
 public class MaintenanceReceiptDomain {
 	
+	private Integer receiptId;
+	
 	private Integer memberId;
 	
 	private String memberName;
@@ -42,5 +44,13 @@ public class MaintenanceReceiptDomain {
 
 	public void setMemberName(String memberName) {
 		this.memberName = memberName;
+	}
+
+	public Integer getReceiptId() {
+		return receiptId;
+	}
+
+	public void setReceiptId(Integer receiptId) {
+		this.receiptId = receiptId;
 	}
 }

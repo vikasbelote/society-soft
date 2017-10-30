@@ -2,6 +2,8 @@ package com.society.model.domain;
 
 public class MaintenacneChargeDomain {
 	
+	private Integer chargeId;
+	
 	private Integer srNumber;
 	
 	private Integer generalHeadId;
@@ -40,5 +42,13 @@ public class MaintenacneChargeDomain {
 
 	public void setSrNumber(Integer srNumber) {
 		this.srNumber = srNumber;
+	}
+
+	public Integer getChargeId() {
+		return chargeId;
+	}
+
+	public void setChargeId(Integer chargeId) {
+		this.chargeId = chargeId;
 	}
 }

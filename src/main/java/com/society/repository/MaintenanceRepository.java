@@ -152,7 +152,7 @@ public class MaintenanceRepository extends BaseRepository {
 			session.beginTransaction();
 			
 			for(MaintenanceChargeJPA charge : chargeList) {
-				session.save(charge);
+				session.saveOrUpdate(charge);
 			}
 			
 			session.getTransaction().commit();
@@ -216,8 +216,11 @@ public class MaintenanceRepository extends BaseRepository {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<MaintenanceReceiptJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceReceiptJPA.class);
 		Root<MaintenanceReceiptJPA> root = criteriaQuery.from(MaintenanceReceiptJPA.class);	
-		root.fetch("chargeList", JoinType.INNER);
+		Fetch<MaintenanceReceiptJPA, List<MaintenanceChargeJPA>> chargeList = root.fetch("chargeList", JoinType.INNER);
+		chargeList.fetch("generalHead", JoinType.INNER);
 		root.fetch("cycle", JoinType.INNER);
+		Fetch<MaintenanceReceiptJPA, SocietyMemberJPA> member = root.fetch("member", JoinType.INNER);
+		member.fetch("person", JoinType.INNER);
 		criteriaQuery.select(root);
 		
 		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), cycleId);
@@ -232,6 +235,5 @@ public class MaintenanceRepository extends BaseRepository {
 			maintenanceReceiptSet = null;
 		}
 		return maintenanceReceiptSet;
-		
 	}
 }

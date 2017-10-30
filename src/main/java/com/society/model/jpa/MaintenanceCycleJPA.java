@@ -1,6 +1,7 @@
 package com.society.model.jpa;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,7 +34,10 @@ public class MaintenanceCycleJPA {
 	
 	@Column(name = "end_date")
 	private Date endDate;
-
+	
+	@OneToMany(mappedBy = "cycle" , fetch = FetchType.LAZY)
+	private List<MaintenanceReceiptJPA> receiptList;
+	
 	public Integer getCycleId() {
 		return cycleId;
 	}
@@ -71,6 +76,14 @@ public class MaintenanceCycleJPA {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public List<MaintenanceReceiptJPA> getReceiptList() {
+		return receiptList;
+	}
+
+	public void setReceiptList(List<MaintenanceReceiptJPA> receiptList) {
+		this.receiptList = receiptList;
 	}
 	
 	

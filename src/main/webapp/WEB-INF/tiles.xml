@@ -117,5 +117,9 @@
 		<put-attribute name="body" value="/WEB-INF/views/report/maintaince/maintaince_view.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/report/maintaince/maintaince_inline.jsp" />
 	</definition>
+	<definition name="viewMaintenanceTable" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/report/maintaince/maintenance_view_table.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/report/maintaince/maintaince_inline.jsp" />
+	</definition>
 	
 </tiles-definitions>

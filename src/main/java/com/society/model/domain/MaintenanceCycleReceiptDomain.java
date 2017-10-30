@@ -26,6 +26,8 @@ public class MaintenanceCycleReceiptDomain {
 	private Integer lateInterestRate;
 	
 	private String chequeName;
+	
+	private List<GeneralHeadDomain> generalHeadList;
 
 	public Integer getCycleId() {
 		return cycleId;
@@ -113,5 +115,13 @@ public class MaintenanceCycleReceiptDomain {
 
 	public void setChequeName(String chequeName) {
 		this.chequeName = chequeName;
+	}
+
+	public List<GeneralHeadDomain> getGeneralHeadList() {
+		return generalHeadList;
+	}
+
+	public void setGeneralHeadList(List<GeneralHeadDomain> generalHeadList) {
+		this.generalHeadList = generalHeadList;
 	}
 }

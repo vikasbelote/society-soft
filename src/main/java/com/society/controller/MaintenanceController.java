@@ -125,9 +125,14 @@ public class MaintenanceController extends BaseController {
 	@RequestMapping(value = "viewCycleDetails")
 	public ModelAndView viewCycleDetauils(@RequestParam(value="id", required=true)Integer cycleId) {
 		
-		maintenanceService.getMaintenanceReceiptList(cycleId);
+		String[] breadCrumbs = {"Report", "Member Mainenacne", "View"};
+		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);
 		
-		ModelAndView modelAndView = new ModelAndView("viewMaintenanceReport");
+		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(cycleId);
+		
+		ModelAndView modelAndView = new ModelAndView("viewMaintenanceTable");
+		modelAndView.addObject(breadCrumbList);
+		modelAndView.addObject("cycle", cycle);
 		return modelAndView;
 		
 	}

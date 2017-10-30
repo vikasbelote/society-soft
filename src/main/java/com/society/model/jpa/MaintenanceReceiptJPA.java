@@ -83,4 +83,12 @@ public class MaintenanceReceiptJPA {
 		this.receipId = receipId;
 	}
 
+	public List<MaintenanceChargeJPA> getChargeList() {
+		return chargeList;
+	}
+
+	public void setChargeList(List<MaintenanceChargeJPA> chargeList) {
+		this.chargeList = chargeList;
+	}
+
 }
