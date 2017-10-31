@@ -14,9 +14,13 @@
 		<!-- PAGE CONTENT BEGINS -->
 	
 		<div class="row">
-			<div class="col-xs-2">
+			<div class="col-xs-6">
 				<a id="generateReceiptId" href="#" role="button"
 					class="btn btn-primary">Generate Receipt</a>
+				<a id="sendEmailId" href="#" role="button"
+					class="btn btn-primary">Email</a>
+				<a id="sendMsgId" href="#" role="button"
+					class="btn btn-primary">Message</a>
 			</div>
 			<div class="col-xs-6 center">
 				<h3>For the period ${cycle.startDate} to ${cycle.endDate}</h3>
