@@ -216,6 +216,29 @@
 			}
 		});
 	});
+	
+	$("#sendEmailId").click(function() {
+		
+		
+		var cycle = {};
+		cycle.cycleId = $("#maintenanceTableId").attr("data-cycleId");
+		
+		var cycleJson = JSON.stringify(cycle);
+		
+		$.ajax({
+			url : 'sendEmail',
+			contentType : "application/json",
+			type : 'POST',
+			data : cycleJson,
+			success : function(response) {
+				alert(response);
+			},
+			error : function(e) {
+				showValidationMsg("Error","There is error while saving receipt data.");
+			}
+		});
+	});
+	
 })(jQuery);
 
 function downloadAllMaintenanceReceipt() {

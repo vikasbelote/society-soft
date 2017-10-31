@@ -46,7 +46,7 @@
 		
 		
 		<div class="row">
-			<div class="col-xs-2">
+			<div class="col-xs-6">
 				<a id="generateReceiptId" href="#" role="button"
 					class="btn btn-primary">Generate Receipt</a>
 			</div>
