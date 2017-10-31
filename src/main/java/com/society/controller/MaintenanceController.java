@@ -123,7 +123,7 @@ public class MaintenanceController extends BaseController {
 	}
 	
 	@RequestMapping(value = "viewCycleDetails")
-	public ModelAndView viewCycleDetauils(@RequestParam(value="id", required=true)Integer cycleId) {
+	public ModelAndView viewCycleDetails(@RequestParam(value="id", required=true)Integer cycleId) {
 		
 		String[] breadCrumbs = {"Report", "Member Mainenacne", "View"};
 		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);

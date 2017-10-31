@@ -13,6 +13,8 @@ public class MaintenanceReceiptDomain {
 	private String billNumber;
 	
 	private List<MaintenacneChargeDomain> chargeList;
+	
+	private Double totalValue;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -52,5 +54,13 @@ public class MaintenanceReceiptDomain {
 
 	public void setReceiptId(Integer receiptId) {
 		this.receiptId = receiptId;
+	}
+
+	public Double getTotalValue() {
+		return totalValue;
+	}
+
+	public void setTotalValue(Double totalValue) {
+		this.totalValue = totalValue;
 	}
 }

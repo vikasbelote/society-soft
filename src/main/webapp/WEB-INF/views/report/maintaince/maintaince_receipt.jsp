@@ -21,6 +21,13 @@
 						<td>${charge.chargeValue}</td>
 					</tr>
 				</c:forEach>
+				<c:if test="${not empty receipt.chargeList}">
+					<tr>
+						<td></td>
+						<td>Total Payable Value</td>
+						<td>${receipt.totalValue}</td>
+					</tr>
+				</c:if>
 			</tbody>
 		</table>
 		

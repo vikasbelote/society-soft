@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -215,6 +216,17 @@ public class MaintenanceService {
 		cycleDomain.setAddress((this.getAddress(societyConfig.getSociety().getAddress())));
 		cycleDomain.setLateInterestRate(societyConfig.getMaintenancePaymentDueInterest());
 		cycleDomain.setChequeName(societyConfig.getMaintenancePaymentChequeName());
+		
+		Iterator<MaintenanceReceiptDomain> receiptIterator = cycleDomain.getReceipts().iterator();
+		while(receiptIterator.hasNext()) {
+			MaintenanceReceiptDomain receipt = receiptIterator.next();
+			
+			Double totalValue = new Double(0);
+			for(MaintenacneChargeDomain charge : receipt.getChargeList()) {
+				totalValue = totalValue + charge.getChargeValue();
+			}
+			receipt.setTotalValue(totalValue);
+		}
 		return true;
 	}
 	
@@ -306,6 +318,7 @@ public class MaintenanceService {
 			receipt.setMemberId(receiptDB.getMember().getMemberId());
 			receipt.setMemberName(this.getPersonName(receiptDB.getMember().getPerson()));
 			
+			Double totalValue = new Double(0);
 			if(CollectionUtils.isNotEmpty(receiptDB.getChargeList())) {
 				List<MaintenacneChargeDomain> chargeList = new ArrayList<MaintenacneChargeDomain>();
 				for(MaintenanceChargeJPA chargeDB : receiptDB.getChargeList()) {
@@ -316,6 +329,8 @@ public class MaintenanceService {
 					charge.setChargeValue(chargeDB.getChargeValue());
 					chargeList.add(charge);
 					
+					totalValue = totalValue + chargeDB.getChargeValue();
+					
 					if(isGeneralHeadColumnPopulated) {
 						GeneralHeadDomain generalHeadDomain = new GeneralHeadDomain();
 						generalHeadDomain.setGeneralHeadId(charge.getGeneralHeadId());
@@ -325,6 +340,7 @@ public class MaintenanceService {
 				}
 				isGeneralHeadColumnPopulated = false;
 				receipt.setChargeList(chargeList);
+				receipt.setTotalValue(totalValue);
 			}
 			receiptList.add(receipt);
 		}

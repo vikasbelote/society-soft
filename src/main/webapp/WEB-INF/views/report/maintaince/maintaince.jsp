@@ -22,7 +22,7 @@
 					<i class="ace-icon fa fa-times"></i>
 					Oh snap!
 				</strong>
-				Select payment cycle is already exist.
+				Selected payment cycle is already exist.
 				<br />
 			</div>
 		</c:if>

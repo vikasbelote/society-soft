@@ -210,9 +210,12 @@
 				$('#content').append(response);
 				downloadAllMaintenanceReceipt();
 				$("#spinnerId").addClass("hide");
+				
+				window.location.replace("viewMaintenanceReport");
 			},
 			error : function(e) {
 				showValidationMsg("Error","There is error while saving receipt data.");
+				$("#spinnerId").addClass("hide");
 			}
 		});
 	});
