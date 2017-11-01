@@ -7,16 +7,14 @@ import java.io.FileOutputStream;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles3.TilesView;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -37,6 +35,8 @@ public class EmailService {
 
 	// @Autowired
 	// private EmailRepository emailRepository;
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private MaintenanceService maintenanceService;
@@ -159,7 +159,7 @@ public class EmailService {
 				// get maintenance receipt PDF file
 				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
 				if(receiptPdf != null) {
-					
+					LOGGER.debug("Sending maill");
 					MimeMessage mimeMessage = mailSender.createMimeMessage();
 					try {
 						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
@@ -171,6 +171,7 @@ public class EmailService {
 						
 												
 						mailSender.send(mimeMessage);
+						LOGGER.debug("Mail Send successfuly.");
 						
 					} catch (MessagingException e) {
 						System.out.println(e.getMessage());
