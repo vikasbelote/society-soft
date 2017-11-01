@@ -15,6 +15,10 @@ public class MaintenanceReceiptDomain {
 	private List<MaintenacneChargeDomain> chargeList;
 	
 	private Double totalValue;
+	
+	private String emailId;
+	
+	private Integer mobileNumber;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -62,5 +66,21 @@ public class MaintenanceReceiptDomain {
 
 	public void setTotalValue(Double totalValue) {
 		this.totalValue = totalValue;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public Integer getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(Integer mobileNumber) {
+		this.mobileNumber = mobileNumber;
 	}
 }

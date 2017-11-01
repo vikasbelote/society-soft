@@ -1,5 +1,8 @@
 package com.society.controller;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +21,12 @@ public class EmailController {
 	private EmailService emailService;
 	
 	@RequestMapping(value = "sendEmail", method = RequestMethod.POST)
-	public ResponseEntity<String> sendEmail(@RequestBody MaintenanceCycleReceiptDomain cycle) {
+	public ResponseEntity<String> sendEmail(@RequestBody MaintenanceCycleReceiptDomain cycle, HttpSession session) {
 		
-		emailService.sendMail();
-		
+		String rootPath = session.getServletContext().getRealPath("/");
+		if(StringUtils.isNotEmpty(rootPath) & StringUtils.isNotBlank(rootPath)){
+			emailService.sendMail(rootPath);
+		}
 		return new ResponseEntity<String>("Sending email...", HttpStatus.OK);
 	}
 

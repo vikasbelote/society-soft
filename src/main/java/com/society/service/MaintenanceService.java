@@ -317,6 +317,7 @@ public class MaintenanceService {
 			receipt.setReceiptId(receiptDB.getReceipId());
 			receipt.setMemberId(receiptDB.getMember().getMemberId());
 			receipt.setMemberName(this.getPersonName(receiptDB.getMember().getPerson()));
+			receipt.setEmailId(receiptDB.getMember().getPerson().getEmailId());
 			
 			Double totalValue = new Double(0);
 			if(CollectionUtils.isNotEmpty(receiptDB.getChargeList())) {
