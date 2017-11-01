@@ -163,14 +163,15 @@ public class EmailService {
 					MimeMessage mimeMessage = mailSender.createMimeMessage();
 					try {
 						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
-						mailMsg.setFrom("vikasb0207@gmail.com");
-						mailMsg.setTo("vikasb50@rediffmail.com");
+						mailMsg.setFrom("admin@societysoft.com");
+						mailMsg.setTo("vikasb0207@gmail.com");
 						mailMsg.setSubject("Test mail with Attachment");
 						mailMsg.setText("Please find Attachment.");
 						mailMsg.addAttachment("maintenacne-receipt.pdf", receiptPdf);
 						
 												
 						mailSender.send(mimeMessage);
+						
 					} catch (MessagingException e) {
 						System.out.println(e.getMessage());
 					}
