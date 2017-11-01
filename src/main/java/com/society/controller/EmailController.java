@@ -1,5 +1,6 @@
 package com.society.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.society.model.domain.MaintenanceCycleReceiptDomain;
+import com.society.model.domain.EmailDomain;
 import com.society.service.EmailService;
 
 @RestController
@@ -21,13 +22,15 @@ public class EmailController {
 	private EmailService emailService;
 	
 	@RequestMapping(value = "sendEmail", method = RequestMethod.POST)
-	public ResponseEntity<String> sendEmail(@RequestBody MaintenanceCycleReceiptDomain cycle, HttpSession session) {
+	public ResponseEntity<String> sendEmail(@RequestBody EmailDomain email, HttpSession session, HttpServletRequest request) {
 		
-		String rootPath = session.getServletContext().getRealPath("/");
-		if(StringUtils.isNotEmpty(rootPath) & StringUtils.isNotBlank(rootPath)){
-			emailService.sendMail(rootPath);
+		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
+		email.setSocietyId(societyId);
+		email.setRootPath(session.getServletContext().getRealPath("/"));
+		
+		if(StringUtils.isNotEmpty(email.getRootPath()) & StringUtils.isNotBlank(email.getRootPath())){
+			emailService.sendMail(email);
 		}
 		return new ResponseEntity<String>("Sending email...", HttpStatus.OK);
 	}
-
 }

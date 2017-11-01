@@ -223,16 +223,16 @@
 	$("#sendEmailId").click(function() {
 		
 		
-		var cycle = {};
-		cycle.cycleId = $("#maintenanceTableId").attr("data-cycleId");
+		var email = {};
+		email.cycleId = $("#maintenanceTableId").attr("data-cycleId");
 		
-		var cycleJson = JSON.stringify(cycle);
+		var emailJson = JSON.stringify(email);
 		
 		$.ajax({
 			url : 'sendEmail',
 			contentType : "application/json",
 			type : 'POST',
-			data : cycleJson,
+			data : emailJson,
 			success : function(response) {
 				alert(response);
 			},

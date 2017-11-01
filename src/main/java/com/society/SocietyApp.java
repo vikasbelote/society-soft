@@ -1,5 +1,6 @@
 package com.society;
 
+import java.util.Properties;
 import java.util.concurrent.Executor;
 
 import org.dozer.DozerBeanMapper;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -49,5 +51,24 @@ public class SocietyApp extends SpringBootServletInitializer implements AsyncCon
 	@Override
 	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
 		return new CustomAsyncExceptionHandler();
+	}
+	
+	@Bean
+	public JavaMailSenderImpl getJavaMailSender() {
+		
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+	    mailSender.setHost("smtp.gmail.com");
+	    mailSender.setPort(587);
+	     
+	    mailSender.setUsername("vikasb0207@gmail.com");
+	    mailSender.setPassword("Bat@123456");
+	     
+	    Properties props = mailSender.getJavaMailProperties();
+	    props.put("mail.transport.protocol", "smtp");
+	    props.put("mail.smtp.auth", "true");
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.debug", "true");
+	     
+	    return mailSender;
 	}
 }

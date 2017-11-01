@@ -121,5 +121,6 @@
 		<put-attribute name="body" value="/WEB-INF/views/report/maintaince/maintenance_view_table.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/report/maintaince/maintaince_inline.jsp" />
 	</definition>
-	
+	<definition name="emailTemplate" template="/WEB-INF/views/report/maintaince/email_template.jsp">	
+	</definition>
 </tiles-definitions>
