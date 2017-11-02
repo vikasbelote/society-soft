@@ -58,7 +58,7 @@ public class EmailService {
 				// get maintenance receipt PDF file
 				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
 				if(receiptPdf != null) {
-					logger.info("Sending maill");
+					logger.info("Sending mail");
 					MimeMessage mimeMessage = mailSender.createMimeMessage();
 					try {
 						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);

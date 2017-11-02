@@ -57,7 +57,7 @@ public class SocietyApp extends SpringBootServletInitializer implements AsyncCon
 	public JavaMailSenderImpl getJavaMailSender() {
 		
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-	    mailSender.setHost("smtp.gmail.com");
+	    mailSender.setHost("mail.societysoft");
 	    mailSender.setPort(587);
 	     
 	    mailSender.setUsername("admin@societysoft.com");
