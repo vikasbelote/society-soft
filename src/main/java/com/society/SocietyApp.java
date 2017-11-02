@@ -19,7 +19,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 @EnableAsync
 public class SocietyApp extends SpringBootServletInitializer implements AsyncConfigurer {
-
+	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(SocietyApp.class);
