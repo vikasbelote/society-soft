@@ -7,8 +7,8 @@ import java.io.FileOutputStream;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,6 +25,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.society.SocietyApp;
 import com.society.model.domain.EmailDomain;
 import com.society.model.domain.MaintenacneChargeDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
@@ -36,13 +37,61 @@ public class EmailService {
 	// @Autowired
 	// private EmailRepository emailRepository;
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LogManager.getLogger(SocietyApp.class);
 
 	@Autowired
 	private MaintenanceService maintenanceService;
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Async
+	public void sendMail(EmailDomain email) {
+
+		String destPath = email.getRootPath() + "/receipt.pdf";
+		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(email.getCycleId());
+		cycle.setSocietyId(email.getSocietyId());
+		
+		if (cycle != null && maintenanceService.updateCycle(cycle)) {
+			for (MaintenanceReceiptDomain receipt : cycle.getReceipts()) {
+				
+				// get maintenance receipt PDF file
+				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
+				if(receiptPdf != null) {
+					logger.info("Sending maill");
+					MimeMessage mimeMessage = mailSender.createMimeMessage();
+					try {
+						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
+						mailMsg.setFrom("admin@societysoft.com");
+						mailMsg.setTo("vikasb0207@gmail.com");
+						mailMsg.setSubject("Test mail with Attachment");
+						mailMsg.setText("Please find Attachment.");
+						mailMsg.addAttachment("maintenacne-receipt.pdf", receiptPdf);
+						
+												
+						mailSender.send(mimeMessage);
+						logger.info("Mail Send successfuly.");
+						
+					} catch (MessagingException e) {
+						System.out.println(e.getMessage());
+					}
+					catch(MailException e) {
+						System.out.println(e.getMessage());
+					}
+			      	catch(Exception e){
+			      		System.out.println(e.getMessage());
+			      	}
+			        finally {
+			        	receiptPdf.deleteOnExit();
+			        }
+				}
+			}
+			
+			
+			//Store the response in table for particular society
+			// rowId, memberId, societyId, receiptId,billNumber
+		}
+	}
 
 	private File generateMaintenacneReceipt(MaintenanceReceiptDomain receipt, MaintenanceCycleReceiptDomain cycle,
 			String destPath) {
@@ -145,53 +194,4 @@ public class EmailService {
 		}
 		return receiptFile;
 	}
-
-	@Async
-	public void sendMail(EmailDomain email) {
-
-		String destPath = email.getRootPath() + "/receipt.pdf";
-		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(email.getCycleId());
-		cycle.setSocietyId(email.getSocietyId());
-		
-		if (cycle != null && maintenanceService.updateCycle(cycle)) {
-			for (MaintenanceReceiptDomain receipt : cycle.getReceipts()) {
-				
-				// get maintenance receipt PDF file
-				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
-				if(receiptPdf != null) {
-					LOGGER.debug("Sending maill");
-					MimeMessage mimeMessage = mailSender.createMimeMessage();
-					try {
-						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
-						mailMsg.setFrom("admin@societysoft.com");
-						mailMsg.setTo("vikasb0207@gmail.com");
-						mailMsg.setSubject("Test mail with Attachment");
-						mailMsg.setText("Please find Attachment.");
-						mailMsg.addAttachment("maintenacne-receipt.pdf", receiptPdf);
-						
-												
-						mailSender.send(mimeMessage);
-						LOGGER.debug("Mail Send successfuly.");
-						
-					} catch (MessagingException e) {
-						System.out.println(e.getMessage());
-					}
-					catch(MailException e) {
-						System.out.println(e.getMessage());
-					}
-			      	catch(Exception e){
-			      		System.out.println(e.getMessage());
-			      	}
-			        finally {
-			        	receiptPdf.deleteOnExit();
-			        }
-				}
-			}
-			
-			
-			//Store the response in table for particular society
-			// rowId, memberId, societyId, receiptId,billNumber
-		}
-	}
-
 }

@@ -20,6 +20,14 @@
 			<AppenderRef ref="ConsoleAppender" />
 			<AppenderRef ref="ManagedServerLog" />
 		</Logger>
+		<Logger name="javax.mail" level="DEBUG" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="ManagedServerLog" />
+		</Logger>
+		<Logger name="org.springframework.mail.javamail" level="DEBUG" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="ManagedServerLog" />
+		</Logger>
 		<Logger name="org.springframework" level="INFO" additivity="false">
 			<AppenderRef ref="ConsoleAppender" />
 			<AppenderRef ref="ManagedServerLog" />
