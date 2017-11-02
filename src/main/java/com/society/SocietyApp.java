@@ -1,8 +1,15 @@
 package com.society;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+import javax.mail.Session;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +26,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 @EnableAsync
 public class SocietyApp extends SpringBootServletInitializer implements AsyncConfigurer {
+	
+	private static final Logger logger = LogManager.getLogger(SocietyApp.class);
 	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -68,7 +77,13 @@ public class SocietyApp extends SpringBootServletInitializer implements AsyncCon
 	    props.put("mail.smtp.auth", "true");
 	    props.put("mail.smtp.starttls.enable", "true");
 	    props.put("mail.debug", "true");
-	     
+	    
+		OutputStream outputStream = new LoggerOutputStream(logger, Level.DEBUG);
+		PrintStream printStream = new PrintStream(outputStream);
+		
+		Session session = mailSender.getSession(); 
+		session.setDebugOut(printStream);
+	    
 	    return mailSender;
 	}
 }

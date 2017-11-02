@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.society.SocietyApp;
 import com.society.model.domain.EmailDomain;
 import com.society.model.domain.MaintenacneChargeDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
@@ -37,13 +36,13 @@ public class EmailService {
 	// @Autowired
 	// private EmailRepository emailRepository;
 	
-	private static final Logger logger = LogManager.getLogger(SocietyApp.class);
+	private static final Logger logger = LogManager.getLogger(EmailService.class);
 
 	@Autowired
 	private MaintenanceService maintenanceService;
 	
 	@Autowired
-	private JavaMailSender mailSender;
+	private JavaMailSenderImpl mailSender;
 	
 	@Async
 	public void sendMail(EmailDomain email) {
@@ -59,6 +58,7 @@ public class EmailService {
 				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
 				if(receiptPdf != null) {
 					logger.info("Sending mail");
+
 					MimeMessage mimeMessage = mailSender.createMimeMessage();
 					try {
 						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
@@ -73,13 +73,13 @@ public class EmailService {
 						logger.info("Mail Send successfuly.");
 						
 					} catch (MessagingException e) {
-						System.out.println(e.getMessage());
+						logger.info(e.getMessage());
 					}
 					catch(MailException e) {
-						System.out.println(e.getMessage());
+						logger.info(e.getMessage());
 					}
 			      	catch(Exception e){
-			      		System.out.println(e.getMessage());
+			      		logger.info(e.getMessage());
 			      	}
 			        finally {
 			        	receiptPdf.deleteOnExit();
