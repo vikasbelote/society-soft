@@ -17,6 +17,7 @@
 		<put-attribute name="breadcrumbs" value="/WEB-INF/views/layout/breadcrumbs.jsp" />
 		<put-attribute name="body" value="" />
 		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+		<put-attribute name="page-script" value="" />
 		<put-attribute name="script" value="/WEB-INF/views/layout/script.jsp" />
 		<put-attribute name="inline" value="" />
 	</definition>
@@ -73,6 +74,7 @@
 	</definition>
 	<definition name="transaction" extends="layout.basic">
 		<put-attribute name="body" value="/WEB-INF/views/setting/transaction/transaction.jsp" />
+		<put-attribute name="page-script" value="/WEB-INF/views/setting/transaction/transaction_page_script.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/setting/transaction/transaction_inline.jsp" />
 	</definition>
 	<definition name="recordTransactionStatus" extends="layout.basic">

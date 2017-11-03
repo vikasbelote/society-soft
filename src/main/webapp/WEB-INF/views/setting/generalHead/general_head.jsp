@@ -14,6 +14,21 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
+		
+		<c:if test="${generalHeadExist}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<i class="ace-icon fa fa-times"></i>
+				</button>
+				<strong>
+					<i class="ace-icon fa fa-times"></i>
+					Oh snap!
+				</strong>
+				This general head details is already exist for that section.
+				<br />
+			</div>
+		</c:if>
+		
 		<form:form id="inserAndUpdateForm" commandName="genaralHeadDomain"
 			class="form-horizontal" action="generalHead">
 
@@ -26,7 +41,7 @@
 				<div class="col-sm-9 inputGroupContainer">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<form:input path="generalHeadName" class="col-xs-10 col-sm-4"
+						<form:input path="generalHeadName" class="col-xs-10 col-sm-4 upper-case"
 							placeholder="General Head" />
 					</div>
 				</div>

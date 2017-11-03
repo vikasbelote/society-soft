@@ -12,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.society.model.domain.SocietyUserDomain;
 import com.society.model.jpa.AccessRightsId;
 import com.society.model.jpa.RoleJPA;
 import com.society.model.jpa.SocietyUserAccessRightsJPA;
@@ -38,9 +39,6 @@ public class SocietyUserRepository extends BaseRepository {
 				}
 			}
 			
-			
-			RoleJPA role = session.load(RoleJPA.class, new Integer(3));
-			user.setRole(role);
 			session.saveOrUpdate(user);
 			
 			for(SocietyUserAccessRightsJPA accessRights : rightList) {
@@ -127,5 +125,37 @@ public class SocietyUserRepository extends BaseRepository {
 			menuRightList = null;
 		}
 		return menuRightList;
+	}
+	
+	public UserJPA checkUserExist(SocietyUserDomain societyUser) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<UserJPA> criteriaQuery = criteriaBuilder.createQuery(UserJPA.class);
+		Root<UserJPA> root = criteriaQuery.from(UserJPA.class);
+		root.fetch("society", JoinType.INNER);
+		root.fetch("person", JoinType.INNER);
+		criteriaQuery.select(root);
+		
+		
+		Predicate userId = criteriaBuilder.notEqual(root.<Integer>get("userId"), societyUser.getUserId());
+		Predicate userNamePredicate = criteriaBuilder.equal(root.<String>get("userName"), societyUser.getUserName());
+		Predicate contactNumberPredicate = criteriaBuilder.equal(root.<String>get("person").get("contactNumber"), societyUser.getContactNumber());
+		Predicate emailIdPredicate = criteriaBuilder.equal(root.<String>get("person").get("emailId"), societyUser.getEmailId());
+		
+		Predicate orPredicate = criteriaBuilder.or(userNamePredicate, contactNumberPredicate, emailIdPredicate);
+		
+		if(societyUser.getUserId() == null)
+			criteriaQuery.where(orPredicate);
+		else
+			criteriaQuery.where(userId, orPredicate);
+		
+		UserJPA user;
+		try {
+			user = entityManager.createQuery(criteriaQuery).getSingleResult();
+		}
+		catch(Exception e) {
+			user = null;
+		}
+		return user;
 	}
 }

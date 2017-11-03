@@ -35,6 +35,12 @@
 		<![endif]-->
 
 <!-- inline styles related to this page -->
+<style type="text/css">
+	
+	.upper-case {
+		text-transform: uppercase;
+	}
+</style>
 
 <!-- ace settings handler -->
 <script src="./assets/js/ace-extra.js"></script>

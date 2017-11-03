@@ -24,7 +24,7 @@ public class GeneralHeadController extends BaseController {
 	private GeneralHeadService generalHeadService;
 	
 	@RequestMapping(value = "generalHead", method = RequestMethod.GET)
-	public ModelAndView getGeneralHead(HttpSession session){
+	public ModelAndView getGeneralHead(@ModelAttribute("genaralHeadDomain") GeneralHeadDomain generalHeadDomain, HttpSession session){
 		
 		String[] breadCrumbs = {"Setting", "General Head"};
 		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);
@@ -33,7 +33,10 @@ public class GeneralHeadController extends BaseController {
 		List<GeneralHeadDomain> generalHeadList = generalHeadService.getGeneralHeadList(societyId);
 		List<SectionDomain> sectionList = generalHeadService.getSectionList();
 		
-		ModelAndView modelAndView = new ModelAndView("generalHead", "genaralHeadDomain", new GeneralHeadDomain());
+		if(generalHeadDomain == null)
+			generalHeadDomain = new GeneralHeadDomain();
+		
+		ModelAndView modelAndView = new ModelAndView("generalHead", "genaralHeadDomain", generalHeadDomain);
 		modelAndView.addObject(breadCrumbList);
 		modelAndView.addObject("generalHeadList", generalHeadList);
 		modelAndView.addObject("sectionList", sectionList);
@@ -45,6 +48,12 @@ public class GeneralHeadController extends BaseController {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		generalHeadDomain.setSocietyId(societyId);
+		
+		if(generalHeadService.checkGeneralHeadExist(generalHeadDomain)) {
+			redirectAttributes.addFlashAttribute("generalHeadDomain", generalHeadDomain);
+			redirectAttributes.addFlashAttribute("generalHeadExist", true);
+			return "redirect:/generalHead";
+		}
 		
 		if(generalHeadService.insertGeneralHead(generalHeadDomain))
 			redirectAttributes.addFlashAttribute("successMsg", "Congrats!!! General head information save successfully.");

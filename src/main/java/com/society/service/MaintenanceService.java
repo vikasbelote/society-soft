@@ -38,7 +38,7 @@ public class MaintenanceService {
 	@Autowired
 	private MaintenanceRepository maintenanceRepository;
 	
-	public List<String> getCycleDateList(MaintenanceDomain maintenanceDomain, Integer societyId) {
+	public List<String> getCycleDateList1(MaintenanceDomain maintenanceDomain, Integer societyId) {
 		
 		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
 		if(societyConfig == null)
@@ -77,6 +77,58 @@ public class MaintenanceService {
 		return cycleDateList;
 	}
 	
+	public List<String> getCycleDateList(MaintenanceDomain maintenanceDomain, Integer societyId) {
+		
+		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
+		if(societyConfig == null)
+			return null;
+		
+		Integer addMonth = societyConfig.getMaintenanceCycle();
+		Date startDate = societyConfig.getStartDate();
+		
+		if(addMonth == null || addMonth == 0)
+			addMonth = 2;
+		if(startDate == null) {
+			String str = "2000-04-01";  
+			startDate = Date.valueOf(str);
+		}
+		
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(startDate);
+		
+		int startMonth = c.get(Calendar.MONTH) + 1;
+		
+		java.util.Date currentDate = new java.util.Date();
+		c.setTime(currentDate);
+		int currentYear = c.get(Calendar.YEAR);
+		int currentMonth = c.get(Calendar.MONTH) + 1;
+		if(startMonth > currentMonth)
+			currentYear = currentYear - 1;
+		
+		String dateStr = currentYear + "-" + startMonth + "-" + 01;
+		Date realStartDate = Date.valueOf(dateStr);
+		maintenanceDomain.setPaymentCycleStartDate(realStartDate);
+		
+		List<String> cycleDateList = new ArrayList<String>();
+		Integer cycleCount = 12 / addMonth;
+		for(int i = 0; i < cycleCount; i++) {
+			
+			c.setTimeInMillis(realStartDate.getTime());
+			c.add(Calendar.MONTH, addMonth);
+			c.add(Calendar.DATE, -1);
+			Date endDate = new Date(c.getTimeInMillis());
+			
+			String cycleDate = String.valueOf(realStartDate) + " to " + String.valueOf(endDate);
+			
+			c.add(Calendar.DATE, 1);
+			realStartDate = new Date(c.getTimeInMillis());
+			
+			cycleDateList.add(cycleDate);
+		}
+		return cycleDateList;
+	}
+	
+
 	public List<List<GeneralHeadDomain>> getGeneralHeadList(Integer societyId) {
 		
 		List<GeneralHeadJPA> generalHeadListDB = maintenanceRepository.getGeneralHeadList(societyId);

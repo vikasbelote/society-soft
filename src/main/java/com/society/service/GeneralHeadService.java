@@ -89,5 +89,13 @@ public class GeneralHeadService {
 		generalHead.setGeneralHeadId(generalHeadDomain.getGeneralHeadId());
 		return generalHeadRepository.deleteGeneralHead(generalHead);
 	}
+	
+	public boolean checkGeneralHeadExist(GeneralHeadDomain generalHeadDomain) {
+		
+		GeneralHeadJPA generalHead = generalHeadRepository.checkGeneralHeadExist(generalHeadDomain);
+		if(generalHead == null)
+			return false;
+		return true;
+	}
 
 }

@@ -1,17 +1,3 @@
-	<!--[if !IE]> -->
-	<script src="./assets/js/jquery.js"></script>
-
-	<!-- <![endif]-->
-
-	<!--[if IE]>
-<script src="./assets/js/jquery1x.js"></script>
-<![endif]-->
-	<script type="text/javascript">
-		if ('ontouchstart' in document.documentElement)
-			document.write("<script src='./assets/js/jquery.mobile.custom.js'>"
-					+ "<"+"/script>");
-	</script>
-	<script src="./assets/js/bootstrap.js"></script>
 
 	<!-- page specific plugin scripts -->
 	<script src="./assets/js/fuelux/fuelux.tree.js"></script>

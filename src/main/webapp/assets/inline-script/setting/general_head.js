@@ -4,8 +4,9 @@
 		
 		var editTr = $(this).parents('tr');
 		var generalHeadId = $(this).attr("data-generalHeadId");
-		var generalHeadName = editTr.find("td:eq(0)").text();
-		var sectionId = editTr.find("td:eq(1)").attr("data-sectionId");
+		var generalHeadName = editTr.find("td:eq(1)").text();
+		var sectionId = editTr.find("td:eq(2)").attr("data-sectionId");
+	
 		
 		clear();
 		$("#generalHeadId").val(generalHeadId);

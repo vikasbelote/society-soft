@@ -13,6 +13,19 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
+		<c:if test="${userExist}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<i class="ace-icon fa fa-times"></i>
+				</button>
+				<strong>
+					<i class="ace-icon fa fa-times"></i>
+					Oh snap!
+				</strong>
+				This user details is already exist, please choose different User Name or Mobile Number or Email Id
+				<br />
+			</div>
+		</c:if>
 
 		<form:form id="some-form" commandName="societyUserDomain"
 			class="form-horizontal" action="createUser">
@@ -20,6 +33,8 @@
 			<form:hidden path="userId" />
 			<form:hidden path="personId" />
 			<form:hidden path="rights" />
+			<form:hidden path="roleId" />
+			<form:hidden path="roleName" />
 
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right">User
@@ -88,7 +103,7 @@
 				<div class="col-sm-9 inputGroupContainer">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-mobile"></i></span>
-						<form:input path="contactNumber" class="col-xs-10 col-sm-4"
+						<form:input path="contactNumber" class="col-xs-10 col-sm-4 numeric"
 							placeholder="(845)555-1212" />
 					</div>
 				</div>
@@ -105,18 +120,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="widget-box widget-color-blue2">
-				<div class="widget-header">
-					<h4 class="widget-title lighter smaller">User Rights</h4>
-				</div>
-
-				<div class="widget-body">
-					<div class="widget-main padding-8">
-						<ul id="tree1">
-						</ul>
+			<c:if test="${societyUserDomain.roleName eq 'User'}">
+				<div class="widget-box widget-color-blue2">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">User Rights</h4>
+					</div>
+	
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<ul id="tree1">
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
+			</c:if>
+			
 			<div class="clearfix form-actions">
 				<div class="col-sm-offset-3">
 					<button id="societyUserSubmitBtn" type="submit"

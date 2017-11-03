@@ -73,13 +73,13 @@ public class EmailService {
 						logger.info("Mail Send successfuly.");
 						
 					} catch (MessagingException e) {
-						logger.info(e.getMessage());
+						logger.error(e.getMessage());
 					}
 					catch(MailException e) {
-						logger.info(e.getMessage());
+						logger.error(e.getMessage());
 					}
 			      	catch(Exception e){
-			      		logger.info(e.getMessage());
+			      		logger.error(e.getMessage());
 			      	}
 			        finally {
 			        	receiptPdf.deleteOnExit();

@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadOrderJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
@@ -112,4 +113,34 @@ public class GeneralHeadRepository extends BaseRepository {
 				session.close();
 		}
 	}
+	
+	public GeneralHeadJPA checkGeneralHeadExist(GeneralHeadDomain generalHeadDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<GeneralHeadJPA> criteriaQuery = criteriaBuilder.createQuery(GeneralHeadJPA.class);
+		Root<GeneralHeadJPA> root = criteriaQuery.from(GeneralHeadJPA.class);
+		root.fetch("section", JoinType.INNER);
+		criteriaQuery.select(root);
+		
+		Predicate generalHeadIdPredicate = criteriaBuilder.notEqual(root.<Integer>get("generalHeadId"), generalHeadDomain.getGeneralHeadId());
+		Predicate generalHeadNamePredicate = criteriaBuilder.equal(root.<String>get("generalHeadName"), generalHeadDomain.getGeneralHeadName());
+		Predicate sectionIdPredicate = criteriaBuilder.equal(root.<Integer>get("section").get("sectionId"), generalHeadDomain.getSectionId());
+		
+		Predicate andPredicate = criteriaBuilder.and(generalHeadNamePredicate, sectionIdPredicate);
+		
+		if(generalHeadDomain.getGeneralHeadId() == null)
+			criteriaQuery.where(andPredicate);
+		else
+			criteriaQuery.where(generalHeadIdPredicate, andPredicate);
+		
+		GeneralHeadJPA generalHead;
+		try {
+			generalHead = entityManager.createQuery(criteriaQuery).getSingleResult();
+		}
+		catch(Exception e) {
+			generalHead = null;
+		}
+		return generalHead;
+	}
+	
 }

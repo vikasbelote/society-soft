@@ -29,12 +29,15 @@ public class SocietyUserController {
 	private SocietyUserService societyUserService;
 	
 	@RequestMapping(value = "createUser", method = RequestMethod.GET)
-	public ModelAndView getUser() {
+	public ModelAndView getUser(@ModelAttribute("societyUserDomain")SocietyUserDomain societyUserDomain) {
 		
 		String[] breadCrumbs = {"Society", "Create User"};
 		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);
 		
-		ModelAndView modelAndView = new ModelAndView("createUser", "societyUserDomain", new SocietyUserDomain());
+		if(societyUserDomain == null)
+			societyUserDomain = new SocietyUserDomain();
+		
+		ModelAndView modelAndView = new ModelAndView("createUser", "societyUserDomain", societyUserDomain);
 		modelAndView.addObject(breadCrumbList);
 		return modelAndView;
 	}
@@ -44,6 +47,13 @@ public class SocietyUserController {
 		
 		societyUserDomain.setSocietyId((Integer)session.getAttribute("SOCIETYID"));
 		
+		if(societyUserService.checkUserNameExist(societyUserDomain)) {
+			redirectAttributes.addFlashAttribute("societyUserDomain", societyUserDomain);
+			redirectAttributes.addFlashAttribute("userExist", true);
+			return "redirect:/createUser";
+		}
+			
+			
 		if(societyUserService.insertSocietyUserDetails(societyUserDomain))
 			redirectAttributes.addFlashAttribute("successMsg", "Congrats!!! Your society new user account created successfully.");
 		else

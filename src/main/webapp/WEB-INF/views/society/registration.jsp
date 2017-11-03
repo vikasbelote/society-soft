@@ -213,6 +213,8 @@
 
 			<a id="addMemberAnchor" href="#modal-form" role="button" class="btn btn-sm btn-primary"
 				data-toggle="modal"> Add Member </a>
+			<a id="downloadMemberTemplate" href="downloadMemberTemplate" role="button" class="btn btn-sm btn-primary"> Download Template </a>
+			<a id="uploadMemberTemplate" href="uploadMemberTemplate" role="button" class="btn btn-sm btn-primary"> Upload </a>
 			<div class="space-4"></div>
 			<input type="hidden" id="rowIndex" value="" />
 			<table id="memberTable" class="table table-bordered table-hover hide">

@@ -37,26 +37,24 @@
 		<tiles:insertAttribute name="footer" />
 	</div>
 	<!-- /.main-container -->
-
-	<!-- basic scripts -->
+	
+	<!-- basic script -->
+	<script src="./assets/js/jquery.js"></script>
+	<script type="text/javascript">
+		if ('ontouchstart' in document.documentElement)
+			document.write("<script src='./assets/js/jquery.mobile.custom.js'>"
+					+ "<"+"/script>");
+	</script>
+	<script src="./assets/js/bootstrap.js"></script>
+	
+	<!-- page specific plugin scripts -->
+	<tiles:insertAttribute name="page-script" />
+	
+	<!-- ace scripts -->
 	<tiles:insertAttribute name="script" />
 
 	<!-- inline scripts related to this page -->
 	<tiles:insertAttribute name="inline" />
 
-<!-- 	the following scripts are used in demo only for onpage help and you don't need them -->
-<!-- <link rel="stylesheet" href="./assets/css/ace.onpage-help.css" />
-	<link rel="stylesheet" href="./docs/assets/js/themes/sunburst.css" />
-
-	<script type="text/javascript">
-		ace.vars['base'] = '..';
-	</script>
-	<script src="./assets/js/ace/elements.onpage-help.js"></script>
-	<script src="./assets/js/ace/ace.onpage-help.js"></script>
-	<script src="./docs/assets/js/rainbow.js"></script>
-	<script src="./docs/assets/js/language/generic.js"></script>
-	<script src="./docs/assets/js/language/html.js"></script>
-	<script src="./docs/assets/js/language/css.js"></script>
-	<script src="./docs/assets/js/language/javascript.js"></script> -->
 </body>
 </html>

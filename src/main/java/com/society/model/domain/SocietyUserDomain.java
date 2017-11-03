@@ -1,10 +1,5 @@
 package com.society.model.domain;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-@Component
-@Scope("prototype")
 public class SocietyUserDomain {
 	
 	private Integer societyId;
@@ -28,6 +23,10 @@ public class SocietyUserDomain {
 	private String emailId;
 	
 	private String[] rights;
+	
+	private Integer roleId;
+	
+	private String roleName;
 
 	public String getUserName() {
 		return userName;
@@ -115,5 +114,21 @@ public class SocietyUserDomain {
 
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 }

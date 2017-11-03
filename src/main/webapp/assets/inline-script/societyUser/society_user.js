@@ -178,14 +178,6 @@ $(document).ready(function() {
 		loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>'
 	});
 	
-//	$("#tree1").on("click", ".tree-item", function() {
-//		if ($(this).hasClass("tree-selected")) {
-//			$(this).find("input[type=checkbox]").attr("checked", true);
-//		} else {
-//			$(this).find("input[type=checkbox]").attr("checked", false);
-//		}
-//	});
-	
 	$("#societyUserSubmitBtn").click(function() {
 		
 		var isValid = true;
@@ -228,6 +220,10 @@ $(document).ready(function() {
 		var emailId = $("#emailId").val();
 		if(emailId == "") {
 			showValidationMsg("Email Id","Please enter value for email Id.");
+			isValid = false;
+		}
+		if(!validateEmail(emailId)) {
+			showValidationMsg("Email Id","Please enter correct format for mail id.");
 			isValid = false;
 		}
 		
