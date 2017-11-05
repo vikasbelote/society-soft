@@ -66,20 +66,21 @@
 		});
 	});
 	
-//	$("#transactionDescription").change(function() {
-//		//alert("Inline Function is called");
-//	
-//	});
-	
 	$('#transactionDescription').on('keydown keyup', function() {
 		$("#transactionDescriptionId").val("");
 		$("#generalHeadId").val("-1");
+	});
+	
+	$("#transactionFormResetId").click(function(){
+		clear();
 	});
 	
 })(jQuery);
 
 function clear() {
 	
+	$("#transactionDescriptionId").val("");
+	$("#transactionId").val("");
 	$("#generalHeadId").val("-1");
 	$("#transactionTypeId").val("-1");
 	$("#transactionAmount").val("");

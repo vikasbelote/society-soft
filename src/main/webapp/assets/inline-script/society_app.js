@@ -9,6 +9,15 @@ function showValidationMsg(titleName, msgText) {
 	});
 }
 
+function showSuccessMsg(titleName, msgText) {
+	
+	$.gritter.add({
+		title: titleName,
+		text: msgText,
+		class_name: 'gritter-success'
+	});
+}
+
 $('.date-picker').datepicker({
 	autoclose: true,
 	todayHighlight: true

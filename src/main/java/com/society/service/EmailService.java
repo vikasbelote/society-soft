@@ -3,6 +3,8 @@ package com.society.service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -51,6 +53,10 @@ public class EmailService {
 		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(email.getCycleId());
 		cycle.setSocietyId(email.getSocietyId());
 		
+		Date todayDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		String strDate = sdf.format(todayDate);
+		
 		if (cycle != null && maintenanceService.updateCycle(cycle)) {
 			for (MaintenanceReceiptDomain receipt : cycle.getReceipts()) {
 				
@@ -58,27 +64,36 @@ public class EmailService {
 				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
 				if(receiptPdf != null) {
 					logger.info("Sending mail");
-
 					MimeMessage mimeMessage = mailSender.createMimeMessage();
 					try {
 						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
 						mailMsg.setFrom("admin@societysoft.com");
-						mailMsg.setTo("vikasb0207@gmail.com");
-						mailMsg.setSubject("Test mail with Attachment");
-						mailMsg.setText("Please find Attachment.");
-						mailMsg.addAttachment("maintenacne-receipt.pdf", receiptPdf);
+						mailMsg.setTo(receipt.getEmailId());
+						mailMsg.setSubject("Maintenance Receipt");
 						
-												
+						StringBuilder sb = new StringBuilder();
+						sb.append("Hi " + receipt.getMemberName() + ",\n\n");
+						sb.append("This is a notice that an Maintenance Receipt has been generated on " + strDate + ".\n\n");
+						sb.append("Amount Due: INR " + receipt.getTotalValue() + "\n\n");
+						sb.append("Due Date: " + cycle.getPaymentDueDate() + "\n\n");
+						sb.append("Thanks & Regards,\n\n");
+						sb.append("Society soft admin team");
+						
+						mailMsg.setText(sb.toString());
+						mailMsg.addAttachment("maintenacne-receipt.pdf", receiptPdf);
+								
 						mailSender.send(mimeMessage);
 						logger.info("Mail Send successfuly.");
-						
 					} catch (MessagingException e) {
+						logger.error("MessagingException => Mail sending failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
 						logger.error(e.getMessage());
 					}
 					catch(MailException e) {
+						logger.error("MailException => Mail sending failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
 						logger.error(e.getMessage());
 					}
 			      	catch(Exception e){
+			      		logger.error("Exception => Mail sending failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
 			      		logger.error(e.getMessage());
 			      	}
 			        finally {
@@ -86,16 +101,16 @@ public class EmailService {
 			        }
 				}
 			}
-			
-			
 			//Store the response in table for particular society
 			// rowId, memberId, societyId, receiptId,billNumber
+		} 
+		else {
+			logger.error("Probelem with fetching cycle data from Database for societyId : " + email.getSocietyId());
 		}
 	}
 
 	private File generateMaintenacneReceipt(MaintenanceReceiptDomain receipt, MaintenanceCycleReceiptDomain cycle,
 			String destPath) {
-		
 		File receiptFile;
 		PdfWriter writer = null;
 		Document document = new Document();
@@ -180,11 +195,14 @@ public class EmailService {
 			document.add(chequeName);
 			
 		} catch (DocumentException e) {
+			logger.error("DocimentException => Receipt generation failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
 			receiptFile = null;
 		} catch (FileNotFoundException e) {
+			logger.error("FileNotFoundException => Receipt generation failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
 			receiptFile = null;
 		}
 		catch(Exception e) {
+			logger.error("Exception => Receipt generation failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
 			receiptFile = null;
 		}
 		finally {

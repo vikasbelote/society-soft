@@ -1,6 +1,8 @@
 package com.society.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +15,12 @@ import com.society.helper.model.DropDownHelper;
 import com.society.model.domain.TransactionDescriptionDomain;
 import com.society.model.domain.TransactionDomain;
 import com.society.model.jpa.GeneralHeadJPA;
+import com.society.model.jpa.SocietyConfigJPA;
 import com.society.model.jpa.SocietyJPA;
 import com.society.model.jpa.TransactionDescriptionJPA;
 import com.society.model.jpa.TransactionJPA;
 import com.society.model.jpa.TransactionTypeJPA;
+import com.society.repository.MaintenanceRepository;
 import com.society.repository.TransactionRepository;
 
 @Service
@@ -24,6 +28,9 @@ public class TransactionService {
 
 	@Autowired
 	private TransactionRepository transactionRepository;
+	
+	@Autowired
+	private MaintenanceRepository maintenanceRepository;
 
 	public Map<String, List<DropDownHelper>> getMasterData(Integer societyId) {
 
@@ -138,5 +145,43 @@ public class TransactionService {
 		
 		return transactionRepository.deleteTransactionEntry(transaction);
 	}
-
+	
+	public boolean checkTransactionExist(TransactionDomain transactionDomain) {
+		List<Date> dateList = this.getFinanicalYear(transactionDomain);
+		TransactionJPA transaction = transactionRepository.checkTransactionExist(transactionDomain, dateList);
+		if(transaction == null)
+			return false;
+		return true;
+	}
+	
+	private List<Date> getFinanicalYear(TransactionDomain transactionDomain){
+		
+		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(transactionDomain.getGeneralHeadId());
+		if(societyConfig == null)
+			return null;
+		
+		Date startDate = societyConfig.getStartDate();
+		Calendar c = Calendar.getInstance(); 
+		
+		c.setTime(startDate);
+		int startMonth = c.get(Calendar.MONTH) + 1;
+		
+		c.setTime(transactionDomain.getTransactionDate());
+		int currentYear = c.get(Calendar.YEAR);
+		int currentMonth = c.get(Calendar.MONTH) + 1;
+		if(startMonth > currentMonth)
+			currentYear = currentYear - 1;
+		
+		String startDateStr = currentYear + "-" + startMonth + "-01";
+		Date realStartDate = Date.valueOf(startDateStr);
+		c.setTime(realStartDate);
+		c.add(Calendar.YEAR, 1);
+		c.add(Calendar.DATE, -1);
+		Date realEndDate = new Date(c.getTimeInMillis());
+		
+		List<Date> dateList = new ArrayList<Date>(2);
+		dateList.add(realStartDate);
+		dateList.add(realEndDate);
+		return dateList;
+	}
 }

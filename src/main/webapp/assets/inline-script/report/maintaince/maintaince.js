@@ -234,10 +234,10 @@
 			type : 'POST',
 			data : emailJson,
 			success : function(response) {
-				alert(response);
+				showSuccessMsg("Email", "Mail sending process is running, Please check notificaion report to know staus.");
 			},
 			error : function(e) {
-				showValidationMsg("Error","There is error while saving receipt data.");
+				showValidationMsg("Error","There is error while sending email to soicety member. Please contact society soft support team.");
 			}
 		});
 	});

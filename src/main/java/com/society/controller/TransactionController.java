@@ -1,6 +1,5 @@
 package com.society.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.helper.model.BreadCrumb;
 import com.society.helper.model.DropDownHelper;
-import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.TransactionDescriptionDomain;
 import com.society.model.domain.TransactionDomain;
 import com.society.service.TransactionService;
@@ -28,7 +26,7 @@ public class TransactionController extends BaseController {
 	private TransactionService transactionService;
 	
 	@RequestMapping(value = "recordTransaction", method = RequestMethod.GET)
-	public ModelAndView getTransaction(HttpSession session) {
+	public ModelAndView getTransaction(@ModelAttribute("transactionDomain")TransactionDomain transactionDomain, HttpSession session) {
 		
 		String[] breadCrumbs = {"Setting", "Record Transaction"};
 		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);
@@ -39,7 +37,10 @@ public class TransactionController extends BaseController {
 		List<TransactionDomain> transactionDomainList = transactionService.getTransactionEntry(societyId);
 		List<TransactionDescriptionDomain> tranDescDomainList = transactionService.getTransactionDescriptionDomainList(societyId);
 		
-		ModelAndView modelAndView = new ModelAndView("transaction", "transactionDomain", new TransactionDomain());
+		if(transactionDomain == null)
+			transactionDomain = new TransactionDomain();
+			
+		ModelAndView modelAndView = new ModelAndView("transaction", "transactionDomain", transactionDomain);
 		modelAndView.addObject(breadCrumbList);
 		modelAndView.addObject("transactionDomainList", transactionDomainList);
 		modelAndView.addObject("tranDescDomainList", tranDescDomainList);
@@ -54,6 +55,12 @@ public class TransactionController extends BaseController {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		transactionDomain.setSocietyId(societyId);
+		
+		if(transactionService.checkTransactionExist(transactionDomain)) {
+			redirectAttributes.addFlashAttribute("transactionDomain", transactionDomain);
+			redirectAttributes.addFlashAttribute("transactionExist", true);
+			return "redirect:/recordTransaction";
+		}
 		
 		if(transactionService.insertTransactionEntry(transactionDomain))
 			redirectAttributes.addFlashAttribute("successMsg", "Congrats!!! you have inserted tranasaction entry successfuly.");

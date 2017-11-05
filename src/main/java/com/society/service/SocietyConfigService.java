@@ -120,6 +120,11 @@ public class SocietyConfigService {
 			return societyConfigDomain;
 		
 		societyConfigDomain.setConfigId(societyConfig.getConfigId());
+		societyConfigDomain.setStartDate(societyConfig.getStartDate());
+		societyConfigDomain.setEndDate(societyConfig.getEndDate());
+		societyConfigDomain.setMaintenanceCycle(societyConfig.getMaintenanceCycle());
+		societyConfigDomain.setMaintenancePaymentInterestRate(societyConfig.getMaintenancePaymentDueInterest());
+		societyConfigDomain.setMaintenancePaymentChequeName(societyConfig.getMaintenancePaymentChequeName());
 		
 		return societyConfigDomain;
 	}
@@ -225,6 +230,4 @@ public class SocietyConfigService {
 		}
 		return societyConfigRepository.saveSocietyConfig(generalHeadOrderList, societyConfig);
 	}
-	
-	
 }

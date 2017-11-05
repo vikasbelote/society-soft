@@ -22,7 +22,7 @@ public class EmailController {
 	private EmailService emailService;
 	
 	@RequestMapping(value = "sendEmail", method = RequestMethod.POST)
-	public ResponseEntity<String> sendEmail(@RequestBody EmailDomain email, HttpSession session, HttpServletRequest request) {
+	public ResponseEntity<Integer> sendEmail(@RequestBody EmailDomain email, HttpSession session, HttpServletRequest request) {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		email.setSocietyId(societyId);
@@ -31,6 +31,6 @@ public class EmailController {
 		if(StringUtils.isNotEmpty(email.getRootPath()) & StringUtils.isNotBlank(email.getRootPath())){
 			emailService.sendMail(email);
 		}
-		return new ResponseEntity<String>("Sending email...", HttpStatus.OK);
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
 }

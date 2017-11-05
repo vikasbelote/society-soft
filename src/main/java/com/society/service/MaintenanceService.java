@@ -38,45 +38,6 @@ public class MaintenanceService {
 	@Autowired
 	private MaintenanceRepository maintenanceRepository;
 	
-	public List<String> getCycleDateList1(MaintenanceDomain maintenanceDomain, Integer societyId) {
-		
-		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);
-		if(societyConfig == null)
-			return null;
-		
-		Integer addMonth = societyConfig.getMaintenanceCycle();
-		Date startDate = societyConfig.getStartDate();
-		maintenanceDomain.setPaymentCycleStartDate(startDate);
-		
-		if(addMonth == null || addMonth == 0)
-			addMonth = 2;
-		
-		if(startDate == null) {
-			String str = "2000-04-01";  
-			startDate = Date.valueOf(str);
-		}
-		Calendar c = Calendar.getInstance(); 
-		
-		List<String> cycleDateList = new ArrayList<String>();
-		Integer cycleCount = 12 / addMonth;
-		for(int i = 0; i < cycleCount; i++) {
-			
-			c.setTimeInMillis(startDate.getTime());
-			c.add(Calendar.MONTH, addMonth);
-			c.add(Calendar.DATE, -1);
-			Date endDate = new Date(c.getTimeInMillis());
-			
-			String cycleDate = String.valueOf(startDate) + " to " + String.valueOf(endDate);
-			
-			c.add(Calendar.DATE, 1);
-			startDate = new Date(c.getTimeInMillis());
-			
-			cycleDateList.add(cycleDate);
-		}
-		
-		return cycleDateList;
-	}
-	
 	public List<String> getCycleDateList(MaintenanceDomain maintenanceDomain, Integer societyId) {
 		
 		SocietyConfigJPA societyConfig = maintenanceRepository.getSocietyConfigDetail(societyId);

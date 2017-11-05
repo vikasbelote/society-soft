@@ -14,6 +14,20 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
+		<c:if test="${transactionExist}">
+			<div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<i class="ace-icon fa fa-times"></i>
+				</button>
+				<strong>
+					<i class="ace-icon fa fa-times"></i>
+					Oh snap!
+				</strong>
+				This transaction entry is exist for given finaincial year.
+				<br />
+			</div>
+		</c:if>
+		
 		<form:form id="inserAndUpdateForm" commandName="transactionDomain"
 			class="form-horizontal" action="recordTransaction">
 
@@ -27,7 +41,7 @@
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
 						<form:hidden path="transactionDescriptionId" />
-						<form:input path="transactionDescription" class="col-xs-10 col-sm-4"
+						<form:input path="transactionDescription" class="col-xs-10 col-sm-4 upper-case"
 							placeholder="Transaction Description" />
 					</div>
 				</div>
@@ -55,7 +69,7 @@
 				<div class="col-sm-9 inputGroupContainer">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<form:input path="transactionAmount" class="col-xs-10 col-sm-4"
+						<form:input path="transactionAmount" class="col-xs-10 col-sm-4 numeric"
 							placeholder="Transaction Amount" />
 					</div>
 				</div>
@@ -97,7 +111,7 @@
 						<i class="ace-icon fa fa-check bigger-110"></i>Submit
 					</button>
 					&nbsp; &nbsp; &nbsp;
-					<button class="btn btn-sm" type="reset">
+					<button id="transactionFormResetId" class="btn btn-sm" type="reset">
 						<i class="ace-icon fa fa-undo bigger-110"></i> Reset
 					</button>
 				</div>

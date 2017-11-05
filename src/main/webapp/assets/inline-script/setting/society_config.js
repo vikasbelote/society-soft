@@ -82,27 +82,6 @@
 			}).get().join();
 			$("#incomeOrderIds").val(inOrderList);
 		}
-		
-		var startDate = $("#configStartDate").val();
-		if(startDate != '')
-			$("#startDate").val(startDate);
-		
-		var endDate = $("#configEndDate").val();
-		if(endDate != '')
-			$("#endDate").val(endDate);
-		
-		var maintenanceCycle = $("#configMaintenanceDate").val();
-		if(maintenanceCycle != 0)
-			$("#maintenanceCycle").val(maintenanceCycle);
-		
-		var maintenancePaymentInterestRate = $("#maintenancePaymentInterestRate").val();
-		if(maintenancePaymentInterestRate != '')
-			$("#maintenancePaymentInterestRate").val(maintenancePaymentInterestRate);
-		
-		var maintenancePaymentChequeName = $("#maintenancePaymentChequeName").val();
-		if(maintenancePaymentChequeName != '')
-			$("#maintenancePaymentChequeName").val(maintenancePaymentChequeName);
-		
 		return true;
 	});
 

@@ -1,5 +1,6 @@
 package com.society.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.society.model.domain.TransactionDomain;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.RoleJPA;
 import com.society.model.jpa.SocietyMemberJPA;
@@ -130,4 +132,32 @@ public class TransactionRepository extends BaseRepository {
 				session.close();
 		}
 	}
+	
+	public TransactionJPA checkTransactionExist(TransactionDomain transactionDomain, List<Date> dateList) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<TransactionJPA> criteriaQuery = criteriaBuilder.createQuery(TransactionJPA.class);
+		Root<TransactionJPA> root = criteriaQuery.from(TransactionJPA.class);
+		criteriaQuery.select(root);
+		
+		Predicate transactionId = criteriaBuilder.notEqual(root.<Integer>get("transactionId"), transactionDomain.getTransactionId());
+		Predicate generalHeadId = criteriaBuilder.equal(root.<Integer>get("generalHead").get("generalHeadId"), transactionDomain.getGeneralHeadId());
+		Predicate transactionDescriptionId = criteriaBuilder.equal(root.<Integer>get("transactionDescription").get("descId"), transactionDomain.getTransactionDescriptionId());
+		Predicate transactionDate = criteriaBuilder.between(root.<Date>get("transactionDate"), dateList.get(0), dateList.get(1));
+		
+		if(transactionDomain.getTransactionId() == null)
+			criteriaQuery.where(generalHeadId, transactionDescriptionId, transactionDate);
+		else
+			criteriaQuery.where(transactionId, generalHeadId, transactionDescriptionId, transactionDate);
+		
+		TransactionJPA transaction;
+		try {
+			transaction = entityManager.createQuery(criteriaQuery).getSingleResult();
+		}
+		catch(Exception e) {
+			transaction = null;
+		}
+		return transaction;
+	}
+	
 }
