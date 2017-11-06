@@ -101,21 +101,21 @@
 						<li class=""><a href="#" class="dropdown-toggle"> <i
 								class="menu-icon fa fa-caret-right"></i> Member Maintenance
 						</a> <b class="arrow"></b>
-						
+
 							<ul class="submenu">
-								<c:if test="${sessionScope.MENURIGHTS.isEnableCreateMaintenacneReport()}">
+								<c:if
+									test="${sessionScope.MENURIGHTS.isEnableCreateMaintenacneReport()}">
 									<li class=""><a href="maintaince"> <i
-										class="menu-icon fa fa-caret-right"></i> Create
+											class="menu-icon fa fa-caret-right"></i> Create
 									</a> <b class="arrow"></b></li>
 								</c:if>
-								<c:if test="${sessionScope.MENURIGHTS.isEnableViewMaintenacneReport()}">
+								<c:if
+									test="${sessionScope.MENURIGHTS.isEnableViewMaintenacneReport()}">
 									<li class=""><a href="viewMaintenanceReport"> <i
-										class="menu-icon fa fa-caret-right"></i> View
+											class="menu-icon fa fa-caret-right"></i> View
 									</a> <b class="arrow"></b></li>
 								</c:if>
-							</ul>
-						
-						</li>
+							</ul></li>
 					</c:if>
 
 				</ul></li>
@@ -133,15 +133,37 @@
 							</a> <b class="arrow"></b></li>
 						</c:if>
 
-						<c:if test="${sessionScope.MENURIGHTS.isEnabledReocrdTransactionMenu()}">
+						<c:if
+							test="${sessionScope.MENURIGHTS.isEnabledReocrdTransactionMenu()}">
 							<li class=""><a href="recordTransaction"> <i
 									class="menu-icon fa fa-caret-right"></i> Record Transaction
 							</a> <b class="arrow"></b></li>
 						</c:if>
-						
-						<c:if test="${sessionScope.MENURIGHTS.isEnableSocietyConfigurationMenu()}">
+
+						<c:if
+							test="${sessionScope.MENURIGHTS.isEnableSocietyConfigurationMenu()}">
 							<li class=""><a href="societyConfig"> <i
 									class="menu-icon fa fa-caret-right"></i> Society Configuration
+							</a> <b class="arrow"></b></li>
+						</c:if>
+					</ul></li>
+			</c:if>
+			<c:if test="${sessionScope.MENURIGHTS.isEnableNotificationReport()}">
+				<li class=""><a href="#" class="dropdown-toggle"> <i
+						class="menu-icon fa fa-bell"></i> <span class="menu-text">
+							Notification </span> <b class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+				
+					<ul class="submenu">
+						<c:if test="${sessionScope.MENURIGHTS.isEnableEmailNotificationReportMenu()}">
+							<li class=""><a href="emailNotification"> <i
+									class="menu-icon fa fa-caret-right"></i> Email
+							</a> <b class="arrow"></b></li>
+						</c:if>
+						
+						<c:if test="${sessionScope.MENURIGHTS.isEnableMessageNotificationReportMenu()}">
+							<li class=""><a href="msgNotification"> <i
+									class="menu-icon fa fa-caret-right"></i> Message
 							</a> <b class="arrow"></b></li>
 						</c:if>
 					</ul></li>

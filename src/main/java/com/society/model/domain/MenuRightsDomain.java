@@ -34,6 +34,12 @@ public class MenuRightsDomain {
 	private boolean isEnableCreateMaintenacneReport = false;
 	//11 Menu Id
 	private boolean isEnableViewMaintenacneReport = false;
+	
+	private boolean isEnableNotificationReport = false;
+	//12 Menu Id
+	private boolean isEnableEmailNotificationReportMenu = false;
+	//13 Menu Id
+	private boolean isEnableMessageNotificationReportMenu = false;
 
 	public void initMenuRights(LoginDomain loginDomain) {
 
@@ -43,7 +49,8 @@ public class MenuRightsDomain {
 		if (loginDomain.getRoleName().equals("Admin")) {
 			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = 
 					isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = 
-					isEnableSocietyConfigurationMenu = isEnableCreateMaintenacneReport = isEnableViewMaintenacneReport = true;
+					isEnableSocietyConfigurationMenu = isEnableCreateMaintenacneReport = isEnableViewMaintenacneReport = isEnableEmailNotificationReportMenu = 
+					isEnableMessageNotificationReportMenu = isEnableNotificationReport = true;
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -91,6 +98,14 @@ public class MenuRightsDomain {
 					isEnableViewMaintenacneReport = true;
 					break;
 				}
+				case 12: {
+					isEnableEmailNotificationReportMenu = true;
+					break;
+				}
+				case 13: {
+					isEnableMessageNotificationReportMenu = true;
+					break;
+				}
 				}
 			}
 		}
@@ -106,6 +121,9 @@ public class MenuRightsDomain {
 		
 		if(isEnabledGeneralHeadMenu || isEnabledReocrdTransactionMenu || isEnableSocietyConfigurationMenu)
 			isEnabledSettingMenu = true;
+		
+		if(isEnableEmailNotificationReportMenu || isEnableMessageNotificationReportMenu)
+			isEnableNotificationReport = true;
 	}
 
 	public boolean isEnabledSocietyMenu() {
@@ -227,5 +245,29 @@ public class MenuRightsDomain {
 
 	public void setEnableViewMaintenacneReport(boolean isEnableViewMaintenacneReport) {
 		this.isEnableViewMaintenacneReport = isEnableViewMaintenacneReport;
+	}
+
+	public boolean isEnableNotificationReport() {
+		return isEnableNotificationReport;
+	}
+
+	public void setEnableNotificationReport(boolean isEnableNotificationReport) {
+		this.isEnableNotificationReport = isEnableNotificationReport;
+	}
+
+	public boolean isEnableEmailNotificationReportMenu() {
+		return isEnableEmailNotificationReportMenu;
+	}
+
+	public void setEnableEmailNotificationReportMenu(boolean isEnableEmailNotificationReportMenu) {
+		this.isEnableEmailNotificationReportMenu = isEnableEmailNotificationReportMenu;
+	}
+
+	public boolean isEnableMessageNotificationReportMenu() {
+		return isEnableMessageNotificationReportMenu;
+	}
+
+	public void setEnableMessageNotificationReportMenu(boolean isEnableMessageNotificationReportMenu) {
+		this.isEnableMessageNotificationReportMenu = isEnableMessageNotificationReportMenu;
 	}
 }

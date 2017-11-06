@@ -125,4 +125,16 @@
 	</definition>
 	<definition name="emailTemplate" template="/WEB-INF/views/report/maintaince/email_template.jsp">	
 	</definition>
+	<definition name="emailNotification" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/notification/email/email_notification.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/notification/notification_inline.jsp" />
+	</definition>
+	<definition name="viewEmailStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/notification/email/view_email_status.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/notification/notification_inline.jsp" />
+	</definition>
+	<definition name="msgNotification" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/notification/message/msg_notification.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/notification/notification_inline.jsp" />
+	</definition>
 </tiles-definitions>

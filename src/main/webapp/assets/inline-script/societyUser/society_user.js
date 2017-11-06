@@ -42,6 +42,10 @@ $(document).ready(function() {
 			'setting' : {
 				text : 'Setting',
 				type : 'folder'
+			},
+			'notification' : {
+				text : 'Notification',
+				type : 'folder'
 			}
 		}
 		tree_data['society']['additionalParameters'] = {
@@ -127,6 +131,21 @@ $(document).ready(function() {
 				'societyConfiguration' : {
 					id : 9,
 					text : 'Society Configuration',
+					type : 'item'
+				}
+			}
+		}
+	
+	tree_data['notification']['additionalParameters'] = {
+			'children' : {
+				'email' : {
+					id : 12,
+					text : 'Email',
+					type : 'item'
+				},
+				'message' : {
+					id : 13,
+					text : 'Message',
 					type : 'item'
 				}
 			}
