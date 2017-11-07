@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import javax.persistence.Table;
 
 @Entity
@@ -50,7 +51,12 @@ public class MaintenanceReceiptJPA {
 		else
 			return false;
 	}
-
+	
+	@PostPersist
+	public void updareBillNumber() {
+		billNumber = "B-" + this.receipId;
+	}
+	
 	public MaintenanceCycleJPA getCycle() {
 		return cycle;
 	}

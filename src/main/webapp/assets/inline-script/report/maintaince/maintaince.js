@@ -161,7 +161,7 @@
 		cycle.endDate = $.trim(paymentCycleDateArr[1]);
 		cycle.receipts = [];
 		
-		var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(0)").map(function(){
+		var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(1)").map(function(){
 			return $(this).text();
 		}).get();
 		
@@ -171,9 +171,10 @@
 			memberReceipt.receiptId = $(this).attr("data-receiptId");
 			memberReceipt.memberId = $(this).find("td:eq(0)").attr("data-memberId");
 			memberReceipt.memberName = $(this).find("td:eq(0)").text();
+			memberReceipt.billNumber = $(this).find("td:eq(1)").text();
 			memberReceipt.chargeList = [];
 			
-			var generalHeadIdAndValueArr = $(this).find("td:gt(0)").map(function(){
+			var generalHeadIdAndValueArr = $(this).find("td:gt(1)").map(function(){
 				var generalHeadIdAndValue = {
 						generalHeadId : $(this).attr("data-generalHeadId"),
 						value : $(this).text(),

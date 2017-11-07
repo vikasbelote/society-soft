@@ -49,4 +49,6 @@ public class NotificationController {
 		modelAndView.addObject("cycleId", cycleId);
 		return modelAndView;
 	}
+	
+	
 }

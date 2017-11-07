@@ -1,5 +1,7 @@
 package com.society.model.domain;
 
+import java.util.List;
+
 public class EmailDomain {
 	
 	private Integer cycleId;
@@ -7,6 +9,8 @@ public class EmailDomain {
 	private Integer societyId;
 	
 	private String rootPath;
+	
+	private List<StatusMemberDomain> memberIds;
 	
 	public Integer getCycleId() {
 		return cycleId;
@@ -32,5 +36,13 @@ public class EmailDomain {
 		this.rootPath = rootPath;
 	}
 
+	public List<StatusMemberDomain> getMemberIds() {
+		return memberIds;
+	}
 
+	public void setMemberIds(List<StatusMemberDomain> memberIds) {
+		this.memberIds = memberIds;
+	}
+
+	
 }

@@ -2,7 +2,7 @@ package com.society.constant;
 
 public enum EmailType {
 	
-	MA("MAEmail");
+	MA("MA");
 	
 	private String value;
 	

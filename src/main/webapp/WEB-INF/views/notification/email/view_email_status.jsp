@@ -4,7 +4,7 @@
 <div class="page-header">
 	<h1>
 		Email Notification <small> <i
-			class="ace-icon fa fa-angle-double-right"></i> 
+			class="ace-icon fa fa-angle-double-right"></i>
 		</small>
 	</h1>
 </div>
@@ -13,16 +13,18 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<a id="sendEmailId" href="#" role="button"
-					class="btn btn-primary">Email</a>
-		<div class="space-6"></div>
+		<a id="sendEmailId" href="#" role="button" class="btn btn-sm btn-primary">Email</a>
+		<div class="space-2"></div>
 		<c:choose>
 			<c:when test="${not empty emailStatusDomainList}">
-				<table data-cycleId="${cycleId}" id="emailStatusTableId" class="table table-bordered table-hover">
+				<table data-cycleId="${cycleId}" id="emailStatusTableId"
+					class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th><input id="checkFailMemberId" name="form-field-checkbox" type="checkbox" class="ace" />
-														<span class="lbl"><strong>Check Fail Member</strong></span></th>
+							<th class="center"><label class="pos-rel"> <input
+									id="checkFailMemberId" type="checkbox" class="ace" /> <span
+									class="lbl"></span>
+							</label></th>
 							<th><strong>Bill Number</strong></th>
 							<th><strong>Member Name</strong></th>
 							<th><strong>Send Date</strong></th>
@@ -31,12 +33,26 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${emailStatusDomainList}" var="emailStatus">
-							<tr>
-								<td><input type="checkbox" value="${emailStatus.memberId}"/></td>
+							<tr data-mailStatusId="${emailStatus.mailStatusId}">
+								<td class="center"><label class="pos-rel"> <input
+										type="checkbox" class="ace" value="${emailStatus.memberId}" /> <span class="lbl"></span>
+								</label></td>
+
 								<td>${emailStatus.billNumber}</td>
 								<td>${emailStatus.memberName}</td>
 								<td>${emailStatus.sendDate}</td>
-								<td>${emailStatus.mailStatus}</td>
+								<c:choose>
+									<c:when test="${emailStatus.mailStatus}">
+										<td class="hidden-480">
+											<span class="label label-sm label-success arrowed">Send</span>
+										</td>
+									</c:when>
+									<c:otherwise>
+										<td class="hidden-480">
+											<span class="label label-sm label-danger arrowed-in">Failed</span>
+										</td>
+									</c:otherwise>
+								</c:choose>
 							</tr>
 						</c:forEach>
 					</tbody>

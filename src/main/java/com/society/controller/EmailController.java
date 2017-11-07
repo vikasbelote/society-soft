@@ -1,6 +1,5 @@
 package com.society.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,14 +21,27 @@ public class EmailController {
 	private EmailService emailService;
 	
 	@RequestMapping(value = "sendEmail", method = RequestMethod.POST)
-	public ResponseEntity<Integer> sendEmail(@RequestBody EmailDomain email, HttpSession session, HttpServletRequest request) {
+	public ResponseEntity<Integer> sendEmail(@RequestBody EmailDomain email, HttpSession session) {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		email.setSocietyId(societyId);
 		email.setRootPath(session.getServletContext().getRealPath("/"));
 		
-		if(StringUtils.isNotEmpty(email.getRootPath()) & StringUtils.isNotBlank(email.getRootPath())){
+		if(StringUtils.isNotEmpty(email.getRootPath()) && StringUtils.isNotBlank(email.getRootPath())){
 			emailService.sendMail(email);
+		}
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "sendEmailToFailedMember", method = RequestMethod.POST)
+	public ResponseEntity<Integer> sendEmailToFailedMember(@RequestBody EmailDomain email, HttpSession session) {
+		
+		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
+		email.setSocietyId(societyId);
+		email.setRootPath(session.getServletContext().getRealPath("/"));
+		
+		if(StringUtils.isNotEmpty(email.getRootPath()) && StringUtils.isNotBlank(email.getRootPath())){
+			emailService.sendMailToFailedMember(email);
 		}
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}

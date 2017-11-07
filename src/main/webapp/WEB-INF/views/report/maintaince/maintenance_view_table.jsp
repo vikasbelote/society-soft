@@ -36,7 +36,8 @@
 					class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th><strong>Memeber Name</strong></th>
+							<th><strong>Member</strong></th>
+							<th><strong>Bill No</strong></th>
 							<c:forEach items="${cycle.generalHeadList}"
 								var="generalHead">
 								<th data-generalHeadId="${generalHead.generalHeadId}">${generalHead.generalHeadName}</th>
@@ -47,6 +48,7 @@
 						<c:forEach items="${cycle.receipts}" var="receipt">
 							<tr data-receiptId="${receipt.receiptId}">
 								<td data-memberId="${receipt.memberId}">${receipt.memberName}</td>
+								<td>${receipt.billNumber}</td>
 								<c:forEach items="${receipt.chargeList}" var="charge">
 									<td class="numeric" data-chargeId="${charge.chargeId}" data-generalHeadId="${charge.generalHeadId}" 
 									    contenteditable="true">${charge.chargeValue}</td>

@@ -2,32 +2,33 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <style>
-	/* some elements used in demo only */
-	.spinner-preview {
-		width: 100px;
-		height: 100px;
-		text-align: center;
-		margin-top: 60px;
-	}
-	
-	.spinner{
-	    position: absolute;
-	    top: 50%;
-	    left: 50%;
-	    margin-left: -50px;
-	    margin-top: -50px;
-	    background-size: 100%;
-	}
-	
-	.dropdown-preview {
-		margin: 0 5px;
-		display: inline-block;
-	}
-	.dropdown-preview  > .dropdown-menu {
-		display: block;
-		position: static;
-		margin-bottom: 5px;
-	}
+/* some elements used in demo only */
+.spinner-preview {
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	margin-top: 60px;
+}
+
+.spinner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -50px;
+	margin-top: -50px;
+	background-size: 100%;
+}
+
+.dropdown-preview {
+	margin: 0 5px;
+	display: inline-block;
+}
+
+.dropdown-preview>.dropdown-menu {
+	display: block;
+	position: static;
+	margin-bottom: 5px;
+}
 </style>
 
 <div class="page-header">
@@ -41,29 +42,51 @@
 <div class="row">
 	<div id="table-data" class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		
-		<i id="spinnerId" class="ace-icon hide fa fa-spinner fa-spin orange bigger-300 spinner"></i>
-		
-		
-		<div class="row">
+
+		<i id="spinnerId"
+			class="ace-icon hide fa fa-spinner fa-spin orange bigger-300 spinner"></i>
+		<div class="col-xs-12 col-sm-6">
+			<div class="profile-user-info profile-user-info-striped">
+				<div class="profile-info-row">
+					<div class="profile-info-name">Payment Cycle</div>
+
+					<div class="profile-info-value">
+						<span class="editable" id="username">For the period ${maintenanceTable.paymentCycle}</span>
+					</div>
+				</div>
+
+				<div class="profile-info-row">
+					<div class="profile-info-name">Due Date</div>
+
+					<div class="profile-info-value">
+						<span class="editable" id="signup">${maintenanceTable.paymentDueDate}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="space-6"></div>
+
+		<%-- <div class="row">
 			<div class="col-xs-6">
 				<a id="generateReceiptId" href="#" role="button"
-					class="btn btn-primary">Generate Receipt</a>
+					class="btn btn-sm btn-primary">Generate Receipt</a>
 			</div>
-			<div class="col-xs-6 center">
+				<div class="col-xs-6 center">
 				<h3>For the period ${maintenanceTable.paymentCycle}</h3>
 			</div>
-			
-		</div>
+
+		</div> --%>
 		<c:choose>
 			<c:when test="${not empty maintenanceTable}">
-				<input type="hidden" id="paymentDueDate" value="${maintenanceTable.paymentDueDate}" />
-				<input type="hidden" id="paymentCycle" value="${maintenanceTable.paymentCycle}" />
+				<input type="hidden" id="paymentDueDate"
+					value="${maintenanceTable.paymentDueDate}" />
+				<input type="hidden" id="paymentCycle"
+					value="${maintenanceTable.paymentCycle}" />
 				<table id="maintenanceTableId"
 					class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th><strong>Memeber Name</strong></th>
+							<th><strong>Member</strong></th>
 							<c:forEach items="${maintenanceTable.columnList}"
 								var="generalHead">
 								<th data-generalHeadId="${generalHead.generalHeadId}">${generalHead.generalHeadName}</th>
@@ -75,7 +98,8 @@
 							<tr>
 								<td data-memberId="${member.memberId}">${member.name}</td>
 								<c:forEach items="${member.generalHeadValues}" var="charge">
-									<td data-generalHeadId="${charge.generalHeadId}" contenteditable="true">${charge.chargeValue}</td>
+									<td data-generalHeadId="${charge.generalHeadId}"
+										contenteditable="true">${charge.chargeValue}</td>
 								</c:forEach>
 							</tr>
 						</c:forEach>

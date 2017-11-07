@@ -46,6 +46,7 @@ public class NotificationService {
 		List<EmailStatusDomain> emailStatusDomainList = new ArrayList<EmailStatusDomain>();
 		for(EmailStatusJPA emailStatusDB : emailStatusListDB) {
 			EmailStatusDomain emailStatusDomain = new EmailStatusDomain();
+			emailStatusDomain.setMailStatusId(emailStatusDB.getMailStatusId());
 			emailStatusDomain.setMemberName(this.getMemberName(emailStatusDB.getReceipt().getMember().getPerson()));
 			emailStatusDomain.setMemberId(emailStatusDB.getReceipt().getMember().getMemberId());
 			emailStatusDomain.setSendDate(emailStatusDB.getSendDate());

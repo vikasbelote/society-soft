@@ -3,7 +3,9 @@
 	<c:forEach items="${maintenanceCycleReceiptDomain.receipts}" var="receipt">
 		<p style="font-size: 18px; margin-left: 150px;">${maintenanceCycleReceiptDomain.societyName}</p>
 		<p style="margin-left: 170px;">${maintenanceCycleReceiptDomain.address}</p>
-		<p style="font-size: 16px;">Name : ${receipt.memberName}</p>
+		<p style="font-size: 16px;">Name        : ${receipt.memberName}</p>
+		<p style="font-size: 16px;">Bill Number : ${receipt.billNumber}</p>
+		<p style="font-size: 16px;">For Period ${maintenanceCycleReceiptDomain.startDate} to ${maintenanceCycleReceiptDomain.endDate}</p>
 		
 		<table width="400" border="1">
 			<thead>

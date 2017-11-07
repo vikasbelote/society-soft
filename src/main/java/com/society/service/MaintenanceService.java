@@ -14,6 +14,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.society.model.domain.EmailDomain;
 import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.MaintenacneChargeDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
@@ -192,6 +193,7 @@ public class MaintenanceService {
 		cycle.setEndDate(cycleDomain.getEndDate());
 		
 		List<MaintenanceChargeJPA> chargeList = new ArrayList<MaintenanceChargeJPA>();
+		List<MaintenanceReceiptJPA> receiptList = new ArrayList<MaintenanceReceiptJPA>();
 		for(MaintenanceReceiptDomain receiptDomain : cycleDomain.getReceipts()) {
 			
 			SocietyMemberJPA member = new SocietyMemberJPA();
@@ -201,7 +203,9 @@ public class MaintenanceService {
 			receipt.setReceipId(receiptDomain.getReceiptId());
 			receipt.setCycle(cycle);
 			receipt.setMember(member);
-			
+			if(receipt.getReceipId() != null)
+				receipt.setBillNumber(receiptDomain.getBillNumber());
+				
 			for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
 				
 				GeneralHeadJPA generalHead = new GeneralHeadJPA();
@@ -215,8 +219,28 @@ public class MaintenanceService {
 				
 				chargeList.add(charge);
 			}
+			receiptList.add(receipt);
 		}
-		return maintenanceRepository.saveMaintenanceData(chargeList);
+		
+		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList);
+		if(isSucess && cycleDomain.getCycleId() == null) {
+			//Update Bill Number after insert into database
+			for(MaintenanceReceiptJPA receipt : receiptList) {
+				
+				MaintenanceReceiptDomain receiptDomain = null;
+				for(MaintenanceReceiptDomain tempReceiptDomain : cycleDomain.getReceipts()) {
+					
+					if(receipt.getMember().getMemberId().equals(tempReceiptDomain.getMemberId())) {
+						receiptDomain = tempReceiptDomain;
+						break;
+					}
+				}
+				if(receiptDomain != null) {
+					receiptDomain.setBillNumber(receipt.getBillNumber());
+				}
+			}
+		}
+		return isSucess;
 	}
 	
 	public boolean updateCycle(MaintenanceCycleReceiptDomain cycleDomain) {
@@ -311,6 +335,67 @@ public class MaintenanceService {
 		boolean isCycleUpdated = true;
 		MaintenanceCycleReceiptDomain cycle = new MaintenanceCycleReceiptDomain();
 		cycle.setCycleId(cycleId);
+		
+		boolean isGeneralHeadColumnPopulated = true;
+		List<GeneralHeadDomain> generalHeadList = new ArrayList<GeneralHeadDomain>();
+		cycle.setGeneralHeadList(generalHeadList);
+		
+		List<MaintenanceReceiptDomain> receiptList = new ArrayList<MaintenanceReceiptDomain>();
+		for(MaintenanceReceiptJPA receiptDB : receiptSet) {
+			
+			if(isCycleUpdated) {
+				isCycleUpdated = false;
+				cycle.setPaymentDueDate(receiptDB.getCycle().getPaymentDueDate());
+				cycle.setStartDate(receiptDB.getCycle().getStartDate());
+				cycle.setEndDate(receiptDB.getCycle().getEndDate());
+			}
+			
+			MaintenanceReceiptDomain receipt = new MaintenanceReceiptDomain();
+			receipt.setReceiptId(receiptDB.getReceipId());
+			receipt.setMemberId(receiptDB.getMember().getMemberId());
+			receipt.setMemberName(this.getPersonName(receiptDB.getMember().getPerson()));
+			receipt.setEmailId(receiptDB.getMember().getPerson().getEmailId());
+			receipt.setBillNumber(receiptDB.getBillNumber());
+			
+			Double totalValue = new Double(0);
+			if(CollectionUtils.isNotEmpty(receiptDB.getChargeList())) {
+				List<MaintenacneChargeDomain> chargeList = new ArrayList<MaintenacneChargeDomain>();
+				for(MaintenanceChargeJPA chargeDB : receiptDB.getChargeList()) {
+					MaintenacneChargeDomain charge = new MaintenacneChargeDomain();
+					charge.setChargeId(chargeDB.getChargeId());
+					charge.setGeneralHeadId(chargeDB.getGeneralHead().getGeneralHeadId());
+					charge.setGeneralHeadName(chargeDB.getGeneralHead().getGeneralHeadName());
+					charge.setChargeValue(chargeDB.getChargeValue());
+					chargeList.add(charge);
+					
+					totalValue = totalValue + chargeDB.getChargeValue();
+					
+					if(isGeneralHeadColumnPopulated) {
+						GeneralHeadDomain generalHeadDomain = new GeneralHeadDomain();
+						generalHeadDomain.setGeneralHeadId(charge.getGeneralHeadId());
+						generalHeadDomain.setGeneralHeadName(charge.getGeneralHeadName());
+						generalHeadList.add(generalHeadDomain);
+					}
+				}
+				isGeneralHeadColumnPopulated = false;
+				receipt.setChargeList(chargeList);
+				receipt.setTotalValue(totalValue);
+			}
+			receiptList.add(receipt);
+		}
+		cycle.setReceipts(receiptList);
+		return cycle;
+	}
+	
+	public MaintenanceCycleReceiptDomain getMemberCycleDetail(EmailDomain email) {
+		
+		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMemberMaintenanceReceipt(email);
+		if(CollectionUtils.isEmpty(receiptSet))
+			return null;
+		
+		boolean isCycleUpdated = true;
+		MaintenanceCycleReceiptDomain cycle = new MaintenanceCycleReceiptDomain();
+		cycle.setCycleId(email.getCycleId());
 		
 		boolean isGeneralHeadColumnPopulated = true;
 		List<GeneralHeadDomain> generalHeadList = new ArrayList<GeneralHeadDomain>();

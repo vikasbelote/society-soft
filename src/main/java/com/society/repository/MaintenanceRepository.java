@@ -1,6 +1,7 @@
 package com.society.repository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,9 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.society.constant.SectionEnum;
+import com.society.model.domain.EmailDomain;
 import com.society.model.domain.MaintenanceDomain;
+import com.society.model.domain.StatusMemberDomain;
 import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
@@ -225,6 +228,39 @@ public class MaintenanceRepository extends BaseRepository {
 		
 		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), cycleId);
 		criteriaQuery.where(equalCycleIdPredicate);
+		
+		Set<MaintenanceReceiptJPA> maintenanceReceiptSet;
+		try {
+			List<MaintenanceReceiptJPA> maintenanceReceiptList = entityManager.createQuery(criteriaQuery).getResultList();
+			maintenanceReceiptSet = new HashSet<MaintenanceReceiptJPA>(maintenanceReceiptList);
+		}
+		catch(Exception e) {
+			maintenanceReceiptSet = null;
+		}
+		return maintenanceReceiptSet;
+	}
+	
+	public Set<MaintenanceReceiptJPA> getMemberMaintenanceReceipt(EmailDomain email) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MaintenanceReceiptJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceReceiptJPA.class);
+		Root<MaintenanceReceiptJPA> root = criteriaQuery.from(MaintenanceReceiptJPA.class);	
+		Fetch<MaintenanceReceiptJPA, List<MaintenanceChargeJPA>> chargeList = root.fetch("chargeList", JoinType.INNER);
+		chargeList.fetch("generalHead", JoinType.INNER);
+		root.fetch("cycle", JoinType.INNER);
+		Fetch<MaintenanceReceiptJPA, SocietyMemberJPA> member = root.fetch("member", JoinType.INNER);
+		member.fetch("person", JoinType.INNER);
+		criteriaQuery.select(root);
+		
+		List<Integer> memberIdList = new ArrayList<Integer>();
+		for(StatusMemberDomain statusMember : email.getMemberIds()) {
+			memberIdList.add(statusMember.getMemberId());
+		}
+		
+		
+		Predicate memberIdsPredicate = root.<Integer>get("member").get("memberId").in(memberIdList);
+		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), email.getCycleId());
+		criteriaQuery.where(equalCycleIdPredicate, memberIdsPredicate);
 		
 		Set<MaintenanceReceiptJPA> maintenanceReceiptSet;
 		try {
