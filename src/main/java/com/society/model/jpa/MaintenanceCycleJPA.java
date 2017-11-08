@@ -3,6 +3,7 @@ package com.society.model.jpa;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,8 +36,11 @@ public class MaintenanceCycleJPA {
 	@Column(name = "end_date")
 	private Date endDate;
 	
-	@OneToMany(mappedBy = "cycle" , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "cycle" , fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private List<MaintenanceReceiptJPA> receiptList;
+	
+	@OneToMany(mappedBy = "cycle" , fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private List<MaintenanceCycleNoteJPA> noteList;
 	
 	public Integer getCycleId() {
 		return cycleId;
@@ -84,6 +88,14 @@ public class MaintenanceCycleJPA {
 
 	public void setReceiptList(List<MaintenanceReceiptJPA> receiptList) {
 		this.receiptList = receiptList;
+	}
+
+	public List<MaintenanceCycleNoteJPA> getNoteList() {
+		return noteList;
+	}
+
+	public void setNoteList(List<MaintenanceCycleNoteJPA> noteList) {
+		this.noteList = noteList;
 	}
 	
 	

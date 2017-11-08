@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.society.model.domain.EmailDomain;
 import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.MaintenacneChargeDomain;
+import com.society.model.domain.MaintenacneNoteDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.model.domain.MaintenanceDomain;
 import com.society.model.domain.MaintenancePersonDomain;
@@ -26,6 +27,7 @@ import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.MaintenanceChargeJPA;
 import com.society.model.jpa.MaintenanceCycleJPA;
+import com.society.model.jpa.MaintenanceCycleNoteJPA;
 import com.society.model.jpa.MaintenanceReceiptJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.SocietyConfigJPA;
@@ -177,6 +179,7 @@ public class MaintenanceService {
 		maintenanceTable.setMemberList(memberList);
 		
 		maintenanceTable.setPaymentCycle(maintenanceDomain.getPaymentCycle());
+		maintenanceTable.setAdditionalNote(maintenanceDomain.getAdditionalNote());
 		return maintenanceTable;
 	}
 	
@@ -221,8 +224,20 @@ public class MaintenanceService {
 			}
 			receiptList.add(receipt);
 		}
-		
-		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList);
+		List<MaintenanceCycleNoteJPA> noteCycle = null;
+		if(CollectionUtils.isNotEmpty(cycleDomain.getNotes())) {
+			
+		    noteCycle = new ArrayList<MaintenanceCycleNoteJPA>();
+			for(MaintenacneNoteDomain note : cycleDomain.getNotes()) {
+				
+				MaintenanceCycleNoteJPA noteDB = new MaintenanceCycleNoteJPA();
+				noteDB.setNoteId(note.getNoteId());
+				noteDB.setNoteText(note.getNoteText());
+				noteDB.setCycle(cycle);
+				noteCycle.add(noteDB);
+			}
+		}
+		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList, noteCycle);
 		if(isSucess && cycleDomain.getCycleId() == null) {
 			//Update Bill Number after insert into database
 			for(MaintenanceReceiptJPA receipt : receiptList) {
@@ -384,6 +399,19 @@ public class MaintenanceService {
 			receiptList.add(receipt);
 		}
 		cycle.setReceipts(receiptList);
+		
+		List<MaintenanceCycleNoteJPA> noteList = maintenanceRepository.getAdditionalNote(cycleId);
+		if(CollectionUtils.isNotEmpty(noteList)) {
+			List<MaintenacneNoteDomain> additinalNoteList = new ArrayList<MaintenacneNoteDomain>();
+			for(MaintenanceCycleNoteJPA cycleNote : noteList) {
+				
+				MaintenacneNoteDomain note = new MaintenacneNoteDomain();
+				note.setNoteId(cycleNote.getNoteId());
+				note.setNoteText(cycleNote.getNoteText());
+				additinalNoteList.add(note);
+			}
+			cycle.setNotes(additinalNoteList);
+		}
 		return cycle;
 	}
 	
@@ -416,6 +444,7 @@ public class MaintenanceService {
 			receipt.setMemberId(receiptDB.getMember().getMemberId());
 			receipt.setMemberName(this.getPersonName(receiptDB.getMember().getPerson()));
 			receipt.setEmailId(receiptDB.getMember().getPerson().getEmailId());
+			receipt.setBillNumber(receiptDB.getBillNumber());
 			
 			Double totalValue = new Double(0);
 			if(CollectionUtils.isNotEmpty(receiptDB.getChargeList())) {
@@ -444,7 +473,19 @@ public class MaintenanceService {
 			receiptList.add(receipt);
 		}
 		cycle.setReceipts(receiptList);
+		List<MaintenanceCycleNoteJPA> noteList = maintenanceRepository.getAdditionalNote(email.getCycleId());
+		if(CollectionUtils.isNotEmpty(noteList)) {
+			List<String> additinalNoteList = new ArrayList<String>();
+			for(MaintenanceCycleNoteJPA cycleNote : noteList) {
+				additinalNoteList.add(cycleNote.getNoteText());
+			}
+			cycle.setAdditionalNote(additinalNoteList);
+		}
 		return cycle;
+	}
+	
+	public boolean deleteCycle(Integer cycleId) {
+		return maintenanceRepository.deleteCycleDetails(cycleId);
 	}
 	
 	private List<MaintenacneChargeDomain> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, 

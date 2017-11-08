@@ -13,10 +13,10 @@
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<a id="sendEmailId" href="#" role="button" class="btn btn-sm btn-primary">Email</a>
-		<div class="space-2"></div>
 		<c:choose>
 			<c:when test="${not empty emailStatusDomainList}">
+				<a id="sendEmailId" href="#" role="button" class="btn btn-sm btn-primary">Email</a>
+				<div class="space-2"></div>
 				<table data-cycleId="${cycleId}" id="emailStatusTableId"
 					class="table table-bordered table-hover">
 					<thead>

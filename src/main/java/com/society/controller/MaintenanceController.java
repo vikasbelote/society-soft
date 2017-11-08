@@ -137,5 +137,16 @@ public class MaintenanceController extends BaseController {
 		
 	}
 	
+	@RequestMapping(value = "deleteCycleDetais")
+	public String deleteCycleDetails(@RequestParam(value="id", required=true)Integer cycleId, RedirectAttributes redirectAttributes) {
+		
+		if(maintenanceService.deleteCycle(cycleId)) {
+			redirectAttributes.addFlashAttribute("deleted", true);
+		}
+		else {
+			redirectAttributes.addFlashAttribute("deleted", false);
+		}
+		return "redirect:/viewMaintenanceReport";
+	}
 }
 

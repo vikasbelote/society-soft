@@ -111,9 +111,25 @@
 	
 	//////////////////////////////////////////////////////////////
 	
+	$("#addNoteId").click(function() {
+		var note = $("#additinalNoteId").val();
+		if(note != "") {
+			$("#additonalNoteList").append('<li><span>' + note + '</span> <input name="additionalNote" type="hidden" value="' + note + '" /><a style="cursor: pointer;text-decoration: underline;" class="delete-note text-danger">Delete</a></li>');
+			$("#additinalNoteId").val("");
+		}
+	});
+	
+	$("#clearNoteId").click(function() {
+		$("#additonalNoteList").html('');
+	});
+	
+	$("#additonalNoteList").on("click", ".delete-note", function() {
+		$(this).parent().remove();
+	});
 	
 	$("#generateMaintenanceReportBtn").click(function() {
 		
+	
 		var isValid = true;
 		try {
 			
@@ -146,79 +162,100 @@
 		return isValid;
 	});
 	
+	$("#paymentDueDateId").change(function(){
+		$("#paymentDueDate").val($(this).val());
+	});
+	
 	$("#generateReceiptId").click(function(){
 	
 		$("#spinnerId").removeClass("hide");
 		
 		var paymentDueDate = $("#paymentDueDate").val();
 		var paymentCycle = $("#paymentCycle").val();
-		var paymentCycleDateArr = paymentCycle.split("to");
-		//Object send to server to populate maintenance receipt data
-		var cycle = {};
-		cycle.cycleId = $("#maintenanceTableId").attr("data-cycleId");
-		cycle.paymentDueDate = paymentDueDate;
-		cycle.startDate = $.trim(paymentCycleDateArr[0]);
-		cycle.endDate = $.trim(paymentCycleDateArr[1]);
-		cycle.receipts = [];
 		
-		var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(1)").map(function(){
-			return $(this).text();
-		}).get();
-		
-		$("#maintenanceTableId tbody").find("tr").map(function() {
+		//perform validation
+		if(validatePaymentDueDate(paymentCycle, paymentDueDate)) {
 			
-			var memberReceipt = {};
-			memberReceipt.receiptId = $(this).attr("data-receiptId");
-			memberReceipt.memberId = $(this).find("td:eq(0)").attr("data-memberId");
-			memberReceipt.memberName = $(this).find("td:eq(0)").text();
-			memberReceipt.billNumber = $(this).find("td:eq(1)").text();
-			memberReceipt.chargeList = [];
+			var paymentCycleDateArr = paymentCycle.split("to");
+			//Object send to server to populate maintenance receipt data
+			var cycle = {};
+			cycle.cycleId = $("#maintenanceTableId").attr("data-cycleId");
+			cycle.paymentDueDate = paymentDueDate;
+			cycle.startDate = $.trim(paymentCycleDateArr[0]);
+			cycle.endDate = $.trim(paymentCycleDateArr[1]);
 			
-			var generalHeadIdAndValueArr = $(this).find("td:gt(1)").map(function(){
-				var generalHeadIdAndValue = {
-						generalHeadId : $(this).attr("data-generalHeadId"),
-						value : $(this).text(),
-						chargeId : $(this).attr("data-chargeId")
-				};
-				return generalHeadIdAndValue;
+			cycle.notes = $("#additonalNoteList").find("li").map(function() {
+										var note = {};
+										note.noteId = $(this).attr("data-noteId");
+										note.noteText = $(this).find("span").text();
+										return note;
+								   }).get();
+			
+			
+			cycle.receipts = [];
+			
+			var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(1)").map(function(){
+				return $(this).text();
 			}).get();
 			
-			
-			if(generalHeadNameArr.length == generalHeadIdAndValueArr.length) {
-				for (var i = 0; i < generalHeadNameArr.length; i++) {
-					
-					var charge = {};
-					charge.chargeId = generalHeadIdAndValueArr[i].chargeId;
-					charge.srNumber = (i + 1);
-					charge.generalHeadId = generalHeadIdAndValueArr[i].generalHeadId;
-					charge.chargeValue = generalHeadIdAndValueArr[i].value;
-					charge.generalHeadName = generalHeadNameArr[i];
-					memberReceipt.chargeList.push(charge);
-				}
-			}
-			
-			cycle.receipts.push(memberReceipt);
-		});
-		
-		var cycleJson = JSON.stringify(cycle);
-		$.ajax({
-			url : 'saveMaintenanceData',
-			contentType : "application/json",
-			type : 'POST',
-			data : cycleJson,
-			success : function(response) {
-				$('#content').html("");
-				$('#content').append(response);
-				downloadAllMaintenanceReceipt();
-				$("#spinnerId").addClass("hide");
+			$("#maintenanceTableId tbody").find("tr").map(function() {
 				
-				window.location.replace("viewMaintenanceReport");
-			},
-			error : function(e) {
-				showValidationMsg("Error","There is error while saving receipt data.");
-				$("#spinnerId").addClass("hide");
-			}
-		});
+				var memberReceipt = {};
+				memberReceipt.receiptId = $(this).attr("data-receiptId");
+				memberReceipt.memberId = $(this).find("td:eq(0)").attr("data-memberId");
+				memberReceipt.memberName = $(this).find("td:eq(0)").text();
+				memberReceipt.billNumber = $(this).find("td:eq(1)").text();
+				memberReceipt.chargeList = [];
+				
+				var generalHeadIdAndValueArr = $(this).find("td:gt(1)").map(function(){
+					var generalHeadIdAndValue = {
+							generalHeadId : $(this).attr("data-generalHeadId"),
+							value : $(this).text(),
+							chargeId : $(this).attr("data-chargeId")
+					};
+					return generalHeadIdAndValue;
+				}).get();
+				
+				
+				if(generalHeadNameArr.length == generalHeadIdAndValueArr.length) {
+					for (var i = 0; i < generalHeadNameArr.length; i++) {
+						
+						var charge = {};
+						charge.chargeId = generalHeadIdAndValueArr[i].chargeId;
+						charge.srNumber = (i + 1);
+						charge.generalHeadId = generalHeadIdAndValueArr[i].generalHeadId;
+						charge.chargeValue = generalHeadIdAndValueArr[i].value;
+						charge.generalHeadName = generalHeadNameArr[i];
+						memberReceipt.chargeList.push(charge);
+					}
+				}
+				
+				cycle.receipts.push(memberReceipt);
+			});
+			
+			var cycleJson = JSON.stringify(cycle);
+			$.ajax({
+				url : 'saveMaintenanceData',
+				contentType : "application/json",
+				type : 'POST',
+				data : cycleJson,
+				success : function(response) {
+					$('#content').html("");
+					$('#content').append(response);
+					downloadAllMaintenanceReceipt();
+					$("#spinnerId").addClass("hide");
+					
+					window.location.replace("viewMaintenanceReport");
+				},
+				error : function(e) {
+					showValidationMsg("Error","There is error while saving receipt data.");
+					$("#spinnerId").addClass("hide");
+				}
+			});
+		}
+			
+		
+		
 	});
 	
 	$("#sendEmailId").click(function() {
@@ -242,6 +279,26 @@
 			}
 		});
 	});
+	
+	function validatePaymentDueDate(paymentCycle, paymentDueDate) {
+		var isValid = true;
+		try {
+			if(paymentDueDate != "" && paymentCycle != "") {
+				
+				var cycleDueDate = new Date(paymentDueDate);
+				var cycleEndDate = new Date($.trim(paymentCycle.split("to")[1]));
+				
+				if(cycleDueDate < cycleEndDate) {
+					showValidationMsg("Payment Due Date","Please select date which is greater than cycle end date.");
+					isValid = false;
+				}
+			}
+		}
+		catch(err) {
+			return false;
+		}
+		return isValid;
+	}
 	
 })(jQuery);
 

@@ -38,6 +38,14 @@
 			If the payment is not received on and before due date, Interest @${maintenanceCycleReceiptDomain.lateInterestRate}% p.a. on entire amount wil be applicable
 		</p>
 		<p style="font-size: 16px;">cheque should be drawan in the favour of "<strong>${maintenanceCycleReceiptDomain.chequeName}</strong>"</p>
+		<p style="font-size: 16px;">Note: </p>
+		<div style="margin-left:20px">
+	      <ol>
+	       	<c:forEach items="${maintenanceCycleReceiptDomain.additionalNote}" var="note">
+	       		<li>${note}</li>
+	       	</c:forEach>
+	      </ol>
+	    </div>
 		<!-- ADD_PAGE -->
 	</c:forEach>
 </c:if>

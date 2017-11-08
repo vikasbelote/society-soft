@@ -42,40 +42,48 @@
 <div class="row">
 	<div id="table-data" class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-
+		
+		<div class="hide">
+			<ol id="additonalNoteList">
+				<c:forEach items="${maintenanceTable.additionalNote}" var="note">
+					<li><span>${note}</span></li>
+				</c:forEach>
+			</ol>
+		</div>
+		
 		<i id="spinnerId"
 			class="ace-icon hide fa fa-spinner fa-spin orange bigger-300 spinner"></i>
-		<div class="col-xs-12 col-sm-6">
-			<div class="profile-user-info profile-user-info-striped">
-				<div class="profile-info-row">
-					<div class="profile-info-name">Payment Cycle</div>
 
-					<div class="profile-info-value">
-						<span class="editable" id="username">For the period ${maintenanceTable.paymentCycle}</span>
+		<div class="row">
+			<div class="col-sm-offset-2 col-xs-12 col-sm-4">
+				<div class="profile-user-info profile-user-info-striped">
+					<div class="profile-info-row">
+						<div class="profile-info-name">Payment Cycle</div>
+
+						<div class="profile-info-value">
+							<span class="editable" id="username">For the period
+								${maintenanceTable.paymentCycle}</span>
+						</div>
 					</div>
-				</div>
 
-				<div class="profile-info-row">
-					<div class="profile-info-name">Due Date</div>
+					<div class="profile-info-row">
+						<div class="profile-info-name">Due Date</div>
 
-					<div class="profile-info-value">
-						<span class="editable" id="signup">${maintenanceTable.paymentDueDate}</span>
+						<div class="profile-info-value">
+							<span class="editable" id="signup">${maintenanceTable.paymentDueDate}</span>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="space-6"></div>
-
-		<%-- <div class="row">
-			<div class="col-xs-6">
+		<div class="space-8"></div>
+		<div class="row">
+			<div class="col-xs-6 col-sm-offset-1 col-sm-6 center">
 				<a id="generateReceiptId" href="#" role="button"
 					class="btn btn-sm btn-primary">Generate Receipt</a>
 			</div>
-				<div class="col-xs-6 center">
-				<h3>For the period ${maintenanceTable.paymentCycle}</h3>
-			</div>
-
-		</div> --%>
+		</div>
+		<div class="space-8"></div>
 		<c:choose>
 			<c:when test="${not empty maintenanceTable}">
 				<input type="hidden" id="paymentDueDate"
@@ -105,6 +113,7 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				
 			</c:when>
 			<c:otherwise>
 				<div style="text-align: center;">

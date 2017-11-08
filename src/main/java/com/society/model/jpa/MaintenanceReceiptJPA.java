@@ -34,7 +34,7 @@ public class MaintenanceReceiptJPA {
 	@Column(name = "bill_number")
 	private String billNumber;
 	
-	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MaintenanceChargeJPA> chargeList;
 	
 	@Override

@@ -28,6 +28,8 @@ public class MaintenanceCycleReceiptDomain {
 	private String chequeName;
 	
 	private List<GeneralHeadDomain> generalHeadList;
+	
+	private List<String> additionalNote;
 
 	public Integer getCycleId() {
 		return cycleId;
@@ -123,5 +125,13 @@ public class MaintenanceCycleReceiptDomain {
 
 	public void setGeneralHeadList(List<GeneralHeadDomain> generalHeadList) {
 		this.generalHeadList = generalHeadList;
+	}
+
+	public List<String> getAdditionalNote() {
+		return additionalNote;
+	}
+
+	public void setAdditionalNote(List<String> additionalNote) {
+		this.additionalNote = additionalNote;
 	}
 }

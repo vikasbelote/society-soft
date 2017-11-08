@@ -78,8 +78,25 @@
 					<div class="widget-box widget-color-green col-sm-offset-3">
 						<div id="additionalNoteHeader" class="widget-header widget-header-small">  </div>
 						<div class="widget-body">
+							<div>
+								<textarea class="form-control" id="additinalNoteId"></textarea>
+							</div>
+							<div class="col-sm-offset-2">
+								<button type="button" id="addNoteId" class="btn btn-sm btn-primary btn-white btn-round center">
+									<span class="bigger-110">Add Note</span>
+									<i class="icon-on-right ace-icon fa fa-arrow-right"></i>
+								</button>
+								<button type="button" id="clearNoteId" class="btn btn-sm btn-primary btn-white btn-round center">
+									<span class="bigger-110">Clear Note</span>
+									<i class="icon-on-right ace-icon fa fa-arrow-right"></i>
+								</button>
+							</div>
+							<div class="space-6"></div>
 							<div class="widget-main no-padding">
-								<div class="wysiwyg-editor" id="editor2"></div>
+								<div class="h-25 d-inline-block">
+									<ol id="additonalNoteList">
+									</ol>
+								</div>
 							</div>
 					 	</div>
 					</div>

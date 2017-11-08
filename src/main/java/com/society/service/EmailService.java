@@ -25,6 +25,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -300,8 +301,16 @@ public class EmailService {
 			document.add(address);
 
 			Paragraph memberName = new Paragraph("Name : " + receipt.getMemberName());
-			memberName.setSpacingAfter(10);
+			memberName.setSpacingAfter(5);
 			document.add(memberName);
+			
+			Paragraph billNumber = new Paragraph("Bill Number : " + receipt.getBillNumber());
+			billNumber.setSpacingAfter(5);
+			document.add(billNumber);
+			
+			Paragraph period = new Paragraph("For the period from " + cycle.getStartDate() +" to " + cycle.getEndDate());
+			period.setSpacingAfter(10);
+			document.add(period);
 
 			PdfPTable table = new PdfPTable(3); 
 			table.setSpacingAfter(10);
@@ -359,6 +368,15 @@ public class EmailService {
 			chequeName.add(new Chunk("\"" + cycle.getChequeName() + "\"", boldFont));
 			chequeName.setSpacingAfter(5);
 			document.add(chequeName);
+			
+			Paragraph note = new Paragraph("Note:");
+			document.add(note);
+			
+			com.itextpdf.text.List list = new com.itextpdf.text.List(com.itextpdf.text.List.ORDERED);
+			for(String str : cycle.getAdditionalNote()) {
+				list.add(new ListItem(str));
+			}
+			document.add(list);
 			
 		} catch (DocumentException e) {
 			logger.error("DocimentException => Receipt generation failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());

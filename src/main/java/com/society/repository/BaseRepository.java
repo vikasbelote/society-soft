@@ -1,5 +1,6 @@
 package com.society.repository;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -50,5 +52,14 @@ public class BaseRepository {
 		
 		Set<T> set = new HashSet<T>(list);
 		return set;
+	}
+	
+	protected boolean deleteById(Class<?> type, Serializable id, Session session) {
+	    Object persistentInstance = session.load(type, id);
+	    if (persistentInstance != null) {
+	        session.delete(persistentInstance);
+	        return true;
+	    }
+	    return false;
 	}
 }

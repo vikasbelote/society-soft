@@ -1,5 +1,6 @@
 package com.society.repository;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +29,7 @@ import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.GeneralHeadSectionJPA;
 import com.society.model.jpa.MaintenanceChargeJPA;
 import com.society.model.jpa.MaintenanceCycleJPA;
+import com.society.model.jpa.MaintenanceCycleNoteJPA;
 import com.society.model.jpa.MaintenanceReceiptJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.RoleJPA;
@@ -148,7 +151,7 @@ public class MaintenanceRepository extends BaseRepository {
 		return societyConfig;
 	}
 	
-	public boolean saveMaintenanceData(List<MaintenanceChargeJPA> chargeList) {
+	public boolean saveMaintenanceData(List<MaintenanceChargeJPA> chargeList, List<MaintenanceCycleNoteJPA> noteCycle) {
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -156,6 +159,12 @@ public class MaintenanceRepository extends BaseRepository {
 			
 			for(MaintenanceChargeJPA charge : chargeList) {
 				session.saveOrUpdate(charge);
+			}
+			
+			if(CollectionUtils.isNotEmpty(noteCycle)) {
+				for(MaintenanceCycleNoteJPA note : noteCycle) {
+					session.saveOrUpdate(note);
+				}
 			}
 			
 			session.getTransaction().commit();
@@ -212,6 +221,26 @@ public class MaintenanceRepository extends BaseRepository {
 			maintenanceCycleList = null;
 		}
 		return maintenanceCycleList;
+	}
+	
+	public List<MaintenanceCycleNoteJPA> getAdditionalNote(Integer cycleId) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MaintenanceCycleNoteJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceCycleNoteJPA.class);
+		Root<MaintenanceCycleNoteJPA> root = criteriaQuery.from(MaintenanceCycleNoteJPA.class);	
+		criteriaQuery.select(root);
+		
+		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), cycleId);
+		criteriaQuery.where(equalCycleIdPredicate);
+		
+		List<MaintenanceCycleNoteJPA> noteList;
+		try {
+			noteList = entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			noteList = null;
+		}
+		return noteList;
 	}
 	
 	public Set<MaintenanceReceiptJPA> getMaintenanceReceipt(Integer cycleId) {
@@ -271,5 +300,32 @@ public class MaintenanceRepository extends BaseRepository {
 			maintenanceReceiptSet = null;
 		}
 		return maintenanceReceiptSet;
+	}
+	
+	public boolean deleteCycleDetails(Integer cycleId) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			Serializable id = new Integer(cycleId);
+			Object persistentInstance = session.load(MaintenanceCycleJPA.class, id);
+			if (persistentInstance != null) 
+			    session.delete(persistentInstance);			
+			else
+				return false;
+			
+			session.getTransaction().commit();
+			return true;
+		}
+		catch(Exception e) {
+			if(session != null)
+				session.getTransaction().rollback();
+			return false;
+		}
+		finally {
+			if(session != null)
+				session.close();
+		}
 	}
 }
