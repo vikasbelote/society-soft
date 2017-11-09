@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -237,7 +238,19 @@ public class MaintenanceService {
 				noteCycle.add(noteDB);
 			}
 		}
-		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList, noteCycle);
+		List<MaintenanceCycleNoteJPA> noteDBList = null;
+		if(StringUtils.isNotEmpty(cycleDomain.getDeleteNoteIds())){
+			
+			noteDBList = new ArrayList<MaintenanceCycleNoteJPA>();
+			String[] deletedNoteIdArr = cycleDomain.getDeleteNoteIds().split(",");
+			for(String noteId : deletedNoteIdArr) {
+				MaintenanceCycleNoteJPA noteDB = new MaintenanceCycleNoteJPA();
+				noteDB.setNoteId(NumberUtils.toInt(noteId));
+				noteDBList.add(noteDB);
+			}
+			
+		}
+		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList, noteCycle, noteDBList);
 		if(isSucess && cycleDomain.getCycleId() == null) {
 			//Update Bill Number after insert into database
 			for(MaintenanceReceiptJPA receipt : receiptList) {
@@ -475,11 +488,15 @@ public class MaintenanceService {
 		cycle.setReceipts(receiptList);
 		List<MaintenanceCycleNoteJPA> noteList = maintenanceRepository.getAdditionalNote(email.getCycleId());
 		if(CollectionUtils.isNotEmpty(noteList)) {
-			List<String> additinalNoteList = new ArrayList<String>();
+			List<MaintenacneNoteDomain> additinalNoteList = new ArrayList<MaintenacneNoteDomain>();
 			for(MaintenanceCycleNoteJPA cycleNote : noteList) {
-				additinalNoteList.add(cycleNote.getNoteText());
+				
+				MaintenacneNoteDomain note = new MaintenacneNoteDomain();
+				note.setNoteId(cycleNote.getNoteId());
+				note.setNoteText(cycleNote.getNoteText());
+				additinalNoteList.add(note);
 			}
-			cycle.setAdditionalNote(additinalNoteList);
+			cycle.setNotes(additinalNoteList);
 		}
 		return cycle;
 	}

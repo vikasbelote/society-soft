@@ -108,6 +108,43 @@
 								<span>${ personDomain.emailId }</span>
 							</div>
 						</div>
+						
+						<div class="profile-info-row">
+							<div class="profile-info-name">Wing Number</div>
+
+							<div class="profile-info-value">
+								<input type="hidden" value="${ personDomain.wingNumber }" name="wingNumberArr" />
+								<span>${ personDomain.wingNumber }</span>
+							</div>
+						</div>
+						
+						<div class="profile-info-row">
+							<div class="profile-info-name">Flat Number</div>
+
+							<div class="profile-info-value">
+								<input type="hidden" value="${ personDomain.flatNumber }" name="flatNumberArr" />
+								<span>${ personDomain.flatNumber }</span>
+							</div>
+						</div>
+						
+						<div class="profile-info-row">
+							<div class="profile-info-name">Square Feet</div>
+
+							<div class="profile-info-value">
+								<input type="hidden" value="${ personDomain.squareFeet }" name="squareFeetArr" />
+								<span>${ personDomain.squareFeet }</span>
+							</div>
+						</div>
+						
+						<div class="profile-info-row">
+							<div class="profile-info-name">Additional Area</div>
+
+							<div class="profile-info-value">
+								<input type="hidden" value="${ personDomain.additionalAreaId }" name="additionalAreaArr" />
+								<span>${ personDomain.additionalAreaName }</span>
+							</div>
+						</div>
+						
 					</div>
 				</div>
 

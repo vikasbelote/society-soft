@@ -41,8 +41,8 @@
 		<p style="font-size: 16px;">Note: </p>
 		<div style="margin-left:20px">
 	      <ol>
-	       	<c:forEach items="${maintenanceCycleReceiptDomain.additionalNote}" var="note">
-	       		<li>${note}</li>
+	       	<c:forEach items="${maintenanceCycleReceiptDomain.notes}" var="note">
+	       		<li>${note.noteText}</li>
 	       	</c:forEach>
 	      </ol>
 	    </div>

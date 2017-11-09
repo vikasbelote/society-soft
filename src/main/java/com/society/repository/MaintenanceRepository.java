@@ -151,7 +151,7 @@ public class MaintenanceRepository extends BaseRepository {
 		return societyConfig;
 	}
 	
-	public boolean saveMaintenanceData(List<MaintenanceChargeJPA> chargeList, List<MaintenanceCycleNoteJPA> noteCycle) {
+	public boolean saveMaintenanceData(List<MaintenanceChargeJPA> chargeList, List<MaintenanceCycleNoteJPA> noteCycle, List<MaintenanceCycleNoteJPA> noteDBList) {
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -164,6 +164,12 @@ public class MaintenanceRepository extends BaseRepository {
 			if(CollectionUtils.isNotEmpty(noteCycle)) {
 				for(MaintenanceCycleNoteJPA note : noteCycle) {
 					session.saveOrUpdate(note);
+				}
+			}
+			
+			if(CollectionUtils.isNotEmpty(noteDBList)) {
+				for(MaintenanceCycleNoteJPA note : noteDBList) {
+					session.delete(session.merge(note));
 				}
 			}
 			

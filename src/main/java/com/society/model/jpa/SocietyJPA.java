@@ -32,6 +32,9 @@ public class SocietyJPA implements Serializable {
 	
 	@OneToMany(mappedBy = "society", fetch = FetchType.LAZY)
 	private List<SocietyMemberJPA> memberList;
+	
+	@Column(name = "registration_no")
+	private String registrationNumber;
 
 	public Integer getSocietyId() {
 		return societyId;
@@ -63,5 +66,13 @@ public class SocietyJPA implements Serializable {
 
 	public void setAddress(AddressJPA address) {
 		this.address = address;
+	}
+
+	public String getRegistrationNumber() {
+		return registrationNumber;
+	}
+
+	public void setRegistrationNumber(String registrationNumber) {
+		this.registrationNumber = registrationNumber;
 	}
 }

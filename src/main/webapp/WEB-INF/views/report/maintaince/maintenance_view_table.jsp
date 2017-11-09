@@ -81,6 +81,7 @@
 			<c:when test="${not empty cycle}">
 				<input type="hidden" id="paymentDueDate" value="${cycle.paymentDueDate}" />
 				<input type="hidden" id="paymentCycle" value="${cycle.startDate} to ${cycle.endDate}"/>
+				<input type="hidden" id="deletedNoteId" />
 				
 				<table id="maintenanceTableId" data-cycleId="${cycle.cycleId}"
 					class="table table-bordered table-hover">

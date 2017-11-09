@@ -9,6 +9,8 @@ public class SocietyForm {
 	
 	private String societyName;
 	
+	private String registrationNumber;
+	
 	private String userName;
 	
 	private String userPassword;
@@ -46,6 +48,15 @@ public class SocietyForm {
 	private String[] memberContactNumberArr;
 	
 	private String[] memberEmailIdArr;
+	
+	private String[] wingNumberArr;
+	
+	private String[] flatNumberArr;
+	
+	private String[] squareFeetArr;
+	
+	private String[] additionalAreaArr;
+	
 
 	public String getSocietyName() {
 		return societyName;
@@ -205,5 +216,45 @@ public class SocietyForm {
 
 	public void setMemberEmailIdArr(String[] memberEmailIdArr) {
 		this.memberEmailIdArr = memberEmailIdArr;
+	}
+
+	public String getRegistrationNumber() {
+		return registrationNumber;
+	}
+
+	public void setRegistrationNumber(String registrationNumber) {
+		this.registrationNumber = registrationNumber;
+	}
+
+	public String[] getWingNumberArr() {
+		return wingNumberArr;
+	}
+
+	public void setWingNumberArr(String[] wingNumberArr) {
+		this.wingNumberArr = wingNumberArr;
+	}
+
+	public String[] getFlatNumberArr() {
+		return flatNumberArr;
+	}
+
+	public void setFlatNumberArr(String[] flatNumberArr) {
+		this.flatNumberArr = flatNumberArr;
+	}
+
+	public String[] getSquareFeetArr() {
+		return squareFeetArr;
+	}
+
+	public void setSquareFeetArr(String[] squareFeetArr) {
+		this.squareFeetArr = squareFeetArr;
+	}
+
+	public String[] getAdditionalAreaArr() {
+		return additionalAreaArr;
+	}
+
+	public void setAdditionalAreaArr(String[] additionalAreaArr) {
+		this.additionalAreaArr = additionalAreaArr;
 	}
 }

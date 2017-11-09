@@ -40,6 +40,24 @@ public class MenuRightsDomain {
 	private boolean isEnableEmailNotificationReportMenu = false;
 	//13 Menu Id
 	private boolean isEnableMessageNotificationReportMenu = false;
+	
+	//14 Menu Id
+	private boolean isEnableMaintenanceHeadMenu = false;
+	//15 Menu Id
+	private boolean isEnableMaintenanceInterestPolicyMenu = false;
+	//16 Menu Id
+	private boolean isEnableMaintenancePenalitiesPolicyMenu = false;
+	//17 Menu Id
+	private boolean isEnableMaintenanceRebatePolicyMenu = false;
+	//18 Menu Id
+	private boolean isEnableMaintenanceAdditionalAreaMenu = false;
+	
+	//19 Menu Id
+	private boolean isEnableSocietyMemberMenu = false;
+	
+	private boolean isEnableMasterMenu = false;
+	//20 Menu Id
+	private boolean isEnableMasterAdditionalAreaMenu = false;
 
 	public void initMenuRights(LoginDomain loginDomain) {
 
@@ -50,7 +68,9 @@ public class MenuRightsDomain {
 			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = 
 					isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = 
 					isEnableSocietyConfigurationMenu = isEnableCreateMaintenacneReport = isEnableViewMaintenacneReport = isEnableEmailNotificationReportMenu = 
-					isEnableMessageNotificationReportMenu = isEnableNotificationReport = true;
+					isEnableMessageNotificationReportMenu = isEnableNotificationReport = isEnableMaintenanceHeadMenu = isEnableMaintenanceInterestPolicyMenu =
+					isEnableMaintenancePenalitiesPolicyMenu = isEnableMaintenanceRebatePolicyMenu = isEnableMaintenanceAdditionalAreaMenu = isEnableSocietyMemberMenu = 
+					isEnableMasterAdditionalAreaMenu = isEnableMasterMenu = true;
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -106,17 +126,46 @@ public class MenuRightsDomain {
 					isEnableMessageNotificationReportMenu = true;
 					break;
 				}
+				case 14: {
+					isEnableMaintenanceHeadMenu = true;
+					break;
+				}
+				case 15: {
+					isEnableMaintenanceInterestPolicyMenu = true;
+					break;
+				}
+				case 16: {
+					isEnableMaintenancePenalitiesPolicyMenu = true;
+					break;
+				}
+				case 17: {
+					isEnableMaintenanceRebatePolicyMenu = true;
+					break;
+				}
+				case 18: {
+					isEnableMaintenanceAdditionalAreaMenu = true;
+					break;
+				}
+				case 19: {
+					isEnableSocietyMemberMenu = true;
+					break;
+				}
+				case 20: {
+					isEnableMasterAdditionalAreaMenu = true;
+					break;
+				}
 				}
 			}
 		}
 		
-		if(isEnableCreateMaintenacneReport || isEnableViewMaintenacneReport)
+		if(isEnableCreateMaintenacneReport || isEnableViewMaintenacneReport || isEnableMaintenanceHeadMenu || isEnableMaintenanceInterestPolicyMenu || 
+				isEnableMaintenancePenalitiesPolicyMenu || isEnableMaintenanceRebatePolicyMenu || isEnableMaintenanceAdditionalAreaMenu)
 			isEnabledMaintainceReport = true;
 		
-		if(isEnabledRegistrationMenu || isEnabledCreateUserMenu || isEnabledUserListMenu)
+		if(isEnabledRegistrationMenu || isEnabledCreateUserMenu || isEnabledUserListMenu || isEnableSocietyMemberMenu)
 			isEnabledSocietyMenu = true;
 		
-		if(isEnabledBlanceSheetMenu || isEnabledIncomeAndExpenseMenu || isEnabledMaintainceReport)
+		if(isEnabledBlanceSheetMenu || isEnabledIncomeAndExpenseMenu)
 			isEnabledReportMenu = true;
 		
 		if(isEnabledGeneralHeadMenu || isEnabledReocrdTransactionMenu || isEnableSocietyConfigurationMenu)
@@ -124,6 +173,9 @@ public class MenuRightsDomain {
 		
 		if(isEnableEmailNotificationReportMenu || isEnableMessageNotificationReportMenu)
 			isEnableNotificationReport = true;
+		
+		if(isEnableMasterAdditionalAreaMenu)
+			isEnableMasterMenu = true;
 	}
 
 	public boolean isEnabledSocietyMenu() {
@@ -270,4 +322,70 @@ public class MenuRightsDomain {
 	public void setEnableMessageNotificationReportMenu(boolean isEnableMessageNotificationReportMenu) {
 		this.isEnableMessageNotificationReportMenu = isEnableMessageNotificationReportMenu;
 	}
+
+	public boolean isEnableMaintenanceHeadMenu() {
+		return isEnableMaintenanceHeadMenu;
+	}
+
+	public void setEnableMaintenanceHeadMenu(boolean isEnableMaintenanceHeadMenu) {
+		this.isEnableMaintenanceHeadMenu = isEnableMaintenanceHeadMenu;
+	}
+
+	public boolean isEnableMaintenanceInterestPolicyMenu() {
+		return isEnableMaintenanceInterestPolicyMenu;
+	}
+
+	public void setEnableMaintenanceInterestPolicyMenu(boolean isEnableMaintenanceInterestPolicyMenu) {
+		this.isEnableMaintenanceInterestPolicyMenu = isEnableMaintenanceInterestPolicyMenu;
+	}
+
+	public boolean isEnableMaintenancePenalitiesPolicyMenu() {
+		return isEnableMaintenancePenalitiesPolicyMenu;
+	}
+
+	public void setEnableMaintenancePenalitiesPolicyMenu(boolean isEnableMaintenancePenalitiesPolicyMenu) {
+		this.isEnableMaintenancePenalitiesPolicyMenu = isEnableMaintenancePenalitiesPolicyMenu;
+	}
+
+	public boolean isEnableMaintenanceRebatePolicyMenu() {
+		return isEnableMaintenanceRebatePolicyMenu;
+	}
+
+	public void setEnableMaintenanceRebatePolicyMenu(boolean isEnableMaintenanceRebatePolicyMenu) {
+		this.isEnableMaintenanceRebatePolicyMenu = isEnableMaintenanceRebatePolicyMenu;
+	}
+
+	public boolean isEnableMaintenanceAdditionalAreaMenu() {
+		return isEnableMaintenanceAdditionalAreaMenu;
+	}
+
+	public void setEnableMaintenanceAdditionalAreaMenu(boolean isEnableMaintenanceAdditionalAreaMenu) {
+		this.isEnableMaintenanceAdditionalAreaMenu = isEnableMaintenanceAdditionalAreaMenu;
+	}
+
+	public boolean isEnableSocietyMemberMenu() {
+		return isEnableSocietyMemberMenu;
+	}
+
+	public void setEnableSocietyMemberMenu(boolean isEnableSocietyMemberMenu) {
+		this.isEnableSocietyMemberMenu = isEnableSocietyMemberMenu;
+	}
+
+	public boolean isEnableMasterMenu() {
+		return isEnableMasterMenu;
+	}
+
+	public void setEnableMasterMenu(boolean isEnableMasterMenu) {
+		this.isEnableMasterMenu = isEnableMasterMenu;
+	}
+
+	public boolean isEnableMasterAdditionalAreaMenu() {
+		return isEnableMasterAdditionalAreaMenu;
+	}
+
+	public void setEnableMasterAdditionalAreaMenu(boolean isEnableMasterAdditionalAreaMenu) {
+		this.isEnableMasterAdditionalAreaMenu = isEnableMasterAdditionalAreaMenu;
+	}
+
+	
 }

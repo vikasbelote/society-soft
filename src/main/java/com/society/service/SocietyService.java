@@ -3,10 +3,12 @@ package com.society.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.society.model.domain.SocietyForm;
+import com.society.model.jpa.AdditionalAreaJPA;
 import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.SocietyJPA;
@@ -34,6 +36,7 @@ public class SocietyService {
 		SocietyJPA society = new SocietyJPA();
 		society.setSocietyName(societyForm.getSocietyName());
 		society.setAddress(address);
+		society.setRegistrationNumber(societyForm.getRegistrationNumber());
 		
 		PersonJPA person = new PersonJPA();
 		person.setFirstName(societyForm.getFirstName());
@@ -59,6 +62,12 @@ public class SocietyService {
 			String mobileNumber = societyForm.getMemberContactNumberArr()[i];
 			String emailId = societyForm.getMemberEmailIdArr()[i];
 			
+			String wingNumber = societyForm.getWingNumberArr()[i];
+			String flatNumber = societyForm.getFlatNumberArr()[i];
+			String squareFeet = societyForm.getSquareFeetArr()[i];
+			String additionalAreaId = societyForm.getAdditionalAreaArr()[i];
+			
+			
 			PersonJPA member = new PersonJPA();
 			member.setFirstName(firstName);
 			member.setMiddleName(middleName);
@@ -66,9 +75,16 @@ public class SocietyService {
 			member.setContactNumber(mobileNumber);
 			member.setEmailId(emailId);
 			
+			AdditionalAreaJPA additionalArea = new AdditionalAreaJPA();
+			additionalArea.setAreaId(NumberUtils.toInt(additionalAreaId));
+			
 			SocietyMemberJPA societyMember = new SocietyMemberJPA();
 			societyMember.setSociety(society);
 			societyMember.setPerson(member);
+			societyMember.setWingNumber(wingNumber);
+			societyMember.setFlatNumber(flatNumber);
+			societyMember.setSquareFeet(NumberUtils.toInt(squareFeet));
+			societyMember.setAdditionalArea(additionalArea);
 			
 			societyMemberList.add(societyMember);
 		}

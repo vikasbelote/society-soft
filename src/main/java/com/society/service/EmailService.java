@@ -34,6 +34,7 @@ import com.society.constant.EmailType;
 import com.society.model.domain.EmailDomain;
 import com.society.model.domain.EmailStatusDomain;
 import com.society.model.domain.MaintenacneChargeDomain;
+import com.society.model.domain.MaintenacneNoteDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.model.domain.MaintenanceReceiptDomain;
 import com.society.model.domain.StatusMemberDomain;
@@ -373,8 +374,8 @@ public class EmailService {
 			document.add(note);
 			
 			com.itextpdf.text.List list = new com.itextpdf.text.List(com.itextpdf.text.List.ORDERED);
-			for(String str : cycle.getAdditionalNote()) {
-				list.add(new ListItem(str));
+			for(MaintenacneNoteDomain noteDomain : cycle.getNotes()) {
+				list.add(new ListItem(noteDomain.getNoteText()));
 			}
 			document.add(list);
 			

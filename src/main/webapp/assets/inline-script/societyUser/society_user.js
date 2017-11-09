@@ -46,6 +46,14 @@ $(document).ready(function() {
 			'notification' : {
 				text : 'Notification',
 				type : 'folder'
+			},
+			'maintenance_bill' : {
+				text : 'Maintenance Bill',
+				type : 'folder'
+			},
+			'master' : {
+				text : 'Master',
+				type : 'folder'
 			}
 		}
 		tree_data['society']['additionalParameters'] = {
@@ -58,6 +66,11 @@ $(document).ready(function() {
 				'userList' : {
 					id : 6,
 					text : 'User List',
+					type : 'item'
+				},
+				'member' : {
+					id 	 : 19,
+					text : 'Member',
 					type : 'item'
 				}
 			}
@@ -73,35 +86,11 @@ $(document).ready(function() {
 					id : 4,
 					text : 'Income & Expense',
 					type : 'item'
-				},
-				'maintenence' : {
-					id : 5,
-					text : 'Maintenence',
-					type : 'item'
-				}
-			}
-		}
-	tree_data['report']['additionalParameters'] = {
-			'children' : {
-				'balanceSheet' : {
-					id : 3,
-					text : 'Balance Sheet',
-					type : 'item'
-				},
-				'incomeAndExpense' : {
-					id : 4,
-					text : 'Income & Expense',
-					type : 'item'
-				},
-				'maintenence' : {
-					id : 5,
-					text : 'Maintenence',
-					type : 'folder'
 				}
 			}
 		}
 	
-	tree_data['report']['additionalParameters']['children']['maintenence']['additionalParameters'] = {
+		tree_data['maintenance_bill']['additionalParameters'] = {
 			'children' : {
 				'create' : {
 					id : 10,
@@ -112,11 +101,36 @@ $(document).ready(function() {
 					id : 11,
 					text : 'View',
 					type : 'item'
+				},
+				'head' : {
+					id : 14,
+					text : 'Head',
+					type : 'item'
+				},
+				'interest' : {
+					id : 15,
+					text : 'Interest Policy',
+					type : 'item'
+				},
+				'penalty' : {
+					id : 16,
+					text : 'Penalty Policy',
+					type : 'item'
+				},
+				'rebate' : {
+					id : 17,
+					text : 'Rebate Policy',
+					type : 'item'
+				},
+				'additional_area' : {
+					id : 18,
+					text : 'Additional Area',
+					type : 'item'
 				}
 			}
 		}
 	
-	tree_data['setting']['additionalParameters'] = {
+		tree_data['setting']['additionalParameters'] = {
 			'children' : {
 				'generalHead' : {
 					id : 7,
@@ -136,7 +150,7 @@ $(document).ready(function() {
 			}
 		}
 	
-	tree_data['notification']['additionalParameters'] = {
+		tree_data['notification']['additionalParameters'] = {
 			'children' : {
 				'email' : {
 					id : 12,
@@ -146,6 +160,15 @@ $(document).ready(function() {
 				'message' : {
 					id : 13,
 					text : 'Message',
+					type : 'item'
+				}
+			}
+		}
+		tree_data['master']['additionalParameters'] = {
+			'children' : {
+				'additional_area' : {
+					id : 20,
+					text : 'Additional Area',
 					type : 'item'
 				}
 			}

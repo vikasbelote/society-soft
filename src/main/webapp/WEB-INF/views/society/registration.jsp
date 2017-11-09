@@ -23,6 +23,17 @@
 						class="col-xs-10 col-sm-5" />
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for="form-field-1"> Registration Number <i class="fa fa-asterisk"
+					style="color: red;"></i>
+				</label>
+
+				<div class="col-sm-9">
+					<input type="text" id="societyNameId" placeholder="Registration Number" name="registrationNumber"
+						class="col-xs-10 col-sm-5" />
+				</div>
+			</div>
 			<h3 class="header smaller lighter green">Society User Details</h3>
 
 			<div class="form-group">
@@ -326,6 +337,65 @@
 										</div>
 									</div>
 								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right">Wing Number
+									</label>
+									<div class="col-sm-9 inputGroupContainer">
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-home"></i></span> <input id="wingNumberId"
+												name="wingNumber" placeholder="Wing Number"
+												class=" col-xs-10 col-sm-6" type="text">
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right">Flat Number
+										 <i class="fa fa-asterisk" style="color: red;"></i>
+									</label>
+									<div class="col-sm-9 inputGroupContainer">
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-home"></i></span> <input id="flatNumberId"
+												name="flatNumber" placeholder="Flat Number"
+												class=" col-xs-10 col-sm-6" type="text">
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right">Square Feet
+										 <i class="fa fa-asterisk" style="color: red;"></i>
+									</label>
+									<div class="col-sm-9 inputGroupContainer">
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-home"></i></span> <input id="squearFeetId"
+												name="squearFeet" placeholder="Square Feet"
+												class=" col-xs-10 col-sm-6 numeric" type="text">
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right">Additional Area
+									</label>
+									<div class="col-sm-9 inputGroupContainer">
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-home"></i></span> 
+												<select class=" col-xs-10 col-sm-6" id="additionalAreaId">
+													<option value="">Choose Additional Area</option>
+													<option value="1">Terrace</option>
+													<option value="2">Mezzanine Floors</option>
+													<option value="3">Other</option>
+												</select>
+										</div>
+									</div>
+								</div>
+								
 							</form>
 						</div>
 					</div>

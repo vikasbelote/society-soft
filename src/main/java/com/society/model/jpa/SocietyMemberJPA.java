@@ -27,6 +27,19 @@ public class SocietyMemberJPA {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "person_id")
 	private PersonJPA person;
+	
+	@Column(name = "wing_number")
+	private String wingNumber;
+	
+	@Column(name = "flat_number")
+	private String flatNumber;
+	
+	@Column(name = "square_feet")
+	private Integer squareFeet;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "additional_area_id")
+	private AdditionalAreaJPA additionalArea;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -50,6 +63,38 @@ public class SocietyMemberJPA {
 
 	public void setPerson(PersonJPA person) {
 		this.person = person;
+	}
+
+	public String getWingNumber() {
+		return wingNumber;
+	}
+
+	public void setWingNumber(String wingNumber) {
+		this.wingNumber = wingNumber;
+	}
+
+	public String getFlatNumber() {
+		return flatNumber;
+	}
+
+	public void setFlatNumber(String flatNumber) {
+		this.flatNumber = flatNumber;
+	}
+
+	public Integer getSquareFeet() {
+		return squareFeet;
+	}
+
+	public void setSquareFeet(Integer squareFeet) {
+		this.squareFeet = squareFeet;
+	}
+
+	public AdditionalAreaJPA getAdditionalArea() {
+		return additionalArea;
+	}
+
+	public void setAdditionalArea(AdditionalAreaJPA additionalArea) {
+		this.additionalArea = additionalArea;
 	}
 
 }

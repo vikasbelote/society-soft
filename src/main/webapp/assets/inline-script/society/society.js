@@ -48,6 +48,8 @@ $("#saveMemberBtn").click(function() {
 	var lastName = $("#memberLastName").val();
 	var mobileNumber = $("#memberMobileNumber").val();
 	var emailId = $("#memberEmailId").val();
+	var flatNumber = $("#flatNumberId").val();
+	var squareFeet = $("#squearFeetId").val();
 
 	if (firstName === "") {
 		$("#modelMsgDiv").removeClass("hide");
@@ -76,13 +78,32 @@ $("#saveMemberBtn").click(function() {
 		$(this).removeAttr('data-dismiss');
 		return;
 	}
+	
+	if (flatNumber === "") {
+		$("#modelMsgDiv").removeClass("hide");
+		$("#modelMsg").html("Please enter flat number id");
+		$(this).removeAttr('data-dismiss');
+		return;
+	}
+	
+	if (squareFeet === "") {
+		$("#modelMsgDiv").removeClass("hide");
+		$("#modelMsg").html("Please enter square feet");
+		$(this).removeAttr('data-dismiss');
+		return;
+	}
 
 	var memberObj = {
 		'firstName' : firstName,
 		'middleName' : middleName,
 		'lastName' : lastName,
 		'contactNumber' : mobileNumber,
-		'emailId' : emailId
+		'emailId' : emailId,
+		'wingNumber' : $("#wingNumberId").val(),
+		'flatNumber' : flatNumber,
+		'squareFeet' : squareFeet,
+		'additionalAreaId' : $("#additionalAreaId").val(),
+		'additionalAreaName' : $("#additionalAreaId option:selected").text()
 	}
 
 	var memberObjJson = JSON.stringify(memberObj);
@@ -107,6 +128,8 @@ $("#updateMemberBtn").click(function() {
 	var lastName = $("#memberLastName").val();
 	var mobileNumber = $("#memberMobileNumber").val();
 	var emailId = $("#memberEmailId").val();
+	var flatNumber = $("#flatNumberId").val();
+	var squareFeet = $("#squearFeetId").val();
 	
 	if (firstName === "") {
 		$("#modelMsgDiv").removeClass("hide");
@@ -132,6 +155,20 @@ $("#updateMemberBtn").click(function() {
 	if (emailId === "") {
 		$("#modelMsgDiv").removeClass("hide");
 		$("#modelMsg").html("Please enter email id");
+		$(this).removeAttr('data-dismiss');
+		return;
+	}
+	
+	if (flatNumber === "") {
+		$("#modelMsgDiv").removeClass("hide");
+		$("#modelMsg").html("Please enter flat number id");
+		$(this).removeAttr('data-dismiss');
+		return;
+	}
+	
+	if (squareFeet === "") {
+		$("#modelMsgDiv").removeClass("hide");
+		$("#modelMsg").html("Please enter square feet");
 		$(this).removeAttr('data-dismiss');
 		return;
 	}
@@ -163,6 +200,21 @@ $("#updateMemberBtn").click(function() {
 	
 	$(profileInfoRowArr[4]).find("span").html(emailId);
 	$(profileInfoRowArr[4]).find("input").val(emailId);
+	
+	var wingNumber = $("#wingNumberId").val();
+	$(profileInfoRowArr[5]).find("span").html(wingNumber);
+	$(profileInfoRowArr[5]).find("input").val(wingNumber);
+	
+	$(profileInfoRowArr[6]).find("span").html(flatNumber);
+	$(profileInfoRowArr[6]).find("input").val(flatNumber);
+	
+	$(profileInfoRowArr[7]).find("span").html(squareFeet);
+	$(profileInfoRowArr[7]).find("input").val(squareFeet);
+	
+	var additionalAreaId = $("#additionalAreaId").val();
+	var additionalAreaName = $("#additionalAreaId option:selected").text()
+	$(profileInfoRowArr[8]).find("span").html(additionalAreaName);
+	$(profileInfoRowArr[8]).find("input").val(additionalAreaId);
 });
 
 function clearTextForPersonModel() {
@@ -172,6 +224,10 @@ function clearTextForPersonModel() {
 	$("#memberLastName").val("");
 	$("#memberMobileNumber").val("");
 	$("#memberEmailId").val("");
+	$("#wingNumberId").val("")
+	$("#additionalAreaId").val("")
+	$("#flatNumberId").val("");
+	$("#squearFeetId").val("");
 	
 	$("#modelMsgDiv").addClass("hide");
 }

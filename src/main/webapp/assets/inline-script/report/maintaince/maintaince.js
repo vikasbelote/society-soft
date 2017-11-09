@@ -124,6 +124,13 @@
 	});
 	
 	$("#additonalNoteList").on("click", ".delete-note", function() {
+		
+		var li = $(this).parent();
+		var noteId = li.attr("data-noteId");
+		var deleteNoteId = $("#deletedNoteId").val();
+		deleteNoteId = deleteNoteId + "," + noteId;
+		$("#deletedNoteId").val(deleteNoteId);
+		
 		$(this).parent().remove();
 	});
 	
@@ -183,14 +190,13 @@
 			cycle.paymentDueDate = paymentDueDate;
 			cycle.startDate = $.trim(paymentCycleDateArr[0]);
 			cycle.endDate = $.trim(paymentCycleDateArr[1]);
-			
 			cycle.notes = $("#additonalNoteList").find("li").map(function() {
 										var note = {};
 										note.noteId = $(this).attr("data-noteId");
 										note.noteText = $(this).find("span").text();
 										return note;
 								   }).get();
-			
+			cycle.deleteNoteIds = $("#deletedNoteId").val();
 			
 			cycle.receipts = [];
 			

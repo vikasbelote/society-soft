@@ -30,6 +30,16 @@ public class MaintenanceCycleReceiptDomain {
 	private List<GeneralHeadDomain> generalHeadList;
 	
 	private List<String> additionalNote;
+	
+	private String deleteNoteIds;
+
+	public String getDeleteNoteIds() {
+		return deleteNoteIds;
+	}
+
+	public void setDeleteNoteIds(String deleteNoteIds) {
+		this.deleteNoteIds = deleteNoteIds;
+	}
 
 	public Integer getCycleId() {
 		return cycleId;

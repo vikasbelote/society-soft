@@ -18,6 +18,16 @@ public class PersonDomain {
 	private String contactNumber;
 	
 	private String emailId;
+	
+	private String wingNumber;
+	
+	private String flatNumber;
+	
+	private String squareFeet;
+	
+	private Integer additionalAreaId;
+	
+	private String additionalAreaName;
 
 	public Integer getPersonId() {
 		return personId;
@@ -65,6 +75,46 @@ public class PersonDomain {
 
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
+	}
+
+	public String getWingNumber() {
+		return wingNumber;
+	}
+
+	public void setWingNumber(String wingNumber) {
+		this.wingNumber = wingNumber;
+	}
+
+	public String getFlatNumber() {
+		return flatNumber;
+	}
+
+	public void setFlatNumber(String flatNumber) {
+		this.flatNumber = flatNumber;
+	}
+
+	public String getSquareFeet() {
+		return squareFeet;
+	}
+
+	public void setSquareFeet(String squareFeet) {
+		this.squareFeet = squareFeet;
+	}
+
+	public Integer getAdditionalAreaId() {
+		return additionalAreaId;
+	}
+
+	public void setAdditionalAreaId(Integer additionalAreaId) {
+		this.additionalAreaId = additionalAreaId;
+	}
+
+	public String getAdditionalAreaName() {
+		return additionalAreaName;
+	}
+
+	public void setAdditionalAreaName(String additionalAreaName) {
+		this.additionalAreaName = additionalAreaName;
 	}
 
 }
