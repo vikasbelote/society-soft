@@ -137,4 +137,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/notification/message/msg_notification.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/notification/notification_inline.jsp" />
 	</definition>
+	
+	<definition name="maintenanceHead" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/maintenance/head/maintenance_head.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/maintenance/head/maintenance_head_inline.jsp" />
+	</definition>
+	
 </tiles-definitions>

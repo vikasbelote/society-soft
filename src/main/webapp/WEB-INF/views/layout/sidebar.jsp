@@ -107,7 +107,7 @@
 					</c:if>
 					<c:if
 						test="${sessionScope.MENURIGHTS.isEnableMaintenanceHeadMenu()}">
-						<li class=""><a href="maintaince"> <i
+						<li class=""><a href="maintenanceHead"> <i
 								class="menu-icon fa fa-caret-right"></i> Head
 						</a> <b class="arrow"></b></li>
 					</c:if>
