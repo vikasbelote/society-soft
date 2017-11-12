@@ -6,34 +6,18 @@ public class MaintenacneChargeDomain {
 	
 	private Integer srNumber;
 	
-	private Integer generalHeadId;
+	private Integer maintenanceHeadId;
 	
-	private String generalHeadName;
+	private String maintenanceHeadName;
 	
 	private Double chargeValue;
 
-	public Integer getGeneralHeadId() {
-		return generalHeadId;
+	public Integer getChargeId() {
+		return chargeId;
 	}
 
-	public void setGeneralHeadId(Integer generalHeadId) {
-		this.generalHeadId = generalHeadId;
-	}
-
-	public Double getChargeValue() {
-		return chargeValue;
-	}
-
-	public void setChargeValue(Double chargeValue) {
-		this.chargeValue = chargeValue;
-	}
-
-	public String getGeneralHeadName() {
-		return generalHeadName;
-	}
-
-	public void setGeneralHeadName(String generalHeadName) {
-		this.generalHeadName = generalHeadName;
+	public void setChargeId(Integer chargeId) {
+		this.chargeId = chargeId;
 	}
 
 	public Integer getSrNumber() {
@@ -44,11 +28,29 @@ public class MaintenacneChargeDomain {
 		this.srNumber = srNumber;
 	}
 
-	public Integer getChargeId() {
-		return chargeId;
+	public Integer getMaintenanceHeadId() {
+		return maintenanceHeadId;
 	}
 
-	public void setChargeId(Integer chargeId) {
-		this.chargeId = chargeId;
+	public void setMaintenanceHeadId(Integer maintenanceHeadId) {
+		this.maintenanceHeadId = maintenanceHeadId;
 	}
+
+	public String getMaintenanceHeadName() {
+		return maintenanceHeadName;
+	}
+
+	public void setMaintenanceHeadName(String maintenanceHeadName) {
+		this.maintenanceHeadName = maintenanceHeadName;
+	}
+
+	public Double getChargeValue() {
+		return chargeValue;
+	}
+
+	public void setChargeValue(Double chargeValue) {
+		this.chargeValue = chargeValue;
+	}
+
+	
 }

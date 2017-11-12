@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.society.SocietyApp;
 import com.society.helper.model.BreadCrumb;
 import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
@@ -24,6 +28,8 @@ import com.society.service.MaintenanceService;
 
 @Controller
 public class MaintenanceController extends BaseController {
+	
+	private static final Logger logger = LogManager.getLogger(SocietyApp.class);
 	
 	@Autowired
 	private MaintenanceService maintenanceService;
@@ -35,14 +41,17 @@ public class MaintenanceController extends BaseController {
 		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
-		List<List<GeneralHeadDomain>> generalHeadList = maintenanceService.getGeneralHeadList(societyId); 
+		MaintenanceTableDomain maintenanceTable = null;
+		if(BooleanUtils.isTrue(maintenanceDomain.getGetMaintenanceTable())) {
+			logger.info("creating maintenance table");
+			maintenanceTable = maintenanceService.getMaintenanceTableList(maintenanceDomain, societyId);
+		}
 		
 		List<String> cycleDateList = maintenanceService.getCycleDateList(maintenanceDomain,societyId);
-				
-		ModelAndView modelAndView = new ModelAndView("maintaince", "maintenanceDomain", maintenanceDomain);
+		ModelAndView modelAndView = new ModelAndView("maintenanceCreate", "maintenanceDomain", maintenanceDomain);
 		modelAndView.addObject(breadCrumbList);
-		modelAndView.addObject("generalHeadList", generalHeadList);
 		modelAndView.addObject("cycleDateList", cycleDateList);
+		modelAndView.addObject("maintenanceTable", maintenanceTable);
 		return modelAndView;
 	}
 	
@@ -53,15 +62,13 @@ public class MaintenanceController extends BaseController {
 		//check the cycle is already exit
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		maintenanceDomain.setSocietyId(societyId);
-		if(maintenanceService.checkPaymentCycleExist(maintenanceDomain)) {
-			redirectAttributes.addFlashAttribute("maintenanceDomain", maintenanceDomain);
-			redirectAttributes.addFlashAttribute("cycleExist", true);
-			return "redirect:/maintaince";
-		}
-			
 		
 		redirectAttributes.addFlashAttribute("maintenanceDomain", maintenanceDomain);
-		return "redirect:/maintenanceTable";
+		if(maintenanceService.checkPaymentCycleExist(maintenanceDomain))
+			maintenanceDomain.setCycleExist(true);
+		else
+			maintenanceDomain.setGetMaintenanceTable(true);
+		return "redirect:/maintaince";
 	}
 	
 	@RequestMapping(value = "maintenanceTable", method = RequestMethod.GET)
@@ -92,20 +99,20 @@ public class MaintenanceController extends BaseController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "saveMaintenanceData", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
-	public ModelAndView getMemberRow(@RequestBody MaintenanceCycleReceiptDomain maintenanceCycleReceiptDomain, HttpSession session) {
-		
-		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
-		maintenanceCycleReceiptDomain.setSocietyId(societyId);
-		if(maintenanceService.saveMaintenanceData(maintenanceCycleReceiptDomain))
-			maintenanceService.updateCycle(maintenanceCycleReceiptDomain);
-		else
-			throw new RuntimeException("exception");
-
-		ModelAndView modelAndView = new ModelAndView("maintenanceReceipt");
-		modelAndView.addObject("maintenanceCycleReceiptDomain", maintenanceCycleReceiptDomain);
-		return modelAndView;
-	}
+//	@RequestMapping(value = "saveMaintenanceData", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+//	public ModelAndView getMemberRow(@RequestBody MaintenanceCycleReceiptDomain maintenanceCycleReceiptDomain, HttpSession session) {
+//		
+//		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
+//		maintenanceCycleReceiptDomain.setSocietyId(societyId);
+//		if(maintenanceService.saveMaintenanceData(maintenanceCycleReceiptDomain))
+//			maintenanceService.updateCycle(maintenanceCycleReceiptDomain);
+//		else
+//			throw new RuntimeException("exception");
+//
+//		ModelAndView modelAndView = new ModelAndView("maintenanceReceipt");
+//		modelAndView.addObject("maintenanceCycleReceiptDomain", maintenanceCycleReceiptDomain);
+//		return modelAndView;
+//	}
 	
 	@RequestMapping(value = "viewMaintenanceReport")
 	public ModelAndView viewMaintenanceReport(HttpSession session) {
@@ -122,7 +129,7 @@ public class MaintenanceController extends BaseController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "viewCycleDetails")
+	/*@RequestMapping(value = "viewCycleDetails")
 	public ModelAndView viewCycleDetails(@RequestParam(value="id", required=true)Integer cycleId) {
 		
 		String[] breadCrumbs = {"Report", "Member Mainenacne", "View"};
@@ -135,7 +142,7 @@ public class MaintenanceController extends BaseController {
 		modelAndView.addObject("cycle", cycle);
 		return modelAndView;
 		
-	}
+	}*/
 	
 	@RequestMapping(value = "deleteCycleDetais")
 	public String deleteCycleDetails(@RequestParam(value="id", required=true)Integer cycleId, RedirectAttributes redirectAttributes) {

@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/maintenance/create/maintenance.js"></script>

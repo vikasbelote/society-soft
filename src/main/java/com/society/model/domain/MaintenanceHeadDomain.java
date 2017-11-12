@@ -101,5 +101,4 @@ public class MaintenanceHeadDomain {
 	public void setReferenceHeadName(String referenceHeadName) {
 		this.referenceHeadName = referenceHeadName;
 	}
-
 }

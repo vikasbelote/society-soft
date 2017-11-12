@@ -21,6 +21,7 @@ import com.society.model.domain.MaintenacneChargeDomain;
 import com.society.model.domain.MaintenacneNoteDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.model.domain.MaintenanceDomain;
+import com.society.model.domain.MaintenanceHeadDomain;
 import com.society.model.domain.MaintenancePersonDomain;
 import com.society.model.domain.MaintenanceReceiptDomain;
 import com.society.model.domain.MaintenanceTableDomain;
@@ -29,11 +30,13 @@ import com.society.model.jpa.GeneralHeadJPA;
 import com.society.model.jpa.MaintenanceChargeJPA;
 import com.society.model.jpa.MaintenanceCycleJPA;
 import com.society.model.jpa.MaintenanceCycleNoteJPA;
+import com.society.model.jpa.MaintenanceHeadJPA;
 import com.society.model.jpa.MaintenanceReceiptJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.SocietyConfigJPA;
 import com.society.model.jpa.SocietyJPA;
 import com.society.model.jpa.SocietyMemberJPA;
+import com.society.repository.MaintenanceHeadRepository;
 import com.society.repository.MaintenanceRepository;
 
 @Service
@@ -41,6 +44,9 @@ public class MaintenanceService {
 	
 	@Autowired
 	private MaintenanceRepository maintenanceRepository;
+	
+	@Autowired
+	private MaintenanceHeadRepository maintenanceHeadRepository;
 	
 	public List<String> getCycleDateList(MaintenanceDomain maintenanceDomain, Integer societyId) {
 		
@@ -92,7 +98,6 @@ public class MaintenanceService {
 		}
 		return cycleDateList;
 	}
-	
 
 	public List<List<GeneralHeadDomain>> getGeneralHeadList(Integer societyId) {
 		
@@ -149,24 +154,30 @@ public class MaintenanceService {
 		if(CollectionUtils.isEmpty(societyMemberList))
 			return null;
 		
-		List<GeneralHeadJPA> generalHeadListDB = maintenanceRepository.getGeneralHeadList(maintenanceDomain.getGeneralHeadChargeMap());
-		if(CollectionUtils.isEmpty(generalHeadListDB))
+		List<MaintenanceHeadJPA> maintenanceHeadListDB = maintenanceHeadRepository.getMaintenanceHeadList(societyId);
+		if(CollectionUtils.isEmpty(maintenanceHeadListDB))
 			return null;
 		
-		List<GeneralHeadDomain> generalHeadDominList = new ArrayList<GeneralHeadDomain>(generalHeadListDB.size());
-		for(GeneralHeadJPA generalHeadDB : generalHeadListDB){
-			
-			GeneralHeadDomain generalHeadDomain = new GeneralHeadDomain();
-			generalHeadDomain.setGeneralHeadId(generalHeadDB.getGeneralHeadId());
-			generalHeadDomain.setGeneralHeadName(generalHeadDB.getGeneralHeadName());
-			generalHeadDominList.add(generalHeadDomain);
-		}
-		
-		List<MaintenacneChargeDomain> chargeValueList = this.getGeneralHeadChargeValueList(generalHeadDominList, maintenanceDomain.getGeneralHeadChargeMap());
-		
 		MaintenanceTableDomain maintenanceTable = new MaintenanceTableDomain();
-		maintenanceTable.setColumnList(generalHeadDominList);
-		maintenanceTable.setPaymentDueDate(maintenanceDomain.getPaymentDueDate());
+		
+		List<MaintenanceHeadDomain> maintenanceHeadDomainList = new ArrayList<MaintenanceHeadDomain>();
+		for(MaintenanceHeadJPA maintenanceHeadDB : maintenanceHeadListDB) {
+			MaintenanceHeadDomain maintenanceHeadDomain = new MaintenanceHeadDomain();
+			maintenanceHeadDomain.setMaintenanceHeadId(maintenanceHeadDB.getHeadId());
+			maintenanceHeadDomain.setMaintenanceHeadName(maintenanceHeadDB.getHeadName());
+			maintenanceHeadDomain.setCalcId(maintenanceHeadDB.getCalculation().getCalcId());
+			maintenanceHeadDomain.setChargeTypeId(maintenanceHeadDB.getCalculation().getCalcType().getCalcTypeId());
+			maintenanceHeadDomain.setChargeType(maintenanceHeadDB.getCalculation().getCalcType().getCalcType());
+			maintenanceHeadDomain.setFixedAmount(maintenanceHeadDB.getCalculation().getFixedAmount());
+			maintenanceHeadDomain.setPercentageAmount(maintenanceHeadDB.getCalculation().getPercentageAmount());
+			
+			if(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead() != null) {
+				maintenanceHeadDomain.setReferenceHeadName(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead().getHeadName());
+				maintenanceHeadDomain.setReferenceHeadId(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead().getHeadId());
+			}
+			maintenanceHeadDomainList.add(maintenanceHeadDomain);
+		}
+		maintenanceTable.setMaintenanceHeadDomainList(maintenanceHeadDomainList);
 		
 		List<MaintenancePersonDomain> memberList = new ArrayList<MaintenancePersonDomain>();
 		for(SocietyMemberJPA societyMember : societyMemberList) {
@@ -174,17 +185,52 @@ public class MaintenanceService {
 			MaintenancePersonDomain maintenancePersonDomain = new MaintenancePersonDomain();
 			maintenancePersonDomain.setMemberId(societyMember.getMemberId());
 			maintenancePersonDomain.setName(this.getPersonName(societyMember.getPerson()));
-			maintenancePersonDomain.setGeneralHeadValues(chargeValueList);
+			maintenancePersonDomain.setSquareFeet(societyMember.getSquareFeet());
+			maintenancePersonDomain.setMaintenanceHeadChargeDomainList(this.calculateMaintenanceHeadChargeList(maintenancePersonDomain,
+					maintenanceHeadDomainList));
 			memberList.add(maintenancePersonDomain);
 		}
 		maintenanceTable.setMemberList(memberList);
-		
-		maintenanceTable.setPaymentCycle(maintenanceDomain.getPaymentCycle());
-		maintenanceTable.setAdditionalNote(maintenanceDomain.getAdditionalNote());
 		return maintenanceTable;
 	}
 	
-	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
+	private List<MaintenacneChargeDomain> calculateMaintenanceHeadChargeList(MaintenancePersonDomain maintenancePersonDomain, 
+			List<MaintenanceHeadDomain> maintenanceHeadDomainList) {
+		
+		List<MaintenacneChargeDomain> maintenanceHeadChargeDomainList = new ArrayList<MaintenacneChargeDomain>();
+		for(MaintenanceHeadDomain maintenanceHeadDomain :  maintenanceHeadDomainList) {
+			
+			MaintenacneChargeDomain maintenacneChargeDomain = new MaintenacneChargeDomain();
+			maintenacneChargeDomain.setMaintenanceHeadId(maintenanceHeadDomain.getMaintenanceHeadId());
+			maintenacneChargeDomain.setMaintenanceHeadName(maintenanceHeadDomain.getMaintenanceHeadName());
+			
+			String chargeType = maintenanceHeadDomain.getChargeType();
+			if(StringUtils.isNotBlank(chargeType)){
+				
+				if("No calculation".equals(chargeType)){
+					
+				}
+					
+				if("Fixed Amount".equals(chargeType)){
+					maintenacneChargeDomain.setChargeValue(maintenanceHeadDomain.getFixedAmount());
+				}
+						
+				if("Per square feet".equals(chargeType)){
+					double percentage = maintenanceHeadDomain.getPercentageAmount();
+					Integer squeareFeet = maintenancePersonDomain.getSquareFeet();
+					maintenacneChargeDomain.setChargeValue(squeareFeet * percentage);
+				}
+					
+				if("Reference Head".equals(chargeType)){
+					
+				}
+			}
+			maintenanceHeadChargeDomainList.add(maintenacneChargeDomain);
+		}
+		return maintenanceHeadChargeDomainList;
+	}
+	
+	/*public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
 		
 		SocietyJPA society = new SocietyJPA();
 		society.setSocietyId(cycleDomain.getSocietyId());
@@ -269,7 +315,7 @@ public class MaintenanceService {
 			}
 		}
 		return isSucess;
-	}
+	}*/
 	
 	public boolean updateCycle(MaintenanceCycleReceiptDomain cycleDomain) {
 		
@@ -354,7 +400,7 @@ public class MaintenanceService {
 		return cycleList;
 	}
 	
-	public MaintenanceCycleReceiptDomain getCycleDetails(Integer cycleId) {
+	/*public MaintenanceCycleReceiptDomain getCycleDetails(Integer cycleId) {
 		
 		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMaintenanceReceipt(cycleId);
 		if(CollectionUtils.isEmpty(receiptSet))
@@ -426,9 +472,9 @@ public class MaintenanceService {
 			cycle.setNotes(additinalNoteList);
 		}
 		return cycle;
-	}
+	}*/
 	
-	public MaintenanceCycleReceiptDomain getMemberCycleDetail(EmailDomain email) {
+	/*public MaintenanceCycleReceiptDomain getMemberCycleDetail(EmailDomain email) {
 		
 		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMemberMaintenanceReceipt(email);
 		if(CollectionUtils.isEmpty(receiptSet))
@@ -499,13 +545,13 @@ public class MaintenanceService {
 			cycle.setNotes(additinalNoteList);
 		}
 		return cycle;
-	}
+	}*/
 	
 	public boolean deleteCycle(Integer cycleId) {
 		return maintenanceRepository.deleteCycleDetails(cycleId);
 	}
 	
-	private List<MaintenacneChargeDomain> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, 
+	/*private List<MaintenacneChargeDomain> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, 
 			Map<Integer, String> generalHeadIdChargeMap) {
 		
 		List<MaintenacneChargeDomain> generalHeadChargeValueList = new ArrayList<MaintenacneChargeDomain>();
@@ -523,7 +569,7 @@ public class MaintenanceService {
 			generalHeadChargeValueList.add(maintenacneChargeDomain);
 		}
 		return generalHeadChargeValueList;
-	}
+	}*/
 	
 	private String getAddress(AddressJPA address) {
 		

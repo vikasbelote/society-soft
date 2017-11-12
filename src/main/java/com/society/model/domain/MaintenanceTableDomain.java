@@ -22,7 +22,9 @@ public class MaintenanceTableDomain {
 	private String paymentCycle;
 	
 	private List<String> additionalNote;
-
+	
+	private List<MaintenanceHeadDomain> maintenanceHeadDomainList;
+	
 	public List<MaintenancePersonDomain> getMemberList() {
 		return memberList;
 	}
@@ -94,6 +96,14 @@ public class MaintenanceTableDomain {
 
 	public void setAdditionalNote(List<String> additionalNote) {
 		this.additionalNote = additionalNote;
+	}
+
+	public List<MaintenanceHeadDomain> getMaintenanceHeadDomainList() {
+		return maintenanceHeadDomainList;
+	}
+
+	public void setMaintenanceHeadDomainList(List<MaintenanceHeadDomain> maintenanceHeadDomainList) {
+		this.maintenanceHeadDomainList = maintenanceHeadDomainList;
 	}
 
 	

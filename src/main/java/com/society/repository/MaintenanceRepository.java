@@ -30,6 +30,7 @@ import com.society.model.jpa.GeneralHeadSectionJPA;
 import com.society.model.jpa.MaintenanceChargeJPA;
 import com.society.model.jpa.MaintenanceCycleJPA;
 import com.society.model.jpa.MaintenanceCycleNoteJPA;
+import com.society.model.jpa.MaintenanceHeadJPA;
 import com.society.model.jpa.MaintenanceReceiptJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.RoleJPA;

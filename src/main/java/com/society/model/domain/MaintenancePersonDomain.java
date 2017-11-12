@@ -8,7 +8,9 @@ public class MaintenancePersonDomain {
 	
 	private String name;
 	
-	private List<MaintenacneChargeDomain> generalHeadValues;
+	private Integer squareFeet;
+	
+	private List<MaintenacneChargeDomain> maintenanceHeadChargeDomainList;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -26,13 +28,20 @@ public class MaintenancePersonDomain {
 		this.name = name;
 	}
 
-	public List<MaintenacneChargeDomain> getGeneralHeadValues() {
-		return generalHeadValues;
+	public Integer getSquareFeet() {
+		return squareFeet;
 	}
 
-	public void setGeneralHeadValues(List<MaintenacneChargeDomain> generalHeadValues) {
-		this.generalHeadValues = generalHeadValues;
+	public void setSquareFeet(Integer squareFeet) {
+		this.squareFeet = squareFeet;
 	}
 
+	public List<MaintenacneChargeDomain> getMaintenanceHeadChargeDomainList() {
+		return maintenanceHeadChargeDomainList;
+	}
+
+	public void setMaintenanceHeadChargeDomainList(List<MaintenacneChargeDomain> maintenanceHeadChargeDomainList) {
+		this.maintenanceHeadChargeDomainList = maintenanceHeadChargeDomainList;
+	}
 	
 }

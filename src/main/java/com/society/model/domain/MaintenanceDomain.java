@@ -17,6 +17,10 @@ public class MaintenanceDomain {
 	Map<Integer, String> generalHeadChargeMap;
 	
 	private Integer societyId;
+	
+	private Boolean cycleExist;
+	
+	private Boolean getMaintenanceTable;
 
 	public Date getPaymentDueDate() {
 		return paymentDueDate;
@@ -64,6 +68,22 @@ public class MaintenanceDomain {
 
 	public void setSocietyId(Integer societyId) {
 		this.societyId = societyId;
+	}
+
+	public Boolean getGetMaintenanceTable() {
+		return getMaintenanceTable;
+	}
+
+	public void setGetMaintenanceTable(Boolean getMaintenanceTable) {
+		this.getMaintenanceTable = getMaintenanceTable;
+	}
+
+	public Boolean getCycleExist() {
+		return cycleExist;
+	}
+
+	public void setCycleExist(Boolean cycleExist) {
+		this.cycleExist = cycleExist;
 	}
 
 }
