@@ -25,6 +25,8 @@ public class MaintenanceTableDomain {
 	
 	private List<MaintenanceHeadDomain> maintenanceHeadDomainList;
 	
+	private Integer societyId;
+	
 	public List<MaintenancePersonDomain> getMemberList() {
 		return memberList;
 	}
@@ -104,6 +106,14 @@ public class MaintenanceTableDomain {
 
 	public void setMaintenanceHeadDomainList(List<MaintenanceHeadDomain> maintenanceHeadDomainList) {
 		this.maintenanceHeadDomainList = maintenanceHeadDomainList;
+	}
+
+	public Integer getSocietyId() {
+		return societyId;
+	}
+
+	public void setSocietyId(Integer societyId) {
+		this.societyId = societyId;
 	}
 
 	

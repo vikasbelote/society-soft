@@ -230,7 +230,24 @@ public class MaintenanceService {
 		return maintenanceHeadChargeDomainList;
 	}
 	
-	/*public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
+	
+	public boolean saveMaintenanceTableData(MaintenanceTableDomain maintenanceTable, Integer societyId) {
+		
+		String[] paymentCycleDateArr = maintenanceTable.getPaymentCycle().split("to");
+		
+		SocietyJPA society = new SocietyJPA();
+		society.setSocietyId(societyId);
+		
+		MaintenanceCycleJPA cycle = new MaintenanceCycleJPA();
+		cycle.setSociety(society);
+		cycle.setPaymentDueDate(maintenanceTable.getPaymentDueDate());
+		cycle.setStartDate(Date.valueOf(paymentCycleDateArr[0]));
+		cycle.setEndDate(Date.valueOf(paymentCycleDateArr[1]));
+		
+		return true;
+	}
+	
+	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
 		
 		SocietyJPA society = new SocietyJPA();
 		society.setSocietyId(cycleDomain.getSocietyId());
@@ -258,13 +275,13 @@ public class MaintenanceService {
 				
 			for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
 				
-				GeneralHeadJPA generalHead = new GeneralHeadJPA();
-				generalHead.setGeneralHeadId(maintenacneChargeDomain.getGeneralHeadId());
+				MaintenanceHeadJPA maintenanceHead = new MaintenanceHeadJPA();
+				maintenanceHead.setHeadId(maintenacneChargeDomain.getMaintenanceHeadId());
 				
 				MaintenanceChargeJPA charge = new MaintenanceChargeJPA();
 				charge.setChargeId(maintenacneChargeDomain.getChargeId());
 				charge.setReceipt(receipt);
-				charge.setGeneralHead(generalHead);
+				charge.setMaintenanceHead(maintenanceHead);
 				charge.setChargeValue(maintenacneChargeDomain.getChargeValue());
 				
 				chargeList.add(charge);
@@ -294,7 +311,6 @@ public class MaintenanceService {
 				noteDB.setNoteId(NumberUtils.toInt(noteId));
 				noteDBList.add(noteDB);
 			}
-			
 		}
 		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList, noteCycle, noteDBList);
 		if(isSucess && cycleDomain.getCycleId() == null) {
@@ -315,7 +331,7 @@ public class MaintenanceService {
 			}
 		}
 		return isSucess;
-	}*/
+	}
 	
 	public boolean updateCycle(MaintenanceCycleReceiptDomain cycleDomain) {
 		
@@ -334,7 +350,7 @@ public class MaintenanceService {
 			
 			Double totalValue = new Double(0);
 			for(MaintenacneChargeDomain charge : receipt.getChargeList()) {
-				totalValue = totalValue + charge.getChargeValue();
+				totalValue = totalValue + (charge.getChargeValue() == null ? 0.0 : charge.getChargeValue());
 			}
 			receipt.setTotalValue(totalValue);
 		}
@@ -550,26 +566,6 @@ public class MaintenanceService {
 	public boolean deleteCycle(Integer cycleId) {
 		return maintenanceRepository.deleteCycleDetails(cycleId);
 	}
-	
-	/*private List<MaintenacneChargeDomain> getGeneralHeadChargeValueList(List<GeneralHeadDomain> generalHeadDominList, 
-			Map<Integer, String> generalHeadIdChargeMap) {
-		
-		List<MaintenacneChargeDomain> generalHeadChargeValueList = new ArrayList<MaintenacneChargeDomain>();
-		for(GeneralHeadDomain generalHeadDomain : generalHeadDominList) {
-			
-			Integer generalHeadId = generalHeadDomain.getGeneralHeadId();
-			MaintenacneChargeDomain maintenacneChargeDomain = new MaintenacneChargeDomain();
-			maintenacneChargeDomain.setGeneralHeadId(generalHeadId);
-
-			if(NumberUtils.isNumber(generalHeadIdChargeMap.get(generalHeadId)))
-				maintenacneChargeDomain.setChargeValue(Double.valueOf(generalHeadIdChargeMap.get(generalHeadId)));
-			else
-				maintenacneChargeDomain.setChargeValue(new Double(0));
-			
-			generalHeadChargeValueList.add(maintenacneChargeDomain);
-		}
-		return generalHeadChargeValueList;
-	}*/
 	
 	private String getAddress(AddressJPA address) {
 		

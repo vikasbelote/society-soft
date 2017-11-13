@@ -73,6 +73,9 @@
 							<div class="widget-main no-padding">
 								<div class="h-25 d-inline-block">
 									<ol id="additonalNoteList">
+										<c:forEach items="${maintenanceDomain.additionalNote}" var="note">
+											<li><span>${note}</span></li>
+										</c:forEach>
 									</ol>
 								</div>
 							</div>
@@ -101,6 +104,7 @@
 				<thead>
 					<tr>
 						<th><strong>Member</strong></th>
+						<th><strong>Bill No</strong></th>
 						<c:forEach items="${maintenanceTable.maintenanceHeadDomainList}"
 							var="maintenanceHead">
 							<th data-generalHeadId="${maintenanceHead.maintenanceHeadId}">${maintenanceHead.maintenanceHeadName}</th>
@@ -111,8 +115,9 @@
 					<c:forEach items="${maintenanceTable.memberList}" var="member">
 						<tr>
 							<td data-memberId="${member.memberId}">${member.name}</td>
+							<td></td>
 							<c:forEach items="${member.maintenanceHeadChargeDomainList}" var="charge">
-								<td data-generalHeadId="${charge.maintenanceHeadId}"
+								<td data-maintenanceHeadId="${charge.maintenanceHeadId}"
 									contenteditable="true">${charge.chargeValue}</td>
 							</c:forEach>
 						</tr>
@@ -120,5 +125,6 @@
 				</tbody>
 			</table>
 		</c:if>
+		<div class="col-xs-12 hide" id="content"></div>
 	</div>
 </div>

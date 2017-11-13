@@ -24,8 +24,8 @@ public class MaintenanceChargeJPA {
 	private MaintenanceReceiptJPA receipt;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "general_head_id")
-	private GeneralHeadJPA generalHead;
+	@JoinColumn(name = "maintenance_head_id")
+	private MaintenanceHeadJPA maintenanceHead;
 	
 	@Column(name = "charge_value")
 	private Double chargeValue;
@@ -46,14 +46,6 @@ public class MaintenanceChargeJPA {
 		this.receipt = receipt;
 	}
 
-	public GeneralHeadJPA getGeneralHead() {
-		return generalHead;
-	}
-
-	public void setGeneralHead(GeneralHeadJPA generalHead) {
-		this.generalHead = generalHead;
-	}
-
 	public Double getChargeValue() {
 		return chargeValue;
 	}
@@ -61,4 +53,14 @@ public class MaintenanceChargeJPA {
 	public void setChargeValue(Double chargeValue) {
 		this.chargeValue = chargeValue;
 	}
+
+	public MaintenanceHeadJPA getMaintenanceHead() {
+		return maintenanceHead;
+	}
+
+	public void setMaintenanceHead(MaintenanceHeadJPA maintenanceHead) {
+		this.maintenanceHead = maintenanceHead;
+	}
+	
+	
 }

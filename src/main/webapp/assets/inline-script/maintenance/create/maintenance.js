@@ -200,7 +200,7 @@
 			
 			cycle.receipts = [];
 			
-			var generalHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(1)").map(function(){
+			var maintenanceHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(1)").map(function(){
 				return $(this).text();
 			}).get();
 			
@@ -213,25 +213,25 @@
 				memberReceipt.billNumber = $(this).find("td:eq(1)").text();
 				memberReceipt.chargeList = [];
 				
-				var generalHeadIdAndValueArr = $(this).find("td:gt(1)").map(function(){
-					var generalHeadIdAndValue = {
-							generalHeadId : $(this).attr("data-generalHeadId"),
+				var maintenanceHeadIdAndValueArr = $(this).find("td:gt(1)").map(function(){
+					var maintenanceHeadIdAndValue = {
+							generalHeadId : $(this).attr("data-maintenanceHeadId"),
 							value : $(this).text(),
 							chargeId : $(this).attr("data-chargeId")
 					};
-					return generalHeadIdAndValue;
+					return maintenanceHeadIdAndValue;
 				}).get();
 				
 				
-				if(generalHeadNameArr.length == generalHeadIdAndValueArr.length) {
-					for (var i = 0; i < generalHeadNameArr.length; i++) {
+				if(maintenanceHeadNameArr.length == maintenanceHeadIdAndValueArr.length) {
+					for (var i = 0; i < maintenanceHeadNameArr.length; i++) {
 						
 						var charge = {};
-						charge.chargeId = generalHeadIdAndValueArr[i].chargeId;
+						charge.chargeId = maintenanceHeadIdAndValueArr[i].chargeId;
 						charge.srNumber = (i + 1);
-						charge.generalHeadId = generalHeadIdAndValueArr[i].generalHeadId;
-						charge.chargeValue = generalHeadIdAndValueArr[i].value;
-						charge.generalHeadName = generalHeadNameArr[i];
+						charge.maintenanceHeadId = maintenanceHeadIdAndValueArr[i].generalHeadId;
+						charge.chargeValue = maintenanceHeadIdAndValueArr[i].value;
+						charge.maintenanceHeadName = maintenanceHeadNameArr[i];
 						memberReceipt.chargeList.push(charge);
 					}
 				}
@@ -259,9 +259,6 @@
 				}
 			});
 		}
-			
-		
-		
 	});
 	
 	$("#sendEmailId").click(function() {
