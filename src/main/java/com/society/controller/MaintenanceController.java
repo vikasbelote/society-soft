@@ -53,7 +53,6 @@ public class MaintenanceController extends BaseController {
 		MaintenanceTableDomain maintenanceTable = null;
 		if(BooleanUtils.isTrue(maintenanceDomain.getGetMaintenanceTable())) {
 			logger.info("creating maintenance table");
-			maintenanceTable.setSocietyId(societyId);
 			maintenanceTable = maintenanceService.getMaintenanceTableList(maintenanceDomain, societyId);
 		}
 		

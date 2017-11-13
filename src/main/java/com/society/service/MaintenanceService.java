@@ -244,6 +244,13 @@ public class MaintenanceService {
 		cycle.setStartDate(Date.valueOf(paymentCycleDateArr[0]));
 		cycle.setEndDate(Date.valueOf(paymentCycleDateArr[1]));
 		
+		List<MaintenanceChargeJPA> chargeList = new ArrayList<MaintenanceChargeJPA>();
+		List<MaintenanceReceiptJPA> receiptList = new ArrayList<MaintenanceReceiptJPA>();
+		
+		for(MaintenancePersonDomain member : maintenanceTable.getMemberList()) {
+			
+		}
+		
 		return true;
 	}
 	
