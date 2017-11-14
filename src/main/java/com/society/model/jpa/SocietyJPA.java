@@ -35,6 +35,9 @@ public class SocietyJPA implements Serializable {
 	
 	@Column(name = "registration_no")
 	private String registrationNumber;
+	
+	@OneToOne(mappedBy="society", fetch = FetchType.LAZY)
+	private SocietyConfigJPA societyConfig;
 
 	public Integer getSocietyId() {
 		return societyId;
@@ -74,5 +77,13 @@ public class SocietyJPA implements Serializable {
 
 	public void setRegistrationNumber(String registrationNumber) {
 		this.registrationNumber = registrationNumber;
+	}
+
+	public SocietyConfigJPA getSocietyConfig() {
+		return societyConfig;
+	}
+
+	public void setSocietyConfig(SocietyConfigJPA societyConfig) {
+		this.societyConfig = societyConfig;
 	}
 }

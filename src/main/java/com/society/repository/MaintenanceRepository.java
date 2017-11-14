@@ -256,8 +256,11 @@ public class MaintenanceRepository extends BaseRepository {
 		CriteriaQuery<MaintenanceReceiptJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceReceiptJPA.class);
 		Root<MaintenanceReceiptJPA> root = criteriaQuery.from(MaintenanceReceiptJPA.class);	
 		Fetch<MaintenanceReceiptJPA, List<MaintenanceChargeJPA>> chargeList = root.fetch("chargeList", JoinType.INNER);
-		chargeList.fetch("generalHead", JoinType.INNER);
-		root.fetch("cycle", JoinType.INNER);
+		chargeList.fetch("maintenanceHead", JoinType.INNER);
+		Fetch<MaintenanceReceiptJPA, MaintenanceCycleJPA> cycle = root.fetch("cycle", JoinType.INNER);
+		Fetch<MaintenanceReceiptJPA, SocietyJPA> society = cycle.fetch("society", JoinType.INNER);
+		society.fetch("address", JoinType.INNER);
+		society.fetch("societyConfig", JoinType.INNER);
 		Fetch<MaintenanceReceiptJPA, SocietyMemberJPA> member = root.fetch("member", JoinType.INNER);
 		member.fetch("person", JoinType.INNER);
 		criteriaQuery.select(root);

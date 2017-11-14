@@ -85,5 +85,4 @@ public class MaintenanceDomain {
 	public void setCycleExist(Boolean cycleExist) {
 		this.cycleExist = cycleExist;
 	}
-
 }

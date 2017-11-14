@@ -99,6 +99,7 @@
 		</form:form>
 		<div class="space-10"></div>
 		<c:if test="${not empty maintenanceTable}">
+			<a href="downloadReceipt?id=${maintenanceTable.cycleId}" class="btn btn-white btn-success" target="_blank">Download Receipt</a>
 			<table id="maintenanceTableId"
 				class="table table-bordered table-hover">
 				<thead>
@@ -115,10 +116,9 @@
 					<c:forEach items="${maintenanceTable.memberList}" var="member">
 						<tr>
 							<td data-memberId="${member.memberId}">${member.name}</td>
-							<td></td>
+							<td>${member.billNumber}</td>
 							<c:forEach items="${member.maintenanceHeadChargeDomainList}" var="charge">
-								<td data-maintenanceHeadId="${charge.maintenanceHeadId}"
-									contenteditable="true">${charge.chargeValue}</td>
+								<td data-maintenanceHeadId="${charge.maintenanceHeadId}">${charge.chargeValue}</td>
 							</c:forEach>
 						</tr>
 					</c:forEach>

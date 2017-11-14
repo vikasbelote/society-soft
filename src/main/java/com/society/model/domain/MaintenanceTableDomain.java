@@ -27,6 +27,10 @@ public class MaintenanceTableDomain {
 	
 	private Integer societyId;
 	
+	private Boolean isMaintenanceDataSave;
+	
+	private Integer cycleId;
+	
 	public List<MaintenancePersonDomain> getMemberList() {
 		return memberList;
 	}
@@ -114,6 +118,22 @@ public class MaintenanceTableDomain {
 
 	public void setSocietyId(Integer societyId) {
 		this.societyId = societyId;
+	}
+
+	public Boolean getIsMaintenanceDataSave() {
+		return isMaintenanceDataSave;
+	}
+
+	public void setIsMaintenanceDataSave(Boolean isMaintenanceDataSave) {
+		this.isMaintenanceDataSave = isMaintenanceDataSave;
+	}
+
+	public Integer getCycleId() {
+		return cycleId;
+	}
+
+	public void setCycleId(Integer cycleId) {
+		this.cycleId = cycleId;
 	}
 
 	

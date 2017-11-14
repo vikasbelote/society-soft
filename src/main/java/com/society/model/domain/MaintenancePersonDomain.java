@@ -10,6 +10,8 @@ public class MaintenancePersonDomain {
 	
 	private Integer squareFeet;
 	
+	private String billNumber;
+	
 	private List<MaintenacneChargeDomain> maintenanceHeadChargeDomainList;
 
 	public Integer getMemberId() {
@@ -42,6 +44,14 @@ public class MaintenancePersonDomain {
 
 	public void setMaintenanceHeadChargeDomainList(List<MaintenacneChargeDomain> maintenanceHeadChargeDomainList) {
 		this.maintenanceHeadChargeDomainList = maintenanceHeadChargeDomainList;
+	}
+
+	public String getBillNumber() {
+		return billNumber;
+	}
+
+	public void setBillNumber(String billNumber) {
+		this.billNumber = billNumber;
 	}
 	
 }
