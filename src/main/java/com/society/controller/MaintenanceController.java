@@ -3,7 +3,6 @@ package com.society.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,7 +15,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.SocietyApp;
 import com.society.helper.model.BreadCrumb;
-import com.society.model.domain.GeneralHeadDomain;
 import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.model.domain.MaintenanceDomain;
 import com.society.model.domain.MaintenanceTableDomain;
@@ -85,73 +82,66 @@ public class MaintenanceController extends BaseController {
 	@RequestMapping(value = "downloadReceipt", method = RequestMethod.GET)
 	public void downloadMaintenanceRceipt(@RequestParam(value="id", required=true)Integer cycleId, HttpSession session, HttpServletResponse response) {
 		
-		String path = session.getServletContext().getRealPath("/") + "/maintenance_receipt.pdf";
-		File receiptFile = maintenanceService.getDownloadReceipt(cycleId, path);
 		InputStream fileInputStream = null;
+		File receiptFile = null;
 		try {
-		    fileInputStream = new FileInputStream(receiptFile);
-			OutputStream responseOutputStream = response.getOutputStream();
+			String path = session.getServletContext().getRealPath("/") + "/maintenance_receipt.pdf";
+		    receiptFile = maintenanceService.getDownloadReceipt(cycleId, path);
 			
-			byte[] buf = new byte[8192];
-			int c = 0;
-	        while ((c = fileInputStream.read(buf, 0, buf.length)) > 0) {
-	        	responseOutputStream.write(buf, 0, c);
-	        	responseOutputStream.flush();
-	        }
-			
-			response.setContentType("application/pdf");
-	        response.setHeader("Content-disposition", "attachment; filename=receipt.pdf");
-	        response.getOutputStream().flush();
-	       
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			if(receiptFile != null) {
+			    fileInputStream = new FileInputStream(receiptFile);
+				OutputStream responseOutputStream = response.getOutputStream();
+				
+				byte[] buf = new byte[8192];
+				int c = 0;
+		        while ((c = fileInputStream.read(buf, 0, buf.length)) > 0) {
+		        	responseOutputStream.write(buf, 0, c);
+		        	responseOutputStream.flush();
+		        }
+				
+				response.setContentType("application/pdf");
+		        response.setHeader("Content-disposition", "attachment; filename=receipt.pdf");
+		        response.getOutputStream().flush();
+			}
+		} 
+		catch (FileNotFoundException e) {
+			logger.error("File Not Found " + e.getMessage());
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			logger.error("IO Exception is occurred " + e.getMessage());
+		}
+		catch(Exception e) {
+			logger.error(e.getMessage());
 		}
 		finally{
-			if(fileInputStream != null)
+			if(fileInputStream != null) {
 				try {
 					fileInputStream.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
+			}
+			if(receiptFile != null)
+				receiptFile.delete();
 		}
 	}
-	
-	
-	@RequestMapping(value = "saveMaintenanceData", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_PDF_VALUE })
-	public ModelAndView getMemberRow(@RequestBody MaintenanceCycleReceiptDomain maintenanceCycleReceiptDomain, HttpSession session, HttpServletResponse response) {
-		
-		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
-		maintenanceCycleReceiptDomain.setSocietyId(societyId);
-		
-		if(maintenanceService.saveMaintenanceData(maintenanceCycleReceiptDomain))
-			maintenanceService.updateCycle(maintenanceCycleReceiptDomain);
-		else
-			throw new RuntimeException("exception");
 
-		ModelAndView modelAndView = new ModelAndView("maintenanceReceipt");
-		modelAndView.addObject("maintenanceCycleReceiptDomain", maintenanceCycleReceiptDomain);
-		return modelAndView;
-	}
-	
 	@RequestMapping(value = "viewMaintenanceReport")
 	public ModelAndView viewMaintenanceReport(HttpSession session) {
 		
-		String[] breadCrumbs = {"Report", "Member Mainenacne", "View"};
+		String[] breadCrumbs = {"Report", "Member Maintenance", "View"};
 		List<BreadCrumb> breadCrumbList = breadCrumbHelper.getBreadCrumbList(breadCrumbs);
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		List<MaintenanceCycleReceiptDomain> cycleList = maintenanceService.getMaintenacneCycleList(societyId);
 		
-		ModelAndView modelAndView = new ModelAndView("viewMaintenanceReport");
+		ModelAndView modelAndView = new ModelAndView("maintenanceView");
 		modelAndView.addObject(breadCrumbList);
 		modelAndView.addObject("cycleList", cycleList);
 		return modelAndView;
 	}
 	
-	/*@RequestMapping(value = "viewCycleDetails")
+	@RequestMapping(value = "viewCycleDetails")
 	public ModelAndView viewCycleDetails(@RequestParam(value="id", required=true)Integer cycleId) {
 		
 		String[] breadCrumbs = {"Report", "Member Mainenacne", "View"};
@@ -159,12 +149,24 @@ public class MaintenanceController extends BaseController {
 		
 		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(cycleId);
 		
-		ModelAndView modelAndView = new ModelAndView("viewMaintenanceTable");
+		ModelAndView modelAndView = new ModelAndView("maintenanceViewTable");
 		modelAndView.addObject(breadCrumbList);
 		modelAndView.addObject("cycle", cycle);
 		return modelAndView;
 		
-	}*/
+	}
+	
+	@RequestMapping(value = "saveMaintenanceData", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<Integer> saveMaintenanceData(@RequestBody MaintenanceCycleReceiptDomain maintenanceCycleReceiptDomain, HttpSession session, HttpServletResponse response) {
+		
+		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
+		maintenanceCycleReceiptDomain.setSocietyId(societyId);
+		
+		if(!(maintenanceService.saveMaintenanceData(maintenanceCycleReceiptDomain)))
+			throw new RuntimeException("exception");
+
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+	}
 	
 	@RequestMapping(value = "deleteCycleDetais")
 	public String deleteCycleDetails(@RequestParam(value="id", required=true)Integer cycleId, RedirectAttributes redirectAttributes) {

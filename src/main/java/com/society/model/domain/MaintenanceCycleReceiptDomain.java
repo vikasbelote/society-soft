@@ -32,6 +32,8 @@ public class MaintenanceCycleReceiptDomain {
 	private List<String> additionalNote;
 	
 	private String deleteNoteIds;
+	
+	private List<MaintenanceHeadDomain> maintenanceHeadList;
 
 	public String getDeleteNoteIds() {
 		return deleteNoteIds;
@@ -143,5 +145,13 @@ public class MaintenanceCycleReceiptDomain {
 
 	public void setAdditionalNote(List<String> additionalNote) {
 		this.additionalNote = additionalNote;
+	}
+
+	public List<MaintenanceHeadDomain> getMaintenanceHeadList() {
+		return maintenanceHeadList;
+	}
+
+	public void setMaintenanceHeadList(List<MaintenanceHeadDomain> maintenanceHeadList) {
+		this.maintenanceHeadList = maintenanceHeadList;
 	}
 }

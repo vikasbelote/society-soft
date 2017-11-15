@@ -32,17 +32,4 @@ public class EmailController {
 		}
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "sendEmailToFailedMember", method = RequestMethod.POST)
-	public ResponseEntity<Integer> sendEmailToFailedMember(@RequestBody EmailDomain email, HttpSession session) {
-		
-		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
-		email.setSocietyId(societyId);
-		email.setRootPath(session.getServletContext().getRealPath("/"));
-		
-		if(StringUtils.isNotEmpty(email.getRootPath()) && StringUtils.isNotBlank(email.getRootPath())){
-			emailService.sendMailToFailedMember(email);
-		}
-		return new ResponseEntity<Integer>(1, HttpStatus.OK);
-	}
 }

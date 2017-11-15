@@ -11,6 +11,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,8 @@ public class EmailService {
 	public void sendMail(EmailDomain email) {
 
 		String destPath = email.getRootPath() + "/receipt.pdf";
-		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(email.getCycleId());
+		List<Integer> memberIdList = this.getMemberIdList(email);
+		MaintenanceCycleReceiptDomain cycle = maintenanceService.getCycleDetails(email.getCycleId(), memberIdList);
 		cycle.setSocietyId(email.getSocietyId());
 		
 		Date todayDate = new Date();
@@ -162,121 +164,6 @@ public class EmailService {
 		}
 	}
 	
-	@Async
-	public void sendMailToFailedMember(EmailDomain email) {
-		
-		String destPath = email.getRootPath() + "/receipt.pdf";
-		MaintenanceCycleReceiptDomain cycle = maintenanceService.getMemberCycleDetail(email);
-		cycle.setSocietyId(email.getSocietyId());
-		
-		Date todayDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		String strDate = sdf.format(todayDate);
-		
-		if (cycle != null && maintenanceService.updateCycle(cycle)) {
-			
-			List<EmailStatusDomain> emailStatusList = new ArrayList<EmailStatusDomain>();
-			for (MaintenanceReceiptDomain receipt : cycle.getReceipts()) {
-				
-				// get maintenance receipt PDF file
-				File receiptPdf = this.generateMaintenacneReceipt(receipt, cycle, destPath);
-				
-				EmailStatusDomain emailStatus = new EmailStatusDomain();
-				emailStatus.setReceiptId(receipt.getReceiptId());
-				emailStatus.setMailType(EmailType.MA.value());
-				emailStatus.setSendDate(new java.sql.Date(todayDate.getTime()));
-				
-				if(receiptPdf != null) {
-					
-					MimeMessage mimeMessage = mailSender.createMimeMessage();
-					try {
-						MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage, true);
-						mailMsg.setFrom("admin@societysoft.com");
-						mailMsg.setTo(receipt.getEmailId());
-						mailMsg.setSubject("Maintenance Receipt");
-						
-						StringBuilder sb = new StringBuilder();
-						sb.append("Hi " + receipt.getMemberName() + ",\n\n");
-						sb.append("This is a notice that an Maintenance Receipt has been generated on " + strDate + ".\n\n");
-						sb.append("Amount Due: INR " + receipt.getTotalValue() + "\n\n");
-						sb.append("Due Date: " + cycle.getPaymentDueDate() + "\n\n");
-						sb.append("Thanks & Regards,\n");
-						sb.append("Society soft admin team");
-						
-						mailMsg.setText(sb.toString());
-						mailMsg.addAttachment("maintenacne-receipt.pdf", receiptPdf);
-						
-						logger.info("Sending mail");
-						mailSender.send(mimeMessage);
-						logger.info("Mail Send successfuly.");
-						emailStatus.setMailStatus(true);
-						
-					} catch (MessagingException e) {
-						logger.error("MessagingException => Mail sending failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
-						logger.error(e.getMessage());
-						emailStatus.setMailStatus(false);
-					}
-					catch(MailException e) {
-						logger.error("MailException => Mail sending failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
-						logger.error(e.getMessage());
-						emailStatus.setMailStatus(false);
-					}
-			      	catch(Exception e){
-			      		logger.error("Exception => Mail sending failed for Member Id : " + receipt.getMemberId() + " Member Name : " + receipt.getMemberName());
-			      		logger.error(e.getMessage());
-			      		emailStatus.setMailStatus(false);
-			      	}
-			        finally {
-			        	receiptPdf.deleteOnExit();
-			        }
-				}
-				
-				if(emailStatus.getMailStatus() == null)
-					emailStatus.setMailStatus(false);
-				emailStatusList.add(emailStatus);
-				
-				//Update Status Id
-				for(StatusMemberDomain statusMember : email.getMemberIds()) {
-					
-					if(statusMember.getMemberId().equals(receipt.getMemberId())) {
-						emailStatus.setMailStatusId(statusMember.getMailStatusId());
-						break;
-					}
-				}
-			}
-			//Store the response in table for particular society
-			logger.info("Creating email status list");
-			SocietyJPA society = new SocietyJPA();
-			society.setSocietyId(cycle.getSocietyId());
-			
-			List<EmailStatusJPA> emailStatusDBList = new ArrayList<EmailStatusJPA>();
-			for(EmailStatusDomain emailStausDomain : emailStatusList) {
-				
-				MaintenanceReceiptJPA receipt = new MaintenanceReceiptJPA();
-				receipt.setReceipId(emailStausDomain.getReceiptId());
-				
-				EmailStatusJPA emailStatus = new EmailStatusJPA();
-				emailStatus.setMailStatusId(emailStausDomain.getMailStatusId());
-				emailStatus.setSociety(society);
-				emailStatus.setReceipt(receipt);
-				emailStatus.setMailStatus(emailStausDomain.getMailStatus());
-				emailStatus.setMailType(emailStausDomain.getMailType());
-				emailStatus.setSendDate(emailStausDomain.getSendDate());
-				
-				emailStatusDBList.add(emailStatus);
-			}
-			logger.info("sending email status to repository");
-			boolean success = emailRepository.saveEmailInformation(emailStatusDBList);
-			if(success)
-				logger.info("sending email status to repository sucessfuly");
-			else
-				logger.info("saving mail status to database failed");
-		} 
-		else {
-			logger.error("Probelem with fetching cycle data from Database for societyId : " + email.getSocietyId());
-		}
-	}
-
 	private File generateMaintenacneReceipt(MaintenanceReceiptDomain receipt, MaintenanceCycleReceiptDomain cycle,
 			String destPath) {
 		File receiptFile;
@@ -332,7 +219,7 @@ public class EmailService {
 			for (MaintenacneChargeDomain charge : receipt.getChargeList()) {
 
 				Paragraph srNoPara = new Paragraph(i++);
-				Paragraph generalHeadPara = new Paragraph(charge.getGeneralHeadName());
+				Paragraph generalHeadPara = new Paragraph(charge.getMaintenanceHeadName());
 				Paragraph chargeValuePara = new Paragraph(String.valueOf(charge.getChargeValue()));
 
 				PdfPCell srNoCell = new PdfPCell(srNoPara);
@@ -396,5 +283,17 @@ public class EmailService {
 				writer.close();
 		}
 		return receiptFile;
+	}
+	
+	private List<Integer> getMemberIdList(EmailDomain email) {
+		
+		List<Integer> memberIdList = null;
+		if(CollectionUtils.isNotEmpty(email.getMemberIds())) {
+			memberIdList = new ArrayList<Integer>();
+			for(StatusMemberDomain statusMember : email.getMemberIds()) {
+				memberIdList.add(statusMember.getMemberId());
+			}
+		}
+		return memberIdList;
 	}
 }

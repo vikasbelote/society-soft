@@ -262,7 +262,7 @@ public class MaintenanceService {
 			}
 			cycle.setNoteList(noteCycle);
 		}
-		boolean isSuccess = maintenanceRepository.saveMaintenanceData(chargeList, noteCycle, null);
+		boolean isSuccess = maintenanceRepository.saveMaintenanceData(null, chargeList, noteCycle);
 		if(isSuccess) {
 			maintenanceTable.setCycleId(cycle.getCycleId());
 			//update bill number
@@ -321,18 +321,19 @@ public class MaintenanceService {
 	
 	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
 		
+		Integer cycleId = cycleDomain.getCycleId();
+		
 		SocietyJPA society = new SocietyJPA();
 		society.setSocietyId(cycleDomain.getSocietyId());
 		
 		MaintenanceCycleJPA cycle = new MaintenanceCycleJPA();
-		cycle.setCycleId(cycleDomain.getCycleId());
+		cycle.setCycleId(cycleId);
 		cycle.setSociety(society);
 		cycle.setPaymentDueDate(cycleDomain.getPaymentDueDate());
 		cycle.setStartDate(cycleDomain.getStartDate());
 		cycle.setEndDate(cycleDomain.getEndDate());
 		
 		List<MaintenanceChargeJPA> chargeList = new ArrayList<MaintenanceChargeJPA>();
-		List<MaintenanceReceiptJPA> receiptList = new ArrayList<MaintenanceReceiptJPA>();
 		for(MaintenanceReceiptDomain receiptDomain : cycleDomain.getReceipts()) {
 			
 			SocietyMemberJPA member = new SocietyMemberJPA();
@@ -342,8 +343,7 @@ public class MaintenanceService {
 			receipt.setReceipId(receiptDomain.getReceiptId());
 			receipt.setCycle(cycle);
 			receipt.setMember(member);
-			if(receipt.getReceipId() != null)
-				receipt.setBillNumber(receiptDomain.getBillNumber());
+			receipt.setBillNumber(receiptDomain.getBillNumber());
 				
 			for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
 				
@@ -358,7 +358,6 @@ public class MaintenanceService {
 				
 				chargeList.add(charge);
 			}
-			receiptList.add(receipt);
 		}
 		List<MaintenanceCycleNoteJPA> noteCycle = null;
 		if(CollectionUtils.isNotEmpty(cycleDomain.getNotes())) {
@@ -367,42 +366,12 @@ public class MaintenanceService {
 			for(MaintenacneNoteDomain note : cycleDomain.getNotes()) {
 				
 				MaintenanceCycleNoteJPA noteDB = new MaintenanceCycleNoteJPA();
-				noteDB.setNoteId(note.getNoteId());
 				noteDB.setNoteText(note.getNoteText());
 				noteDB.setCycle(cycle);
 				noteCycle.add(noteDB);
 			}
 		}
-		List<MaintenanceCycleNoteJPA> noteDBList = null;
-		if(StringUtils.isNotEmpty(cycleDomain.getDeleteNoteIds())){
-			
-			noteDBList = new ArrayList<MaintenanceCycleNoteJPA>();
-			String[] deletedNoteIdArr = cycleDomain.getDeleteNoteIds().split(",");
-			for(String noteId : deletedNoteIdArr) {
-				MaintenanceCycleNoteJPA noteDB = new MaintenanceCycleNoteJPA();
-				noteDB.setNoteId(NumberUtils.toInt(noteId));
-				noteDBList.add(noteDB);
-			}
-		}
-		boolean isSucess = maintenanceRepository.saveMaintenanceData(chargeList, noteCycle, noteDBList);
-		if(isSucess && cycleDomain.getCycleId() == null) {
-			//Update Bill Number after insert into database
-			for(MaintenanceReceiptJPA receipt : receiptList) {
-				
-				MaintenanceReceiptDomain receiptDomain = null;
-				for(MaintenanceReceiptDomain tempReceiptDomain : cycleDomain.getReceipts()) {
-					
-					if(receipt.getMember().getMemberId().equals(tempReceiptDomain.getMemberId())) {
-						receiptDomain = tempReceiptDomain;
-						break;
-					}
-				}
-				if(receiptDomain != null) {
-					receiptDomain.setBillNumber(receipt.getBillNumber());
-				}
-			}
-		}
-		return isSucess;
+		return maintenanceRepository.saveMaintenanceData(cycleId, chargeList, noteCycle);
 	}
 	
 	public boolean updateCycle(MaintenanceCycleReceiptDomain cycleDomain) {
@@ -492,9 +461,11 @@ public class MaintenanceService {
 	public File getDownloadReceipt(Integer cycleId, String path) {
 		
 		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMaintenanceReceipt(cycleId);
-		if(CollectionUtils.isEmpty(receiptSet))
+		if(CollectionUtils.isEmpty(receiptSet)) {
+			logger.debug("No Maintenance Receipt Data from Database for cycle id" + cycleId);
 			return null;
-	
+		}
+			
 		File receiptFile = new File(path);
 		Document document = new Document();
 		PdfWriter writer = null;
@@ -584,7 +555,7 @@ public class MaintenanceService {
 				document.add(lateInterestCharge);
 
 				Paragraph chequeName = new Paragraph("cheque should be drawan in the favour of ");
-				chequeName.add(new Chunk("\"CHEQUE NAME\"", boldFont));
+				chequeName.add(new Chunk("\"" + receiptDB.getCycle().getSociety().getSocietyConfig().getMaintenancePaymentChequeName() + "\"", boldFont));
 				chequeName.setSpacingAfter(5);
 				document.add(chequeName);
 				
@@ -600,15 +571,16 @@ public class MaintenanceService {
 				document.newPage();
 			}
 		}
-		 catch (DocumentException e) {
-			logger.error("DocimentException => Receipt generation failed for Member Id : ");
+		catch (DocumentException e) {
+			logger.error("DocumentException => " + e.getMessage());
 			receiptFile = null;
-		} catch (FileNotFoundException e) {
-			logger.error("FileNotFoundException => Receipt generation failed for Member Id :");
+		}
+		catch (FileNotFoundException e) {
+			logger.error("FileNotFoundException => " + e.getMessage());
 			receiptFile = null;
 		}
 		catch(Exception e) {
-			logger.error("Exception => Receipt generation failed for Member Id : ");
+			logger.error("Exception => Receipt generation failed for Member Id : " + e.getMessage());
 			receiptFile = null;
 		}
 		finally {
@@ -619,11 +591,13 @@ public class MaintenanceService {
 		return receiptFile;
 	}
 	
+	public MaintenanceCycleReceiptDomain getCycleDetails(Integer cycleId) {
+		return this.getCycleDetails(cycleId, null);
+	}
 	
-	
-	/*public MaintenanceCycleReceiptDomain getCycleDetails(Integer cycleId) {
+	public MaintenanceCycleReceiptDomain getCycleDetails(Integer cycleId, List<Integer> memberIdList) {
 		
-		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMaintenanceReceipt(cycleId);
+		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMaintenanceReceiptTable(cycleId, memberIdList);
 		if(CollectionUtils.isEmpty(receiptSet))
 			return null;
 		
@@ -632,8 +606,8 @@ public class MaintenanceService {
 		cycle.setCycleId(cycleId);
 		
 		boolean isGeneralHeadColumnPopulated = true;
-		List<MaintenanceHeadDomain> generalHeadList = new ArrayList<GeneralHeadDomain>();
-		cycle.setGeneralHeadList(generalHeadList);
+		List<MaintenanceHeadDomain> maintenanceHeadList = new ArrayList<MaintenanceHeadDomain>();
+		cycle.setMaintenanceHeadList(maintenanceHeadList);
 		
 		List<MaintenanceReceiptDomain> receiptList = new ArrayList<MaintenanceReceiptDomain>();
 		for(MaintenanceReceiptJPA receiptDB : receiptSet) {
@@ -663,18 +637,13 @@ public class MaintenanceService {
 					charge.setChargeValue(chargeDB.getChargeValue());
 					chargeList.add(charge);
 					
-					totalValue = totalValue + chargeDB.getChargeValue();
+					totalValue = totalValue + (chargeDB.getChargeValue() == null ? 0.0 : chargeDB.getChargeValue());
 					
 					if(isGeneralHeadColumnPopulated) {
-						
 						MaintenanceHeadDomain maintenanceHeadDomain = new MaintenanceHeadDomain();
 						maintenanceHeadDomain.setMaintenanceHeadId(charge.getMaintenanceHeadId());
 						maintenanceHeadDomain.setMaintenanceHeadName(charge.getMaintenanceHeadName());
-						
-						GeneralHeadDomain generalHeadDomain = new GeneralHeadDomain();
-						generalHeadDomain.setGeneralHeadId(charge.getGeneralHeadId());
-						generalHeadDomain.setGeneralHeadName(charge.getGeneralHeadName());
-						generalHeadList.add(generalHeadDomain);
+						maintenanceHeadList.add(maintenanceHeadDomain);
 					}
 				}
 				isGeneralHeadColumnPopulated = false;
@@ -691,87 +660,13 @@ public class MaintenanceService {
 			for(MaintenanceCycleNoteJPA cycleNote : noteList) {
 				
 				MaintenacneNoteDomain note = new MaintenacneNoteDomain();
-				note.setNoteId(cycleNote.getNoteId());
 				note.setNoteText(cycleNote.getNoteText());
 				additinalNoteList.add(note);
 			}
 			cycle.setNotes(additinalNoteList);
 		}
 		return cycle;
-	}*/
-	
-	/*public MaintenanceCycleReceiptDomain getMemberCycleDetail(EmailDomain email) {
-		
-		Set<MaintenanceReceiptJPA> receiptSet = maintenanceRepository.getMemberMaintenanceReceipt(email);
-		if(CollectionUtils.isEmpty(receiptSet))
-			return null;
-		
-		boolean isCycleUpdated = true;
-		MaintenanceCycleReceiptDomain cycle = new MaintenanceCycleReceiptDomain();
-		cycle.setCycleId(email.getCycleId());
-		
-		boolean isGeneralHeadColumnPopulated = true;
-		List<GeneralHeadDomain> generalHeadList = new ArrayList<GeneralHeadDomain>();
-		cycle.setGeneralHeadList(generalHeadList);
-		
-		List<MaintenanceReceiptDomain> receiptList = new ArrayList<MaintenanceReceiptDomain>();
-		for(MaintenanceReceiptJPA receiptDB : receiptSet) {
-			
-			if(isCycleUpdated) {
-				isCycleUpdated = false;
-				cycle.setPaymentDueDate(receiptDB.getCycle().getPaymentDueDate());
-				cycle.setStartDate(receiptDB.getCycle().getStartDate());
-				cycle.setEndDate(receiptDB.getCycle().getEndDate());
-			}
-			
-			MaintenanceReceiptDomain receipt = new MaintenanceReceiptDomain();
-			receipt.setReceiptId(receiptDB.getReceipId());
-			receipt.setMemberId(receiptDB.getMember().getMemberId());
-			receipt.setMemberName(this.getPersonName(receiptDB.getMember().getPerson()));
-			receipt.setEmailId(receiptDB.getMember().getPerson().getEmailId());
-			receipt.setBillNumber(receiptDB.getBillNumber());
-			
-			Double totalValue = new Double(0);
-			if(CollectionUtils.isNotEmpty(receiptDB.getChargeList())) {
-				List<MaintenacneChargeDomain> chargeList = new ArrayList<MaintenacneChargeDomain>();
-				for(MaintenanceChargeJPA chargeDB : receiptDB.getChargeList()) {
-					MaintenacneChargeDomain charge = new MaintenacneChargeDomain();
-					charge.setChargeId(chargeDB.getChargeId());
-					charge.setGeneralHeadId(chargeDB.getGeneralHead().getGeneralHeadId());
-					charge.setGeneralHeadName(chargeDB.getGeneralHead().getGeneralHeadName());
-					charge.setChargeValue(chargeDB.getChargeValue());
-					chargeList.add(charge);
-					
-					totalValue = totalValue + chargeDB.getChargeValue();
-					
-					if(isGeneralHeadColumnPopulated) {
-						GeneralHeadDomain generalHeadDomain = new GeneralHeadDomain();
-						generalHeadDomain.setGeneralHeadId(charge.getGeneralHeadId());
-						generalHeadDomain.setGeneralHeadName(charge.getGeneralHeadName());
-						generalHeadList.add(generalHeadDomain);
-					}
-				}
-				isGeneralHeadColumnPopulated = false;
-				receipt.setChargeList(chargeList);
-				receipt.setTotalValue(totalValue);
-			}
-			receiptList.add(receipt);
-		}
-		cycle.setReceipts(receiptList);
-		List<MaintenanceCycleNoteJPA> noteList = maintenanceRepository.getAdditionalNote(email.getCycleId());
-		if(CollectionUtils.isNotEmpty(noteList)) {
-			List<MaintenacneNoteDomain> additinalNoteList = new ArrayList<MaintenacneNoteDomain>();
-			for(MaintenanceCycleNoteJPA cycleNote : noteList) {
-				
-				MaintenacneNoteDomain note = new MaintenacneNoteDomain();
-				note.setNoteId(cycleNote.getNoteId());
-				note.setNoteText(cycleNote.getNoteText());
-				additinalNoteList.add(note);
-			}
-			cycle.setNotes(additinalNoteList);
-		}
-		return cycle;
-	}*/
+	}
 	
 	public boolean deleteCycle(Integer cycleId) {
 		return maintenanceRepository.deleteCycleDetails(cycleId);

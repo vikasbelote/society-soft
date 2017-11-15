@@ -124,13 +124,6 @@
 	});
 	
 	$("#additonalNoteList").on("click", ".delete-note", function() {
-		
-		var li = $(this).parent();
-		var noteId = li.attr("data-noteId");
-		var deleteNoteId = $("#deletedNoteId").val();
-		deleteNoteId = deleteNoteId + "," + noteId;
-		$("#deletedNoteId").val(deleteNoteId);
-		
 		$(this).parent().remove();
 	});
 	
@@ -173,7 +166,15 @@
 		$("#paymentDueDate").val($(this).val());
 	});
 	
-	$("#generateReceiptId").click(function(){
+	$("#downloadReceiptId").click(function() {
+		return false;
+	});
+	
+	$(".track-change").change(function(){
+		alert(1);
+	});
+	
+	$("#saveMaintenanceId").click(function(){
 	
 		$("#spinnerId").removeClass("hide");
 		
@@ -246,12 +247,9 @@
 				type : 'POST',
 				data : cycleJson,
 				success : function(response) {
-					$('#content').html("");
-					$('#content').append(response);
-					downloadAllMaintenanceReceipt();
+					$("#deletedNoteId").val("");
+					showSuccessMsg("Maintenance Data", "Data save successfully.");
 					$("#spinnerId").addClass("hide");
-					
-					window.location.replace("viewMaintenanceReport");
 				},
 				error : function(e) {
 					showValidationMsg("Error","There is error while saving receipt data.");
@@ -261,7 +259,7 @@
 		}
 	});
 	
-	$("#sendEmailId").click(function() {
+	$("#emailMaintenanceId").click(function() {
 		
 		
 		var email = {};

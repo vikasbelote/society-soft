@@ -119,10 +119,7 @@
 		<put-attribute name="body" value="/WEB-INF/views/report/maintaince/maintaince_view.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/report/maintaince/maintaince_inline.jsp" />
 	</definition>
-	<definition name="viewMaintenanceTable" extends="layout.basic">
-		<put-attribute name="body" value="/WEB-INF/views/report/maintaince/maintenance_view_table.jsp" />
-		<put-attribute name="inline" value="/WEB-INF/views/report/maintaince/maintaince_inline.jsp" />
-	</definition>
+	
 	<definition name="emailTemplate" template="/WEB-INF/views/report/maintaince/email_template.jsp">	
 	</definition>
 	<definition name="emailNotification" extends="layout.basic">
@@ -144,6 +141,14 @@
 	</definition>
 	<definition name="maintenanceCreate" extends="layout.basic">
 		<put-attribute name="body" value="/WEB-INF/views/maintenance/create/maintenance_create.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/maintenance/create/maintenance_create_inline.jsp" />
+	</definition>
+	<definition name="maintenanceView" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/maintenance/view/maintenance_view.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/maintenance/create/maintenance_create_inline.jsp" />
+	</definition>
+	<definition name="maintenanceViewTable" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/maintenance/view/maintenance_view_table.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/maintenance/create/maintenance_create_inline.jsp" />
 	</definition>
 	

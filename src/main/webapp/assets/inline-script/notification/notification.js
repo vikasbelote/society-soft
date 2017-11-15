@@ -36,7 +36,7 @@
 		var emailJson = JSON.stringify(email);
 		
 		$.ajax({
-			url : 'sendEmailToFailedMember',
+			url : 'sendEmail',
 			contentType : "application/json",
 			type : 'POST',
 			data : emailJson,

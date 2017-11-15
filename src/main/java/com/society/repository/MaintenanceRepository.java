@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -152,7 +153,7 @@ public class MaintenanceRepository extends BaseRepository {
 		return societyConfig;
 	}
 	
-	public boolean saveMaintenanceData(List<MaintenanceChargeJPA> chargeList, List<MaintenanceCycleNoteJPA> noteCycle, List<MaintenanceCycleNoteJPA> noteDBList) {
+	public boolean saveMaintenanceData(Integer cycleId, List<MaintenanceChargeJPA> chargeList, List<MaintenanceCycleNoteJPA> noteCycle) {
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -163,14 +164,15 @@ public class MaintenanceRepository extends BaseRepository {
 			}
 			
 			if(CollectionUtils.isNotEmpty(noteCycle)) {
+				
+				if(cycleId != null) {
+					Query query = session.createQuery("delete MaintenanceCycleNoteJPA where cycle.cycleId = :cycleId");
+					query.setParameter("cycleId", cycleId);
+					query.executeUpdate();
+				}
+
 				for(MaintenanceCycleNoteJPA note : noteCycle) {
 					session.saveOrUpdate(note);
-				}
-			}
-			
-			if(CollectionUtils.isNotEmpty(noteDBList)) {
-				for(MaintenanceCycleNoteJPA note : noteDBList) {
-					session.delete(session.merge(note));
 				}
 			}
 			
@@ -268,6 +270,37 @@ public class MaintenanceRepository extends BaseRepository {
 		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), cycleId);
 		criteriaQuery.where(equalCycleIdPredicate);
 		
+		Set<MaintenanceReceiptJPA> maintenanceReceiptSet;
+		try {
+			List<MaintenanceReceiptJPA> maintenanceReceiptList = entityManager.createQuery(criteriaQuery).getResultList();
+			maintenanceReceiptSet = new HashSet<MaintenanceReceiptJPA>(maintenanceReceiptList);
+		}
+		catch(Exception e) {
+			maintenanceReceiptSet = null;
+		}
+		return maintenanceReceiptSet;
+	}
+	
+	public Set<MaintenanceReceiptJPA> getMaintenanceReceiptTable(Integer cycleId, List<Integer> memberIdList) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MaintenanceReceiptJPA> criteriaQuery = criteriaBuilder.createQuery(MaintenanceReceiptJPA.class);
+		Root<MaintenanceReceiptJPA> root = criteriaQuery.from(MaintenanceReceiptJPA.class);	
+		Fetch<MaintenanceReceiptJPA, List<MaintenanceChargeJPA>> chargeList = root.fetch("chargeList", JoinType.INNER);
+		chargeList.fetch("maintenanceHead", JoinType.INNER);
+		root.fetch("cycle", JoinType.INNER);
+		Fetch<MaintenanceReceiptJPA, SocietyMemberJPA> member = root.fetch("member", JoinType.INNER);
+		member.fetch("person", JoinType.INNER);
+		criteriaQuery.select(root);
+		
+		Predicate equalCycleIdPredicate = criteriaBuilder.equal(root.<Integer>get("cycle").get("cycleId"), cycleId);
+		if(CollectionUtils.isNotEmpty(memberIdList)) {
+			Predicate memberIdsPredicate = root.<Integer>get("member").get("memberId").in(memberIdList);
+			criteriaQuery.where(equalCycleIdPredicate, memberIdsPredicate);
+		}
+		else 
+			criteriaQuery.where(equalCycleIdPredicate);
+			
 		Set<MaintenanceReceiptJPA> maintenanceReceiptSet;
 		try {
 			List<MaintenanceReceiptJPA> maintenanceReceiptList = entityManager.createQuery(criteriaQuery).getResultList();
