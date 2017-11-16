@@ -46,7 +46,7 @@
 
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label no-padding-right"
+				<label class="col-sm-3 control-label"
 					for="form-field-1">Additional Note</label>
 				<div class="col-sm-6">
 					<div class="widget-box widget-color-green col-sm-offset-3">

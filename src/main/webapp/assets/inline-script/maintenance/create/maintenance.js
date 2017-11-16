@@ -1,5 +1,19 @@
 (function($){
 	
+//	$('.td-change').on('click', function() {
+//	    var $this = $(this);
+//	    var $input = $('<input>', {
+//	        value: $this.text(),
+//	        type: 'text',
+//	        blur: function() {
+//	           $this.text(this.value);
+//	        },
+//	        keyup: function(e) {
+//	           if (e.which === 13) $input.blur();
+//	        }
+//	    }).appendTo( $this.empty() ).focus();
+//	});
+	
 	$('textarea[data-provide="markdown"]').each(function(){
         var $this = $(this);
 
@@ -116,7 +130,12 @@
 		if(note != "") {
 			$("#additonalNoteList").append('<li><span>' + note + '</span> <input name="additionalNote" type="hidden" value="' + note + '" /><a style="cursor: pointer;text-decoration: underline;" class="delete-note text-danger">Delete</a></li>');
 			$("#additinalNoteId").val("");
+			enableSave();
 		}
+	});
+	
+	$("#paymentDueDateId").change(function(){
+		enableSave();
 	});
 	
 	$("#clearNoteId").click(function() {
@@ -168,10 +187,6 @@
 	
 	$("#downloadReceiptId").click(function() {
 		return false;
-	});
-	
-	$(".track-change").change(function(){
-		alert(1);
 	});
 	
 	$("#saveMaintenanceId").click(function(){
@@ -247,9 +262,11 @@
 				type : 'POST',
 				data : cycleJson,
 				success : function(response) {
-					$("#deletedNoteId").val("");
 					showSuccessMsg("Maintenance Data", "Data save successfully.");
-					$("#spinnerId").addClass("hide");
+					$("#maintenanceTableId tbody").find("tr").map(function() {
+						$(this).removeAttr("style");
+					});
+					disableSave();
 				},
 				error : function(e) {
 					showValidationMsg("Error","There is error while saving receipt data.");
@@ -263,7 +280,7 @@
 		
 		
 		var email = {};
-		email.cycleId = $("#maintenanceTableId").attr("data-cycleId");
+		email.cycleId = $(this).attr("data-cycleId");
 		
 		var emailJson = JSON.stringify(email);
 		
@@ -280,6 +297,21 @@
 			}
 		});
 	});
+	
+	$("#searchMemberId").click(function() {
+		
+		var memberName = $("#searchMemberTextBoxId").val();
+		var patt = new RegExp(memberName);
+		$("#maintenanceTableId tbody").find("tr").map(function() {
+			var tdContent = $(this).find("td:eq(0)").text();
+			var res = patt.test(tdContent);
+			if(!res) 
+				$(this).addClass("hide");
+			else
+				$(this).removeClass("hide");
+		});
+	});
+	
 	
 	function validatePaymentDueDate(paymentCycle, paymentDueDate) {
 		var isValid = true;
@@ -302,6 +334,21 @@
 	}
 	
 })(jQuery);
+
+function onRowChanged(event) {
+	//console.log(event.target.textContent);
+	var row = $(event.target).parent("tr");
+	row.attr("style", "background-color: #dff0d8;");
+	enableSave();
+}
+
+function enableSave() {
+	$("#saveMaintenanceId").removeClass("disabled");
+}
+
+function disableSave() {
+	$("#saveMaintenanceId").addClass("disabled");
+}
 
 function downloadAllMaintenanceReceipt() {
     var pdf = new jsPDF('p', 'pt', 'a3');

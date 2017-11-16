@@ -37,6 +37,9 @@ public class MaintenanceReceiptJPA {
 	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MaintenanceChargeJPA> chargeList;
 	
+	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<EmailStatusJPA> emailStatusList;
+	
 	@Override
 	public boolean equals(Object otherReceipt){
 		if(otherReceipt == null)
@@ -95,6 +98,14 @@ public class MaintenanceReceiptJPA {
 
 	public void setChargeList(List<MaintenanceChargeJPA> chargeList) {
 		this.chargeList = chargeList;
+	}
+
+	public List<EmailStatusJPA> getEmailStatusList() {
+		return emailStatusList;
+	}
+
+	public void setEmailStatusList(List<EmailStatusJPA> emailStatusList) {
+		this.emailStatusList = emailStatusList;
 	}
 
 }

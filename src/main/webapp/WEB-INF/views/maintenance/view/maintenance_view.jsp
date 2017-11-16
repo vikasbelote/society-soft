@@ -51,7 +51,6 @@
 							<th><strong>Start Date</strong></th>
 							<th><strong>End Date</strong></th>
 							<th></th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -60,8 +59,23 @@
 								<td>${cycle.paymentDueDate}</td>
 								<td>${cycle.startDate}</td>
 								<td>${cycle.endDate}</td>
-								<td><a href="viewCycleDetails?id=${cycle.cycleId}">View</a></td>
-								<td><a href="deleteCycleDetais?id=${cycle.cycleId}">Delete</a></td>
+								<td>
+									<a class="btn btn-xs btn-success" href="viewCycleDetails?id=${cycle.cycleId}" data-rel="tooltip" title="Edit Cycle Details"> 
+										<i class="ace-icon fa fa-pencil bigger-120"></i>
+									</a>
+									<a id="emailMaintenanceId" data-cycleId="${cycle.cycleId}" class="btn btn-xs btn-primary" href="#" data-rel="tooltip" title="Email Receipt to Member">
+										<i class="ace-icon fa fa-envelope bigger-120"></i>
+									</a>
+									<a id="#" data-cycleId="${cycle.cycleId}" class="btn btn-xs btn-pink" href="#" data-rel="tooltip" title="Message Receipt to Member">
+										<i class="ace-icon fa fa-comment bigger-120"></i>
+									</a>
+									<a href="downloadReceipt?id=${cycle.cycleId}" class="btn btn-xs btn-purple" target="_blank" data-rel="tooltip" title="Download Receipt">
+										<i class="ace-icon fa fa-cloud-download bigger-120"></i>
+									</a>
+									<a class="btn btn-xs btn-danger" href="deleteCycleDetais?id=${cycle.cycleId}" data-rel="tooltip" title="Delete Cycle Details">
+										<i class="ace-icon fa fa-trash-o bigger-120"></i>
+									</a>
+								</td>
 							</tr>
 						</c:forEach>
 					</tbody>
