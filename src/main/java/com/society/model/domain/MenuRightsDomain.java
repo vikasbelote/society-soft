@@ -58,6 +58,8 @@ public class MenuRightsDomain {
 	private boolean isEnableMasterMenu = false;
 	//20 Menu Id
 	private boolean isEnableMasterAdditionalAreaMenu = false;
+	//21 Menu Id
+	private boolean isEnableMaintenanceBillStatusMenu = false;
 
 	public void initMenuRights(LoginDomain loginDomain) {
 
@@ -70,7 +72,7 @@ public class MenuRightsDomain {
 					isEnableSocietyConfigurationMenu = isEnableCreateMaintenacneReport = isEnableViewMaintenacneReport = isEnableEmailNotificationReportMenu = 
 					isEnableMessageNotificationReportMenu = isEnableNotificationReport = isEnableMaintenanceHeadMenu = isEnableMaintenanceInterestPolicyMenu =
 					isEnableMaintenancePenalitiesPolicyMenu = isEnableMaintenanceRebatePolicyMenu = isEnableMaintenanceAdditionalAreaMenu = isEnableSocietyMemberMenu = 
-					isEnableMasterAdditionalAreaMenu = isEnableMasterMenu = true;
+					isEnableMasterAdditionalAreaMenu = isEnableMasterMenu = isEnableMaintenanceBillStatusMenu = true;
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -154,12 +156,16 @@ public class MenuRightsDomain {
 					isEnableMasterAdditionalAreaMenu = true;
 					break;
 				}
+				case 21: {
+					isEnableMaintenanceBillStatusMenu = true;
+					break;
+				}
 				}
 			}
 		}
 		
 		if(isEnableCreateMaintenacneReport || isEnableViewMaintenacneReport || isEnableMaintenanceHeadMenu || isEnableMaintenanceInterestPolicyMenu || 
-				isEnableMaintenancePenalitiesPolicyMenu || isEnableMaintenanceRebatePolicyMenu || isEnableMaintenanceAdditionalAreaMenu)
+				isEnableMaintenancePenalitiesPolicyMenu || isEnableMaintenanceRebatePolicyMenu || isEnableMaintenanceAdditionalAreaMenu || isEnableMaintenanceBillStatusMenu)
 			isEnabledMaintainceReport = true;
 		
 		if(isEnabledRegistrationMenu || isEnabledCreateUserMenu || isEnabledUserListMenu || isEnableSocietyMemberMenu)
@@ -385,6 +391,14 @@ public class MenuRightsDomain {
 
 	public void setEnableMasterAdditionalAreaMenu(boolean isEnableMasterAdditionalAreaMenu) {
 		this.isEnableMasterAdditionalAreaMenu = isEnableMasterAdditionalAreaMenu;
+	}
+
+	public boolean isEnableMaintenanceBillStatusMenu() {
+		return isEnableMaintenanceBillStatusMenu;
+	}
+
+	public void setEnableMaintenanceBillStatusMenu(boolean isEnableMaintenanceBillStatusMenu) {
+		this.isEnableMaintenanceBillStatusMenu = isEnableMaintenanceBillStatusMenu;
 	}
 
 	

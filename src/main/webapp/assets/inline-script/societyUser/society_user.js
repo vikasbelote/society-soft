@@ -102,6 +102,11 @@ $(document).ready(function() {
 					text : 'View',
 					type : 'item'
 				},
+				'billStatus' : {
+					id : 21,
+					text : 'Bill Status',
+					type : 'item'
+				},
 				'head' : {
 					id : 14,
 					text : 'Head',

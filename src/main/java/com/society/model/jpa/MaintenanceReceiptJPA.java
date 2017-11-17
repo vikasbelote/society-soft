@@ -34,6 +34,9 @@ public class MaintenanceReceiptJPA {
 	@Column(name = "bill_number")
 	private String billNumber;
 	
+	@Column(name = "bill_status")
+	private Boolean billStatus;
+	
 	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MaintenanceChargeJPA> chargeList;
 	
@@ -106,6 +109,14 @@ public class MaintenanceReceiptJPA {
 
 	public void setEmailStatusList(List<EmailStatusJPA> emailStatusList) {
 		this.emailStatusList = emailStatusList;
+	}
+
+	public Boolean getBillStatus() {
+		return billStatus;
+	}
+
+	public void setBillStatus(Boolean billStatus) {
+		this.billStatus = billStatus;
 	}
 
 }

@@ -19,6 +19,10 @@ public class MaintenanceReceiptDomain {
 	private String emailId;
 	
 	private Integer mobileNumber;
+	
+	private Boolean billStatus;
+	
+	private String flatNumber;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -82,5 +86,21 @@ public class MaintenanceReceiptDomain {
 
 	public void setMobileNumber(Integer mobileNumber) {
 		this.mobileNumber = mobileNumber;
+	}
+
+	public Boolean getBillStatus() {
+		return billStatus;
+	}
+
+	public void setBillStatus(Boolean billStatus) {
+		this.billStatus = billStatus;
+	}
+
+	public String getFlatNumber() {
+		return flatNumber;
+	}
+
+	public void setFlatNumber(String flatNumber) {
+		this.flatNumber = flatNumber;
 	}
 }

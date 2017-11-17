@@ -151,5 +151,12 @@
 		<put-attribute name="body" value="/WEB-INF/views/maintenance/view/maintenance_view_table.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/maintenance/create/maintenance_create_inline.jsp" />
 	</definition>
-	
+	<definition name="viewBillStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/maintenance/billStatus/bill_status.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/maintenance/billStatus/bill_status_inline.jsp" />
+	</definition>
+	<definition name="viewCycleBillStatus" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/maintenance/billStatus/cycle_bill_status.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/maintenance/billStatus/bill_status_inline.jsp" />
+	</definition>
 </tiles-definitions>

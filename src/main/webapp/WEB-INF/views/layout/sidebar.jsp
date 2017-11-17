@@ -106,6 +106,12 @@
 						</a> <b class="arrow"></b></li>
 					</c:if>
 					<c:if
+						test="${sessionScope.MENURIGHTS.isEnableMaintenanceBillStatusMenu()}">
+						<li class=""><a href="viewBillStatus"> <i
+								class="menu-icon fa fa-caret-right"></i> Bill Status
+						</a> <b class="arrow"></b></li>
+					</c:if>
+					<c:if
 						test="${sessionScope.MENURIGHTS.isEnableMaintenanceHeadMenu()}">
 						<li class=""><a href="maintenanceHead"> <i
 								class="menu-icon fa fa-caret-right"></i> Head
@@ -135,6 +141,7 @@
 								class="menu-icon fa fa-caret-right"></i> Additional Area
 						</a> <b class="arrow"></b></li>
 					</c:if>
+					
 					
 				</ul></li>
 		</c:if>
