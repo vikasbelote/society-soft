@@ -50,8 +50,11 @@ public class MaintenanceHeadRepository extends BaseRepository {
 		calcution.fetch("referenceMaintenanceHead", JoinType.LEFT);
 		criteriaQuery.select(root);
 		
+		Predicate nullSocietyIdPredicate = criteriaBuilder.isNull(root.<Integer>get("society").get("societyId"));
 		Predicate societyIdPredicate = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), societyId);
-		criteriaQuery.where(societyIdPredicate);
+		Predicate orPredicate = criteriaBuilder.or(nullSocietyIdPredicate, societyIdPredicate);
+		
+		criteriaQuery.where(orPredicate);
 		
 		List<MaintenanceHeadJPA> maintenanceHeadList;
 		try {

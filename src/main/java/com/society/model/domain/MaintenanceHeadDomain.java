@@ -21,6 +21,8 @@ public class MaintenanceHeadDomain {
 	private Integer societyId;
 	
 	private Integer calcId;
+	
+	private Boolean isDefault;
 
 	public Integer getMaintenanceHeadId() {
 		return maintenanceHeadId;
@@ -100,5 +102,13 @@ public class MaintenanceHeadDomain {
 
 	public void setReferenceHeadName(String referenceHeadName) {
 		this.referenceHeadName = referenceHeadName;
+	}
+
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 }

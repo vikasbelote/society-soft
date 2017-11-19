@@ -232,6 +232,7 @@ public class MaintenanceService {
 			
 			List<MaintenacneChargeDomain> chargeDomainList = this.calculateMaintenanceHeadChargeList(maintenancePersonDomain, maintenanceHeadDomainList);
 			//DB Object section start
+			double totalAmount = 0;
 			for(MaintenacneChargeDomain maintenacneChargeDomain : chargeDomainList) {
 				
 				MaintenanceHeadJPA maintenanceHead = new MaintenanceHeadJPA();
@@ -243,7 +244,10 @@ public class MaintenanceService {
 				charge.setChargeValue(maintenacneChargeDomain.getChargeValue());
 				
 				chargeList.add(charge);
+				totalAmount = totalAmount + (maintenacneChargeDomain.getChargeValue() == null ? 0 : maintenacneChargeDomain.getChargeValue());
 			}
+			receipt.setBillStatus(false);
+			receipt.setTotalAmount(totalAmount);
 			receiptList.add(receipt);
 			//DB Object section end
 			maintenancePersonDomain.setMaintenanceHeadChargeDomainList(chargeDomainList);
@@ -319,7 +323,7 @@ public class MaintenanceService {
 		return maintenanceHeadChargeDomainList;
 	}
 	
-	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
+	/*public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
 		
 		Integer cycleId = cycleDomain.getCycleId();
 		
@@ -344,7 +348,8 @@ public class MaintenanceService {
 			receipt.setCycle(cycle);
 			receipt.setMember(member);
 			receipt.setBillNumber(receiptDomain.getBillNumber());
-				
+			
+			double totalAmount = 0;
 			for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
 				
 				MaintenanceHeadJPA maintenanceHead = new MaintenanceHeadJPA();
@@ -357,7 +362,9 @@ public class MaintenanceService {
 				charge.setChargeValue(maintenacneChargeDomain.getChargeValue());
 				
 				chargeList.add(charge);
+				totalAmount = totalAmount + (maintenacneChargeDomain.getChargeValue() == null ? 0 : maintenacneChargeDomain.getChargeValue());
 			}
+			receipt.setTotalAmount(totalAmount);
 		}
 		List<MaintenanceCycleNoteJPA> noteCycle = null;
 		if(CollectionUtils.isNotEmpty(cycleDomain.getNotes())) {
@@ -372,6 +379,10 @@ public class MaintenanceService {
 			}
 		}
 		return maintenanceRepository.saveMaintenanceData(cycleId, chargeList, noteCycle);
+	}*/
+	
+	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
+		return maintenanceRepository.updtaeMaintenanceData(cycleDomain);
 	}
 	
 	public boolean updateCycle(MaintenanceCycleReceiptDomain cycleDomain) {

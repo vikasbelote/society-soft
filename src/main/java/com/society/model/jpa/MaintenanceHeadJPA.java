@@ -29,6 +29,9 @@ public class MaintenanceHeadJPA {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "calc_id")
 	private MaintenanceHeadChargeCalcJPA calculation;
+	
+	@Column(name = "is_default")
+	private Boolean isDefault;
 
 	public Integer getHeadId() {
 		return headId;
@@ -60,5 +63,13 @@ public class MaintenanceHeadJPA {
 
 	public void setCalculation(MaintenanceHeadChargeCalcJPA calculation) {
 		this.calculation = calculation;
+	}
+
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 }

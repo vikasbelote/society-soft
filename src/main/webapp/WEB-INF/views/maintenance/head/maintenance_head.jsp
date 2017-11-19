@@ -178,6 +178,7 @@
 								<td data-referenceHeadId="${maintenanceHead.referenceHeadId}">${maintenanceHead.referenceHeadName}</td>
 								<td>${maintenanceHead.percentageAmount}</td>
 								<td>
+									<c:if test="${not maintenanceHead.isDefault}">
 										<a id="editMaintenanceHeadId"
 											data-maintenanceHeadId="${maintenanceHead.maintenanceHeadId}" href="#"
 											class="btn btn-xs btn-info editMaintenanceHead"> <i
@@ -187,7 +188,7 @@
 											data-maintenanceHeadId="${maintenanceHead.maintenanceHeadId}">
 											<i class="ace-icon fa fa-trash-o bigger-120"></i>
 										</button>
-
+									</c:if>
 								</td>
 							</tr>
 						</c:forEach>

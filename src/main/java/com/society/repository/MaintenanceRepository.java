@@ -23,7 +23,11 @@ import org.springframework.stereotype.Repository;
 
 import com.society.constant.SectionEnum;
 import com.society.model.domain.EmailDomain;
+import com.society.model.domain.MaintenacneChargeDomain;
+import com.society.model.domain.MaintenacneNoteDomain;
+import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.model.domain.MaintenanceDomain;
+import com.society.model.domain.MaintenanceReceiptDomain;
 import com.society.model.domain.StatusMemberDomain;
 import com.society.model.jpa.AddressJPA;
 import com.society.model.jpa.GeneralHeadJPA;
@@ -173,6 +177,70 @@ public class MaintenanceRepository extends BaseRepository {
 
 				for(MaintenanceCycleNoteJPA note : noteCycle) {
 					session.saveOrUpdate(note);
+				}
+			}
+			
+			session.getTransaction().commit();
+			return true;
+		}
+		catch(Exception e) {
+			if(session != null)
+				session.getTransaction().rollback();
+			return false;
+		}
+		finally {
+			if(session != null)
+				session.close();
+		}
+	}
+	
+	public boolean updtaeMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			SocietyJPA society = session.load(SocietyJPA.class, cycleDomain.getSocietyId());
+			MaintenanceCycleJPA cycle = session.load(MaintenanceCycleJPA.class, cycleDomain.getCycleId());
+			cycle.setSociety(society);
+			cycle.setPaymentDueDate(cycleDomain.getPaymentDueDate());
+			cycle.setStartDate(cycleDomain.getStartDate());
+			cycle.setEndDate(cycleDomain.getEndDate());
+			
+			for(MaintenanceReceiptDomain receiptDomain : cycleDomain.getReceipts()) {
+				SocietyMemberJPA member = session.load(SocietyMemberJPA.class, receiptDomain.getMemberId());
+				
+				MaintenanceReceiptJPA receipt = session.load(MaintenanceReceiptJPA.class, receiptDomain.getReceiptId());
+				receipt.setCycle(cycle);
+				receipt.setMember(member);
+				receipt.setBillNumber(receiptDomain.getBillNumber());
+				
+				double totalAmount = 0;
+				for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
+					
+					MaintenanceHeadJPA maintenanceHead = session.load(MaintenanceHeadJPA.class, maintenacneChargeDomain.getMaintenanceHeadId());
+					MaintenanceChargeJPA charge = session.load(MaintenanceChargeJPA.class, maintenacneChargeDomain.getChargeId());
+					charge.setReceipt(receipt);
+					charge.setMaintenanceHead(maintenanceHead);
+					charge.setChargeValue(maintenacneChargeDomain.getChargeValue());
+					session.update(charge);
+					
+					totalAmount = totalAmount + (maintenacneChargeDomain.getChargeValue() == null ? 0 : maintenacneChargeDomain.getChargeValue());
+				}
+				receipt.setTotalAmount(totalAmount);
+			}
+			
+			if(CollectionUtils.isNotEmpty(cycleDomain.getNotes())) {
+				
+				Query query = session.createQuery("delete MaintenanceCycleNoteJPA where cycle.cycleId = :cycleId");
+				query.setParameter("cycleId", cycleDomain.getCycleId());
+				query.executeUpdate();
+				
+				for(MaintenacneNoteDomain note : cycleDomain.getNotes()) {
+					MaintenanceCycleNoteJPA noteDB = new MaintenanceCycleNoteJPA();
+					noteDB.setNoteText(note.getNoteText());
+					noteDB.setCycle(cycle);
+					session.save(noteDB);
 				}
 			}
 			

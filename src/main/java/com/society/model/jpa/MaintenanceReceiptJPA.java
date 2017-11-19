@@ -14,8 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostPersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "sa_maintenance_receipt")
+@DynamicUpdate
 public class MaintenanceReceiptJPA {
 	
 	@Id
@@ -42,6 +45,9 @@ public class MaintenanceReceiptJPA {
 	
 	@OneToMany(mappedBy="receipt", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<EmailStatusJPA> emailStatusList;
+	
+	@Column(name = "total_amount")
+	private Double totalAmount;
 	
 	@Override
 	public boolean equals(Object otherReceipt){
@@ -117,6 +123,14 @@ public class MaintenanceReceiptJPA {
 
 	public void setBillStatus(Boolean billStatus) {
 		this.billStatus = billStatus;
+	}
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 }

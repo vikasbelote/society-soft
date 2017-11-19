@@ -97,6 +97,7 @@ public class MaintenanceHeadService {
 				maintenanceHeadDomain.setReferenceHeadName(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead().getHeadName());
 				maintenanceHeadDomain.setReferenceHeadId(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead().getHeadId());
 			}
+			maintenanceHeadDomain.setIsDefault(maintenanceHeadDB.getIsDefault());
 			maintenanceDomainList.add(maintenanceHeadDomain);
 		}
 		return maintenanceDomainList;
