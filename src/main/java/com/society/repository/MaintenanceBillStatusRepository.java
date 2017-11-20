@@ -81,6 +81,8 @@ public class MaintenanceBillStatusRepository extends BaseRepository {
 				query.executeUpdate();
 			}
 			
+			//update outstanding amount also
+			
 			session.getTransaction().commit();
 			return true;
 		}

@@ -21,6 +21,10 @@ public class MaintenanceDomain {
 	private Boolean cycleExist;
 	
 	private Boolean getMaintenanceTable;
+	
+	private Date cycleStartDate;
+	
+	private Date cycleEndDate;
 
 	public Date getPaymentDueDate() {
 		return paymentDueDate;
@@ -84,5 +88,21 @@ public class MaintenanceDomain {
 
 	public void setCycleExist(Boolean cycleExist) {
 		this.cycleExist = cycleExist;
+	}
+
+	public Date getCycleStartDate() {
+		return cycleStartDate;
+	}
+
+	public void setCycleStartDate(Date cycleStartDate) {
+		this.cycleStartDate = cycleStartDate;
+	}
+
+	public Date getCycleEndDate() {
+		return cycleEndDate;
+	}
+
+	public void setCycleEndDate(Date cycleEndDate) {
+		this.cycleEndDate = cycleEndDate;
 	}
 }

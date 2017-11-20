@@ -3,23 +3,29 @@ package com.society.repository;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.society.constant.SectionEnum;
 import com.society.model.domain.EmailDomain;
@@ -37,6 +43,7 @@ import com.society.model.jpa.MaintenanceCycleJPA;
 import com.society.model.jpa.MaintenanceCycleNoteJPA;
 import com.society.model.jpa.MaintenanceHeadJPA;
 import com.society.model.jpa.MaintenanceReceiptJPA;
+import com.society.model.jpa.MemberOutAmountJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.RoleJPA;
 import com.society.model.jpa.SocietyConfigJPA;
@@ -258,6 +265,82 @@ public class MaintenanceRepository extends BaseRepository {
 		}
 	}
 	
+	public Map<Integer, Double> getOutstandingAmount(MaintenanceDomain maintenanceDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createQuery(Tuple.class);
+		Root<MaintenanceCycleJPA> root = criteriaQuery.from(MaintenanceCycleJPA.class);	
+		Join<MaintenanceCycleJPA, MaintenanceReceiptJPA> receipt = root.join("receiptList", JoinType.INNER);
+		
+		Expression<Double> sumExpression1 = criteriaBuilder.sum(receipt.<Double>get("totalAmount"), receipt.<Double>get("outAmount"));
+		Expression<Double> sumExpression2 = receipt.<Double>get("totalAmount");
+		
+		
+		Expression<Double> sumExpression = criteriaBuilder.<Double>selectCase().when((criteriaBuilder.isNull(receipt.<Double>get("outAmount"))), sumExpression2)
+																			   .otherwise(sumExpression1);
+		
+		//Expression<Double> sumExpression = criteriaBuilder.sum(criteriaBuilder.sum(receipt.<Double>get("totalAmount"), nullOutAmount));
+		
+		criteriaQuery.multiselect(receipt.<Integer>get("member").get("memberId"), sumExpression);
+		
+		Predicate startDatePredicate = criteriaBuilder.between(root.<Date>get("startDate"), maintenanceDomain.getPaymentCycleStartDate(), maintenanceDomain.getCycleStartDate());
+		Predicate endDatePredicate = criteriaBuilder.between(root.<Date>get("endDate"), maintenanceDomain.getPaymentCycleStartDate(), maintenanceDomain.getCycleStartDate());
+		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), maintenanceDomain.getSocietyId());
+		Predicate billStatusPredicate = criteriaBuilder.equal(receipt.<Boolean>get("billStatus"), false);
+		Predicate isActivePredicate = criteriaBuilder.equal(receipt.<Boolean>get("isActive"), true);
+		
+		criteriaQuery.where(startDatePredicate, endDatePredicate, equalSocietyIdPredicate, billStatusPredicate, isActivePredicate);
+		criteriaQuery.groupBy(receipt.<Integer>get("member").get("memberId"));
+		
+		List<Tuple> groupByResult;
+		Map<Integer, Double> outStandingMap = new HashMap<Integer, Double>();
+		try {
+			groupByResult = entityManager.createQuery(criteriaQuery).getResultList();
+			for(Tuple tuple : groupByResult) {
+				Integer memberId = (Integer)tuple.get(0);
+				Double outstandingAmount = (Double)tuple.get(1);
+				outStandingMap.put(memberId, outstandingAmount);
+			}
+		}
+		catch(Exception e) {
+			groupByResult = null;
+		}
+		return outStandingMap;
+	}
+	
+	@Transactional
+	public boolean updateActiveFlagForBill(MaintenanceDomain maintenanceDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaUpdate<MaintenanceReceiptJPA> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(MaintenanceReceiptJPA.class);
+		Root<MaintenanceReceiptJPA> root = criteriaUpdate.from(MaintenanceReceiptJPA.class);
+		criteriaUpdate.set(root.<Boolean>get("isActive"), false);
+		
+		Subquery<MaintenanceCycleJPA> subquery = criteriaUpdate.subquery(MaintenanceCycleJPA.class);
+		Root<MaintenanceCycleJPA> subqueryRoot = subquery.from(MaintenanceCycleJPA.class);
+		subquery.select(subqueryRoot.get("cycleId"));
+		
+		Predicate startDatePredicate = criteriaBuilder.between(subqueryRoot.<Date>get("startDate"), maintenanceDomain.getPaymentCycleStartDate(), maintenanceDomain.getCycleStartDate());
+		Predicate endDatePredicate = criteriaBuilder.between(subqueryRoot.<Date>get("endDate"), maintenanceDomain.getPaymentCycleStartDate(), maintenanceDomain.getCycleStartDate());
+		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(subqueryRoot.<Integer>get("society").get("societyId"), maintenanceDomain.getSocietyId());
+		
+		subquery.where(startDatePredicate, endDatePredicate, equalSocietyIdPredicate);
+		
+		Predicate cycleIdPredicate = root.get("cycle").in(subquery);
+		
+		criteriaUpdate.where(cycleIdPredicate);
+	
+		boolean isSuccess = false;
+		try {
+			entityManager.createQuery(criteriaUpdate).executeUpdate();
+			isSuccess = true;;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return isSuccess;
+	}
+	
 	public List<MaintenanceCycleJPA> checkPaymentCycleExist(MaintenanceDomain maintenanceDomain) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -378,6 +461,24 @@ public class MaintenanceRepository extends BaseRepository {
 			maintenanceReceiptSet = null;
 		}
 		return maintenanceReceiptSet;
+	}
+	
+	public List<MemberOutAmountJPA> getMemberOutstandingAmount(Integer cycleId) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<MemberOutAmountJPA> criteriaQuery = criteriaBuilder.createQuery(MemberOutAmountJPA.class);
+		Root<MemberOutAmountJPA> root = criteriaQuery.from(MemberOutAmountJPA.class);
+		criteriaQuery.select(root);
+		criteriaQuery.where(criteriaBuilder.equal(root.<Integer>get("cycleId"), cycleId));
+		
+		List<MemberOutAmountJPA> outAmountList;
+		try {
+			outAmountList = entityManager.createQuery(criteriaQuery).getResultList();
+		}
+		catch(Exception e) {
+			outAmountList = null;
+		}
+		return outAmountList;
 	}
 	
 	public Set<MaintenanceReceiptJPA> getMemberMaintenanceReceipt(EmailDomain email) {

@@ -23,6 +23,10 @@ public class MaintenanceReceiptDomain {
 	private Boolean billStatus;
 	
 	private String flatNumber;
+	
+	private Double outstandingAmount;
+	
+	private Boolean isActive;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -102,5 +106,21 @@ public class MaintenanceReceiptDomain {
 
 	public void setFlatNumber(String flatNumber) {
 		this.flatNumber = flatNumber;
+	}
+
+	public Double getOutstandingAmount() {
+		return outstandingAmount;
+	}
+
+	public void setOutstandingAmount(Double outstandingAmount) {
+		this.outstandingAmount = outstandingAmount;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }

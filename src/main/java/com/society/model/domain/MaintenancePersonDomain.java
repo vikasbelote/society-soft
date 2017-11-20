@@ -13,6 +13,8 @@ public class MaintenancePersonDomain {
 	private String billNumber;
 	
 	private List<MaintenacneChargeDomain> maintenanceHeadChargeDomainList;
+	
+	private Double outstandingAmount;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -52,6 +54,14 @@ public class MaintenancePersonDomain {
 
 	public void setBillNumber(String billNumber) {
 		this.billNumber = billNumber;
+	}
+
+	public Double getOutstandingAmount() {
+		return outstandingAmount;
+	}
+
+	public void setOutstandingAmount(Double outstandingAmount) {
+		this.outstandingAmount = outstandingAmount;
 	}
 	
 }

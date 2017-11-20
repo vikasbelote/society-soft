@@ -110,6 +110,7 @@
 							var="maintenanceHead">
 							<th data-generalHeadId="${maintenanceHead.maintenanceHeadId}">${maintenanceHead.maintenanceHeadName}</th>
 						</c:forEach>
+						<td><strong>Outstanding Amount</strong></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -120,6 +121,7 @@
 							<c:forEach items="${member.maintenanceHeadChargeDomainList}" var="charge">
 								<td data-maintenanceHeadId="${charge.maintenanceHeadId}">${charge.chargeValue}</td>
 							</c:forEach>
+							<td>${member.outstandingAmount}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

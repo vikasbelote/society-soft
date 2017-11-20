@@ -64,6 +64,9 @@
 							<th><strong>Member</strong></th>
 							<th><strong>Flat Number</strong></th>
 							<th><strong>Bill Number</strong></th>
+							<th><strong>Current Amount</strong></th>
+							<th><strong>Outstanding Amount</strong></th>
+							<th>Bill Status</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -71,22 +74,59 @@
 							<tr>
 								<td><c:choose>
 										<c:when test="${receipt.billStatus}">
-											<label> <input name="receiptIds" data-receiptId="${receipt.receiptId}"
-												class="ace ace-switch ace-switch-5" type="checkbox"
-												checked="checked" /> <span
-												class="lbl"></span>
-											</label>
+											<c:choose>
+												<c:when test="${receipt.isActive}">
+													<label> <input name="receiptIds" data-receiptId="${receipt.receiptId}"
+														class="ace ace-switch ace-switch-5" type="checkbox"
+														checked="checked"  /> <span
+														class="lbl"></span>
+													</label>
+												</c:when>
+												<c:otherwise>
+													<label> <input name="receiptIds" data-receiptId="${receipt.receiptId}"
+														class="ace ace-switch ace-switch-5" type="checkbox"
+														checked="checked" disabled="disabled" /> <span
+														class="lbl"></span>
+													</label>
+												</c:otherwise>
+											</c:choose>
 										</c:when>
 										<c:otherwise> 
-											<label> <input name="receiptIds" data-receiptId="${receipt.receiptId}"
-												class="ace ace-switch ace-switch-5" type="checkbox" /> <span
-												class="lbl"></span>
-											</label>
+											<c:choose>
+												<c:when test="${receipt.isActive}">
+													<label> <input name="receiptIds" data-receiptId="${receipt.receiptId}"
+														class="ace ace-switch ace-switch-5" type="checkbox"
+														  /> <span
+														class="lbl"></span>
+													</label>
+												</c:when>
+												<c:otherwise>
+													<label> <input name="receiptIds" data-receiptId="${receipt.receiptId}"
+														class="ace ace-switch ace-switch-5" type="checkbox"
+														 disabled="disabled" /> <span
+														class="lbl"></span>
+													</label>
+												</c:otherwise>
+											</c:choose>	
+											
 										</c:otherwise>
 									</c:choose></td>
 								<td>${receipt.memberName}</td>
 								<td>${receipt.flatNumber}</td>
 								<td>${receipt.billNumber}</td>
+								<td>${receipt.totalValue}</td>
+								<td>${receipt.outstandingAmount}</td>
+								<td>
+									<c:choose>
+										<c:when test="${receipt.isActive}">
+											<span class="label label-sm label-success arrowed">Active</span>
+										</c:when>
+										<c:otherwise>
+											<span class="label label-sm label-danger arrowed-in">Not Active</span>
+										</c:otherwise>
+									</c:choose>
+								
+								</td>
 							</tr>
 						</c:forEach>
 					</tbody>

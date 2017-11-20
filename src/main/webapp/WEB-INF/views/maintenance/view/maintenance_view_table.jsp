@@ -120,6 +120,7 @@
 								var="maintenanceHead">
 								<th data-generalHeadId="${maintenanceHead.maintenanceHeadId}">${maintenanceHead.maintenanceHeadName}</th>
 							</c:forEach>
+							<th><strong>Outstanding Amount</strong></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -132,6 +133,7 @@
 										contenteditable="true" data-chargeId="${charge.chargeId}"
 										data-maintenanceHeadId="${charge.maintenanceHeadId}">${charge.chargeValue}</td>
 								</c:forEach>
+								<td>${receipt.outstandingAmount}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

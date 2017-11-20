@@ -1,9 +1,5 @@
 (function($){
 	
-	$(".ace-switch-5").click(function() {
-		
-	});
-	
 	$("#markAllMemberId").click(function() {
 		
 		if($(this).prop("checked")) {

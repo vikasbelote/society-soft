@@ -23,6 +23,8 @@ public class MaintenanceHeadDomain {
 	private Integer calcId;
 	
 	private Boolean isDefault;
+	
+	private String headCode;
 
 	public Integer getMaintenanceHeadId() {
 		return maintenanceHeadId;
@@ -110,5 +112,13 @@ public class MaintenanceHeadDomain {
 
 	public void setIsDefault(Boolean isDefault) {
 		this.isDefault = isDefault;
+	}
+
+	public String getHeadCode() {
+		return headCode;
+	}
+
+	public void setHeadCode(String headCode) {
+		this.headCode = headCode;
 	}
 }

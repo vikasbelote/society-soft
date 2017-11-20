@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -48,6 +49,7 @@ import com.society.model.jpa.MaintenanceCycleJPA;
 import com.society.model.jpa.MaintenanceCycleNoteJPA;
 import com.society.model.jpa.MaintenanceHeadJPA;
 import com.society.model.jpa.MaintenanceReceiptJPA;
+import com.society.model.jpa.MemberOutAmountJPA;
 import com.society.model.jpa.PersonJPA;
 import com.society.model.jpa.SocietyConfigJPA;
 import com.society.model.jpa.SocietyJPA;
@@ -176,6 +178,8 @@ public class MaintenanceService {
 		if(CollectionUtils.isEmpty(maintenanceHeadListDB))
 			return null;
 		
+		Map<Integer, Double> outstandingAmountMap = null;
+		
 		//DB Object section start
 		SocietyJPA society = new SocietyJPA();
 		society.setSocietyId(societyId);
@@ -186,13 +190,20 @@ public class MaintenanceService {
 		
 		if(StringUtils.isNotBlank(maintenanceDomain.getPaymentCycle())) {
 			String[] cycleDateArr = maintenanceDomain.getPaymentCycle().split("to");
-			String startDate = StringUtils.trim(cycleDateArr[0]);
-			String endDate = StringUtils.trim(cycleDateArr[1]);
-			cycle.setStartDate(Date.valueOf(startDate));
-			cycle.setEndDate(Date.valueOf(endDate));
+			String startDateStr = StringUtils.trim(cycleDateArr[0]);
+			String endDateStr = StringUtils.trim(cycleDateArr[1]);
+			Date startDate = Date.valueOf(startDateStr);
+			Date endDate = Date.valueOf(endDateStr);
+			
+			cycle.setStartDate(startDate);
+			cycle.setEndDate(endDate);
+			maintenanceDomain.setCycleStartDate(startDate);
+			maintenanceDomain.setCycleEndDate(endDate);
+			
+			outstandingAmountMap = maintenanceRepository.getOutstandingAmount(maintenanceDomain);
 		}
 		//DB Object section end
-	
+		
 		MaintenanceTableDomain maintenanceTable = new MaintenanceTableDomain();
 		
 		List<MaintenanceHeadDomain> maintenanceHeadDomainList = new ArrayList<MaintenanceHeadDomain>();
@@ -205,6 +216,7 @@ public class MaintenanceService {
 			maintenanceHeadDomain.setChargeType(maintenanceHeadDB.getCalculation().getCalcType().getCalcType());
 			maintenanceHeadDomain.setFixedAmount(maintenanceHeadDB.getCalculation().getFixedAmount());
 			maintenanceHeadDomain.setPercentageAmount(maintenanceHeadDB.getCalculation().getPercentageAmount());
+			maintenanceHeadDomain.setHeadCode(maintenanceHeadDB.getHeadCode());
 			
 			if(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead() != null) {
 				maintenanceHeadDomain.setReferenceHeadName(maintenanceHeadDB.getCalculation().getReferenceMaintenanceHead().getHeadName());
@@ -230,6 +242,14 @@ public class MaintenanceService {
 			maintenancePersonDomain.setName(this.getPersonName(societyMember.getPerson()));
 			maintenancePersonDomain.setSquareFeet(societyMember.getSquareFeet());
 			
+			//update outstanding amount to display in table
+			if(MapUtils.isNotEmpty(outstandingAmountMap)) {
+				Double amount = outstandingAmountMap.get(societyMember.getMemberId());
+				maintenancePersonDomain.setOutstandingAmount(amount);
+				//update db object to save into database
+				receipt.setOutAmount(amount);
+			}
+			
 			List<MaintenacneChargeDomain> chargeDomainList = this.calculateMaintenanceHeadChargeList(maintenancePersonDomain, maintenanceHeadDomainList);
 			//DB Object section start
 			double totalAmount = 0;
@@ -247,6 +267,7 @@ public class MaintenanceService {
 				totalAmount = totalAmount + (maintenacneChargeDomain.getChargeValue() == null ? 0 : maintenacneChargeDomain.getChargeValue());
 			}
 			receipt.setBillStatus(false);
+			receipt.setIsActive(true);
 			receipt.setTotalAmount(totalAmount);
 			receiptList.add(receipt);
 			//DB Object section end
@@ -266,6 +287,7 @@ public class MaintenanceService {
 			}
 			cycle.setNoteList(noteCycle);
 		}
+		
 		boolean isSuccess = maintenanceRepository.saveMaintenanceData(null, chargeList, noteCycle);
 		if(isSuccess) {
 			maintenanceTable.setCycleId(cycle.getCycleId());
@@ -281,6 +303,9 @@ public class MaintenanceService {
 				if(personDomain != null) 
 					personDomain.setBillNumber(receipt.getBillNumber());
 			}
+			
+			//update previous bill is_active to false
+			maintenanceRepository.updateActiveFlagForBill(maintenanceDomain);
 		}
 		maintenanceTable.setIsMaintenanceDataSave(isSuccess);
 		//DB Object section end
@@ -323,63 +348,6 @@ public class MaintenanceService {
 		return maintenanceHeadChargeDomainList;
 	}
 	
-	/*public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
-		
-		Integer cycleId = cycleDomain.getCycleId();
-		
-		SocietyJPA society = new SocietyJPA();
-		society.setSocietyId(cycleDomain.getSocietyId());
-		
-		MaintenanceCycleJPA cycle = new MaintenanceCycleJPA();
-		cycle.setCycleId(cycleId);
-		cycle.setSociety(society);
-		cycle.setPaymentDueDate(cycleDomain.getPaymentDueDate());
-		cycle.setStartDate(cycleDomain.getStartDate());
-		cycle.setEndDate(cycleDomain.getEndDate());
-		
-		List<MaintenanceChargeJPA> chargeList = new ArrayList<MaintenanceChargeJPA>();
-		for(MaintenanceReceiptDomain receiptDomain : cycleDomain.getReceipts()) {
-			
-			SocietyMemberJPA member = new SocietyMemberJPA();
-			member.setMemberId(receiptDomain.getMemberId());
-			
-			MaintenanceReceiptJPA receipt = new MaintenanceReceiptJPA();
-			receipt.setReceipId(receiptDomain.getReceiptId());
-			receipt.setCycle(cycle);
-			receipt.setMember(member);
-			receipt.setBillNumber(receiptDomain.getBillNumber());
-			
-			double totalAmount = 0;
-			for(MaintenacneChargeDomain maintenacneChargeDomain : receiptDomain.getChargeList()) {
-				
-				MaintenanceHeadJPA maintenanceHead = new MaintenanceHeadJPA();
-				maintenanceHead.setHeadId(maintenacneChargeDomain.getMaintenanceHeadId());
-				
-				MaintenanceChargeJPA charge = new MaintenanceChargeJPA();
-				charge.setChargeId(maintenacneChargeDomain.getChargeId());
-				charge.setReceipt(receipt);
-				charge.setMaintenanceHead(maintenanceHead);
-				charge.setChargeValue(maintenacneChargeDomain.getChargeValue());
-				
-				chargeList.add(charge);
-				totalAmount = totalAmount + (maintenacneChargeDomain.getChargeValue() == null ? 0 : maintenacneChargeDomain.getChargeValue());
-			}
-			receipt.setTotalAmount(totalAmount);
-		}
-		List<MaintenanceCycleNoteJPA> noteCycle = null;
-		if(CollectionUtils.isNotEmpty(cycleDomain.getNotes())) {
-			
-		    noteCycle = new ArrayList<MaintenanceCycleNoteJPA>();
-			for(MaintenacneNoteDomain note : cycleDomain.getNotes()) {
-				
-				MaintenanceCycleNoteJPA noteDB = new MaintenanceCycleNoteJPA();
-				noteDB.setNoteText(note.getNoteText());
-				noteDB.setCycle(cycle);
-				noteCycle.add(noteDB);
-			}
-		}
-		return maintenanceRepository.saveMaintenanceData(cycleId, chargeList, noteCycle);
-	}*/
 	
 	public boolean saveMaintenanceData(MaintenanceCycleReceiptDomain cycleDomain) {
 		return maintenanceRepository.updtaeMaintenanceData(cycleDomain);
@@ -612,6 +580,7 @@ public class MaintenanceService {
 		if(CollectionUtils.isEmpty(receiptSet))
 			return null;
 		
+		
 		boolean isCycleUpdated = true;
 		MaintenanceCycleReceiptDomain cycle = new MaintenanceCycleReceiptDomain();
 		cycle.setCycleId(cycleId);
@@ -636,6 +605,7 @@ public class MaintenanceService {
 			receipt.setMemberName(this.getPersonName(receiptDB.getMember().getPerson()));
 			receipt.setEmailId(receiptDB.getMember().getPerson().getEmailId());
 			receipt.setBillNumber(receiptDB.getBillNumber());
+			receipt.setOutstandingAmount(receiptDB.getOutAmount());
 			
 			Double totalValue = new Double(0);
 			if(CollectionUtils.isNotEmpty(receiptDB.getChargeList())) {

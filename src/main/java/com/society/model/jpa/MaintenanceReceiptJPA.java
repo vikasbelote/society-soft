@@ -49,6 +49,12 @@ public class MaintenanceReceiptJPA {
 	@Column(name = "total_amount")
 	private Double totalAmount;
 	
+	@Column(name = "out_amount")
+	private Double outAmount;
+	
+	@Column(name = "is_active")
+	private Boolean isActive;
+	
 	@Override
 	public boolean equals(Object otherReceipt){
 		if(otherReceipt == null)
@@ -131,6 +137,22 @@ public class MaintenanceReceiptJPA {
 
 	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public Double getOutAmount() {
+		return outAmount;
+	}
+
+	public void setOutAmount(Double outAmount) {
+		this.outAmount = outAmount;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

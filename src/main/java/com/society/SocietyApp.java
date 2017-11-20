@@ -22,9 +22,11 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 @EnableAsync
+@EnableTransactionManagement
 public class SocietyApp extends SpringBootServletInitializer implements AsyncConfigurer {
 	
 	private static final Logger logger = LogManager.getLogger(SocietyApp.class);

@@ -59,6 +59,9 @@ public class MaintenanceBillStatusService {
 			receiptDomain.setBillNumber(receipt.getBillNumber());
 			receiptDomain.setFlatNumber(receipt.getMember().getFlatNumber());
 			receiptDomain.setBillStatus(receipt.getBillStatus());
+			receiptDomain.setTotalValue(receipt.getTotalAmount());
+			receiptDomain.setOutstandingAmount(receipt.getOutAmount());
+			receiptDomain.setIsActive(receipt.getIsActive());
 			receiptDomainList.add(receiptDomain);
 		}
 		cycleDomain.setReceipts(receiptDomainList);

@@ -32,6 +32,9 @@ public class MaintenanceHeadJPA {
 	
 	@Column(name = "is_default")
 	private Boolean isDefault;
+	
+	@Column(name = "head_code")
+	private String headCode;
 
 	public Integer getHeadId() {
 		return headId;
@@ -71,5 +74,13 @@ public class MaintenanceHeadJPA {
 
 	public void setIsDefault(Boolean isDefault) {
 		this.isDefault = isDefault;
+	}
+
+	public String getHeadCode() {
+		return headCode;
+	}
+
+	public void setHeadCode(String headCode) {
+		this.headCode = headCode;
 	}
 }
