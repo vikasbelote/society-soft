@@ -34,6 +34,8 @@ public class MaintenanceCycleReceiptDomain {
 	private String deleteNoteIds;
 	
 	private List<MaintenanceHeadDomain> maintenanceHeadList;
+	
+	private Boolean isActive;
 
 	public String getDeleteNoteIds() {
 		return deleteNoteIds;
@@ -153,5 +155,13 @@ public class MaintenanceCycleReceiptDomain {
 
 	public void setMaintenanceHeadList(List<MaintenanceHeadDomain> maintenanceHeadList) {
 		this.maintenanceHeadList = maintenanceHeadList;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }

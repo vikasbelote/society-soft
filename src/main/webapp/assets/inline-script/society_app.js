@@ -18,6 +18,15 @@ function showSuccessMsg(titleName, msgText) {
 	});
 }
 
+function showInfoMsg(titleName, msgText) {
+	
+	$.gritter.add({
+		title: titleName,
+		text: msgText,
+		class_name: 'gritter-info'
+	});
+}
+
 $('.date-picker').datepicker({
 	autoclose: true,
 	todayHighlight: true

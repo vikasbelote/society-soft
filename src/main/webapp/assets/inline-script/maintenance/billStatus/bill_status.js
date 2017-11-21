@@ -13,17 +13,32 @@
 		var cycle = {};
 		//cycle.cycleId = 1;
 		cycle.receipts = $("#billStatusTableId tbody").find("tr").map(function(){
-			
-								var statusCheckbox = $(this).find("td:eq(0)").find("input");
-								var obj = {};
-								obj.receiptId = statusCheckbox.attr("data-receiptId");
-								if(statusCheckbox.prop("checked")) 
-									obj.billStatus = true;
-								else 
-									obj.billStatus = false;
 								
-								return obj;
+								var totalAmount = parseFloat($(this).find("td:eq(6)").text());
+								var paidAmount = parseFloat($(this).find("td:eq(7)").text());
+								
+								var statusCheckbox = $(this).find("td:eq(0)").find("input");
+								if(!statusCheckbox.is(":disabled")) {
+									var obj = {};
+									obj.receiptId = statusCheckbox.attr("data-receiptId");
+									
+									var isValid = true;
+									if(paidAmount < totalAmount)
+										isValid = false;
+									
+									if(statusCheckbox.prop("checked") && isValid) 
+										obj.billStatus = true;
+									else 
+										obj.billStatus = false;
+									obj.paidAmount = paidAmount;
+									return obj;
+								}
 							}).get();
+		
+		if(cycle.receipts.length == 0) {
+			showInfoMsg("Info","There is no bill to update.");
+			return false;
+		}
 		
 		var cycleJson = JSON.stringify(cycle);
 		$.ajax({

@@ -144,6 +144,7 @@
 	
 	$("#additonalNoteList").on("click", ".delete-note", function() {
 		$(this).parent().remove();
+		enableSave();
 	});
 	
 	$("#generateMaintenanceReportBtn").click(function() {
@@ -216,7 +217,7 @@
 			
 			cycle.receipts = [];
 			
-			var maintenanceHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(1)").map(function(){
+			var maintenanceHeadNameArr = $("#maintenanceTableId thead tr").find("th:gt(2)").map(function(){
 				return $(this).text();
 			}).get();
 			
@@ -229,7 +230,7 @@
 				memberReceipt.billNumber = $(this).find("td:eq(1)").text();
 				memberReceipt.chargeList = [];
 				
-				var maintenanceHeadIdAndValueArr = $(this).find("td:gt(1)").map(function(){
+				var maintenanceHeadIdAndValueArr = $(this).find("td:gt(2)").map(function(){
 					var maintenanceHeadIdAndValue = {
 							generalHeadId : $(this).attr("data-maintenanceHeadId"),
 							value : $(this).text(),

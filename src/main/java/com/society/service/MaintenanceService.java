@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -187,6 +189,7 @@ public class MaintenanceService {
 		MaintenanceCycleJPA cycle = new MaintenanceCycleJPA();
 		cycle.setSociety(society);
 		cycle.setPaymentDueDate(maintenanceDomain.getPaymentDueDate());
+		cycle.setIsActive(true);
 		
 		if(StringUtils.isNotBlank(maintenanceDomain.getPaymentCycle())) {
 			String[] cycleDateArr = maintenanceDomain.getPaymentCycle().split("to");
@@ -304,8 +307,8 @@ public class MaintenanceService {
 					personDomain.setBillNumber(receipt.getBillNumber());
 			}
 			
-			//update previous bill is_active to false
-			maintenanceRepository.updateActiveFlagForBill(maintenanceDomain);
+			//update previous bill and cycle is_active flag to false
+			maintenanceRepository.updateActiveFlag(maintenanceDomain);
 		}
 		maintenanceTable.setIsMaintenanceDataSave(isSuccess);
 		//DB Object section end
@@ -431,6 +434,7 @@ public class MaintenanceService {
 			cycle.setPaymentDueDate(maintenanceCycleDB.getPaymentDueDate());
 			cycle.setStartDate(maintenanceCycleDB.getStartDate());
 			cycle.setEndDate(maintenanceCycleDB.getEndDate());
+			cycle.setIsActive(maintenanceCycleDB.getIsActive());
 			cycleList.add(cycle);
 		}
 		return cycleList;
@@ -458,6 +462,9 @@ public class MaintenanceService {
 			Font boldFont = new Font();
 			boldFont.setStyle(Font.BOLD);
 			
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		    String currentDate = formatter.format(Calendar.getInstance().getTime());
+			
 			for(MaintenanceReceiptJPA receiptDB : receiptSet) {
 				
 				Paragraph societyName = new Paragraph(receiptDB.getCycle().getSociety().getSocietyName());
@@ -470,15 +477,34 @@ public class MaintenanceService {
 				address.setSpacingAfter(5);
 				document.add(address);
 				
-				Paragraph memberName = new Paragraph("Name : " + this.getPersonName(receiptDB.getMember().getPerson()));
-				memberName.setSpacingAfter(5);
-				document.add(memberName);
+				
+				PdfPTable nameAndDateTale = new PdfPTable(2);
+				nameAndDateTale.setWidthPercentage(100);
+				nameAndDateTale.setSpacingAfter(5);
+				
+//				Paragraph memberName = new Paragraph("Name : " + this.getPersonName(receiptDB.getMember().getPerson()));
+//				memberName.setSpacingAfter(5);
+//				document.add(memberName);
+				
+				PdfPCell memberNameCell = new PdfPCell(new Phrase("Name : " + this.getPersonName(receiptDB.getMember().getPerson())));
+				memberNameCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+				memberNameCell.setPadding(0);
+				memberNameCell.setBorder(PdfPCell.NO_BORDER);
+				nameAndDateTale.addCell(memberNameCell);
+				
+				PdfPCell currentDateCell = new PdfPCell(new Phrase("Date : " + currentDate));
+				currentDateCell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+				currentDateCell.setPadding(0);
+				currentDateCell.setBorder(PdfPCell.NO_BORDER);
+				nameAndDateTale.addCell(currentDateCell);
+				
+				document.add(nameAndDateTale);
 				
 				Paragraph billNumber = new Paragraph("Bill Number : " + receiptDB.getBillNumber());
 				billNumber.setSpacingAfter(5);
 				document.add(billNumber);
 				
-				Paragraph period = new Paragraph("For the period from " + receiptDB.getCycle().getStartDate() +" to " + receiptDB.getCycle().getEndDate());
+				Paragraph period = new Paragraph("For the period from " + formatter.format(receiptDB.getCycle().getStartDate()) +" to " + formatter.format(receiptDB.getCycle().getEndDate()));
 				period.setSpacingAfter(10);
 				document.add(period);
 
@@ -497,8 +523,11 @@ public class MaintenanceService {
 				int i = 1;
 				double totalChargeValue = 0.0;
 				for (MaintenanceChargeJPA charge : receiptDB.getChargeList()) {
-
-					Paragraph srNoPara = new Paragraph(i++);
+					
+					if(charge.getChargeValue() == null)
+						charge.setChargeValue(new Double(0));
+					
+					Paragraph srNoPara = new Paragraph(String.valueOf(i++));
 					Paragraph generalHeadPara = new Paragraph(charge.getMaintenanceHead().getHeadName());
 					Paragraph chargeValuePara = new Paragraph(String.valueOf(charge.getChargeValue()));
 
@@ -509,9 +538,21 @@ public class MaintenanceService {
 					table.addCell(srNoCell);
 					table.addCell(particularsCell);
 					table.addCell(amonutCell);
-					totalChargeValue = totalChargeValue + (charge.getChargeValue() == null ? 0.0 : charge.getChargeValue());
+					totalChargeValue = totalChargeValue + charge.getChargeValue();
 				}
-
+				
+				if(receiptDB.getOutAmount() == null)
+					receiptDB.setOutAmount(new Double(0));
+				
+				PdfPCell srNoCell = new PdfPCell(new Paragraph(String.valueOf(i++)));
+				PdfPCell particularsCell = new PdfPCell(new Paragraph("Outstanding Amount"));
+				PdfPCell amonutCell = new PdfPCell(new Paragraph(String.valueOf(receiptDB.getOutAmount())));
+				
+				table.addCell(srNoCell);
+				table.addCell(particularsCell);
+				table.addCell(amonutCell);
+				totalChargeValue = totalChargeValue + receiptDB.getOutAmount();
+				
 				PdfPCell emptyCell = new PdfPCell(new Paragraph(""));
 				PdfPCell totalValueLabel = new PdfPCell(new Paragraph("Toatl Payable Value", boldFont));
 				PdfPCell totalValue = new PdfPCell(new Paragraph(String.valueOf(totalChargeValue)));
@@ -522,7 +563,7 @@ public class MaintenanceService {
 
 				document.add(table);
 
-				Paragraph paymentDueDate = new Paragraph("Payment Due Date : " + receiptDB.getCycle().getPaymentDueDate());
+				Paragraph paymentDueDate = new Paragraph("Payment Due Date : " + formatter.format(receiptDB.getCycle().getPaymentDueDate()));
 				paymentDueDate.setSpacingAfter(5);
 				document.add(paymentDueDate);
 
@@ -597,6 +638,7 @@ public class MaintenanceService {
 				cycle.setPaymentDueDate(receiptDB.getCycle().getPaymentDueDate());
 				cycle.setStartDate(receiptDB.getCycle().getStartDate());
 				cycle.setEndDate(receiptDB.getCycle().getEndDate());
+				cycle.setIsActive(receiptDB.getIsActive());
 			}
 			
 			MaintenanceReceiptDomain receipt = new MaintenanceReceiptDomain();

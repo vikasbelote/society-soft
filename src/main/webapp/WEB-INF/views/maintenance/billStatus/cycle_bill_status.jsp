@@ -25,12 +25,14 @@
 			</div>
 		</div>
 		<div class="col-sm-12" style="padding-top: 12px; padding-bottom: 12px; background-color: #EFF3F8;">
-			<div class="col-sm-1">
-				<button id="saveBillStatusId" type="button" class="btn btn-success btn-sm pull-right">
+			<c:if test="${cycle.isActive}">
+				<div class="col-sm-1">
+					<button id="saveBillStatusId" type="button" class="btn btn-success btn-sm pull-right">
 							<span class="ace-icon fa fa-floppy-o icon-on-right bigger-110"></span>
 							Save
-				</button>
-			</div>
+					</button>
+				</div>
+			</c:if>
 			<div class="col-sm-3 no-padding-left pull-left">
 				<div class="input-group">
 					<span class="input-group-addon"> <i
@@ -45,14 +47,16 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="checkbox">
-					<label>
-						<input name="form-field-checkbox" type="checkbox" class="ace" id="markAllMemberId" />
-						<span class="lbl"> Mark all Member</span>
-					</label>
+			<c:if test="${cycle.isActive}">
+				<div class="col-sm-3">
+					<div class="checkbox">
+						<label>
+							<input name="form-field-checkbox" type="checkbox" class="ace" id="markAllMemberId" />
+							<span class="lbl"> Mark all Member</span>
+						</label>
+					</div>
 				</div>
-			</div>
+			</c:if>
 		</div>
 		<c:choose>
 			<c:when test="${not empty cycle.receipts}">
@@ -66,6 +70,8 @@
 							<th><strong>Bill Number</strong></th>
 							<th><strong>Current Amount</strong></th>
 							<th><strong>Outstanding Amount</strong></th>
+							<th><strong>Total Amount</strong></th>
+							<th><strong>Paid Amount</strong></th>
 							<th>Bill Status</th>
 						</tr>
 					</thead>
@@ -116,6 +122,8 @@
 								<td>${receipt.billNumber}</td>
 								<td>${receipt.totalValue}</td>
 								<td>${receipt.outstandingAmount}</td>
+								<td>${receipt.outstandingAmount + receipt.totalValue}</td>
+								<td class="numeric" contenteditable="true">${receipt.paidAmount}</td>
 								<td>
 									<c:choose>
 										<c:when test="${receipt.isActive}">

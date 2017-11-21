@@ -26,9 +26,20 @@
 					<label class="col-sm-2 control-label no-padding-right"
 						for="form-field-1">Payment Due Date</label>
 					<div class="col-sm-2">
-						<input id="paymentDueDateId"
-							class="col-xs-10 col-sm-12 date-picker track-change" type="text"
-							value="${cycle.paymentDueDate}" data-date-format="yyyy-mm-dd" />
+						
+							
+						<c:choose>
+							<c:when test="${cycle.isActive}">
+								<input id="paymentDueDateId"
+									class="col-xs-10 col-sm-12 date-picker track-change" type="text"
+									value="${cycle.paymentDueDate}" data-date-format="yyyy-mm-dd" />
+							</c:when>
+							<c:otherwise>
+								<input id="paymentDueDateId" readonly="readonly"
+									class="col-xs-10 col-sm-12 date-picker track-change" type="text"
+									value="${cycle.paymentDueDate}" data-date-format="yyyy-mm-dd" />
+							</c:otherwise>
+						</c:choose>
 					</div>
 
 				</div>
@@ -41,22 +52,24 @@
 								class="widget-header widget-header-small">Please enter
 								note text here</div>
 							<div class="widget-body">
-								<div>
-									<textarea class="form-control" id="additinalNoteId"></textarea>
-								</div>
-								<div class="col-sm-offset-2">
-									<button type="button" id="addNoteId"
-										class="btn btn-sm btn-primary btn-white btn-round center track-change">
-										<span class="bigger-110">Add Note</span> <i
-											class="icon-on-right ace-icon fa fa-arrow-right"></i>
-									</button>
-									<button type="button" id="clearNoteId"
-										class="btn btn-sm btn-primary btn-white btn-round center track-change">
-										<span class="bigger-110">Clear Note</span> <i
-											class="icon-on-right ace-icon fa fa-arrow-right"></i>
-									</button>
-								</div>
-								<div class="space-6"></div>
+								<c:if test="${cycle.isActive}">
+									<div>
+										<textarea class="form-control" id="additinalNoteId"></textarea>
+									</div>
+									<div class="col-sm-offset-2">
+										<button type="button" id="addNoteId"
+											class="btn btn-sm btn-primary btn-white btn-round center track-change">
+											<span class="bigger-110">Add Note</span> <i
+												class="icon-on-right ace-icon fa fa-arrow-right"></i>
+										</button>
+										<button type="button" id="clearNoteId"
+											class="btn btn-sm btn-primary btn-white btn-round center track-change">
+											<span class="bigger-110">Clear Note</span> <i
+												class="icon-on-right ace-icon fa fa-arrow-right"></i>
+										</button>
+									</div>
+									<div class="space-6"></div>
+								</c:if>
 								<div class="widget-main no-padding">
 									<div class="h-25 d-inline-block">
 										<ol id="additonalNoteList">
@@ -75,10 +88,13 @@
 				<div class="space-8"></div>
 				<div>
 					<div class="col-sm-offset-4">
-						<a id="saveMaintenanceId" href="#"
+						<c:if test="${cycle.isActive}">
+							<a id="saveMaintenanceId" href="#"
 							class="btn btn-sm btn-success disabled"><i
-							class="ace-icon fa fa-floppy-o bigger-110"></i>Submit</a> <a
-							id="backMaintenanceReportId" href="viewMaintenanceReport"
+							class="ace-icon fa fa-floppy-o bigger-110"></i>Submit</a>
+						</c:if>
+						 
+						<a id="backMaintenanceReportId" href="viewMaintenanceReport"
 							class="btn btn-sm btn-grey"><i
 							class="ace-icon fa fa-undo bigger-110"></i>Back</a>
 					</div>
@@ -88,10 +104,13 @@
 		</c:if>
 		<c:choose>
 			<c:when test="${not empty cycle}">
-				<input type="hidden" id="paymentDueDate"
-					value="${cycle.paymentDueDate}" />
-				<input type="hidden" id="paymentCycle"
-					value="${cycle.startDate} to ${cycle.endDate}" />
+				
+				<c:if test="${cycle.isActive}">
+					<input type="hidden" id="paymentDueDate"
+						value="${cycle.paymentDueDate}" />
+					<input type="hidden" id="paymentCycle"
+						value="${cycle.startDate} to ${cycle.endDate}" />
+				</c:if>
 
 				<div class="col-xs-12 col-sm-12" style="padding-top: 12px; padding-bottom: 12px; background-color: #EFF3F8;">
 					<div class="row">
@@ -116,11 +135,12 @@
 						<tr>
 							<th><strong>Member</strong></th>
 							<th><strong>Bill No</strong></th>
+							<th><strong>Outstanding Amount</strong></th>
 							<c:forEach items="${cycle.maintenanceHeadList}"
 								var="maintenanceHead">
 								<th data-generalHeadId="${maintenanceHead.maintenanceHeadId}">${maintenanceHead.maintenanceHeadName}</th>
 							</c:forEach>
-							<th><strong>Outstanding Amount</strong></th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -128,12 +148,20 @@
 							<tr class="selected" data-receiptId="${receipt.receiptId}">
 								<td data-memberId="${receipt.memberId}">${receipt.memberName}</td>
 								<td>${receipt.billNumber}</td>
-								<c:forEach items="${receipt.chargeList}" var="charge">
-									<td class="numeric" oninput="onRowChanged(event)"
-										contenteditable="true" data-chargeId="${charge.chargeId}"
-										data-maintenanceHeadId="${charge.maintenanceHeadId}">${charge.chargeValue}</td>
-								</c:forEach>
 								<td>${receipt.outstandingAmount}</td>
+								<c:forEach items="${receipt.chargeList}" var="charge">
+									<c:choose>
+										<c:when test="${cycle.isActive}">
+											<td class="numeric" oninput="onRowChanged(event)"
+												contenteditable="true" data-chargeId="${charge.chargeId}"
+												data-maintenanceHeadId="${charge.maintenanceHeadId}">${charge.chargeValue}</td>
+										</c:when>
+										<c:otherwise>
+											<td class="numeric" oninput="onRowChanged(event)" data-chargeId="${charge.chargeId}"
+												data-maintenanceHeadId="${charge.maintenanceHeadId}">${charge.chargeValue}</td>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
 							</tr>
 						</c:forEach>
 					</tbody>

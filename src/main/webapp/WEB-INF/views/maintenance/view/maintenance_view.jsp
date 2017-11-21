@@ -50,7 +50,9 @@
 							<th><strong>Payment Due Date</strong></th>
 							<th><strong>Start Date</strong></th>
 							<th><strong>End Date</strong></th>
+							<th><strong>Status</strong></th>
 							<th></th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -60,9 +62,32 @@
 								<td>${cycle.startDate}</td>
 								<td>${cycle.endDate}</td>
 								<td>
-									<a class="btn btn-xs btn-success" href="viewCycleDetails?id=${cycle.cycleId}" data-rel="tooltip" title="Edit Cycle Details"> 
-										<i class="ace-icon fa fa-pencil bigger-120"></i>
-									</a>
+									<c:choose>
+										<c:when test="${cycle.isActive}">
+											<span class="label label-sm label-success arrowed">Active</span>
+										</c:when>
+										<c:otherwise>
+											<span class="label label-sm label-danger arrowed-in">Not Active</span>
+										</c:otherwise>
+									</c:choose>
+								</td>
+								<td>
+									
+									<c:choose>
+										<c:when test="${cycle.isActive}">
+											<a class="btn btn-xs btn-success" href="viewCycleDetails?id=${cycle.cycleId}" data-rel="tooltip" title="Edit Cycle Details"> 
+												<i class="ace-icon fa fa-pencil bigger-120"></i>
+											</a>
+										</c:when>
+										<c:otherwise>
+											<a class="btn btn-xs btn-success" href="viewCycleDetails?id=${cycle.cycleId}" data-rel="tooltip" title="View Cycle Details"> 
+												<i class="ace-icon fa fa-pencil bigger-120"></i>
+											</a>
+										</c:otherwise>
+									</c:choose>
+									
+									
+									
 									<a id="emailMaintenanceId" data-cycleId="${cycle.cycleId}" class="btn btn-xs btn-primary" href="#" data-rel="tooltip" title="Email Receipt to Member">
 										<i class="ace-icon fa fa-envelope bigger-120"></i>
 									</a>

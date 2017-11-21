@@ -49,6 +49,7 @@ public class MaintenanceBillStatusService {
 		cycleDomain.setPaymentDueDate(cycle.getPaymentDueDate());
 		cycleDomain.setStartDate(cycle.getStartDate());
 		cycleDomain.setEndDate(cycle.getEndDate());
+		cycleDomain.setIsActive(cycle.getIsActive());
 		
 		List<MaintenanceReceiptDomain> receiptDomainList = new ArrayList<MaintenanceReceiptDomain>();
 		for(MaintenanceReceiptJPA receipt : cycle.getReceiptList()) {
@@ -62,6 +63,7 @@ public class MaintenanceBillStatusService {
 			receiptDomain.setTotalValue(receipt.getTotalAmount());
 			receiptDomain.setOutstandingAmount(receipt.getOutAmount());
 			receiptDomain.setIsActive(receipt.getIsActive());
+			receiptDomain.setPaidAmount(receipt.getPaidAmount());
 			receiptDomainList.add(receiptDomain);
 		}
 		cycleDomain.setReceipts(receiptDomainList);
@@ -77,6 +79,7 @@ public class MaintenanceBillStatusService {
 			MaintenanceReceiptJPA receipt = new MaintenanceReceiptJPA();
 			receipt.setReceipId(receiptDomain.getReceiptId());
 			receipt.setBillStatus(receiptDomain.getBillStatus());
+			receipt.setPaidAmount(receiptDomain.getPaidAmount());
 			receiptList.add(receipt);
 		}
 		return billStatusRepository.updateBillStatus(receiptList);

@@ -36,6 +36,9 @@ public class MaintenanceCycleJPA {
 	@Column(name = "end_date")
 	private Date endDate;
 	
+	@Column(name = "is_active")
+	private Boolean isActive;
+	
 	@OneToMany(mappedBy = "cycle" , fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private List<MaintenanceReceiptJPA> receiptList;
 	
@@ -96,6 +99,14 @@ public class MaintenanceCycleJPA {
 
 	public void setNoteList(List<MaintenanceCycleNoteJPA> noteList) {
 		this.noteList = noteList;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	

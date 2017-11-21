@@ -75,9 +75,10 @@ public class MaintenanceBillStatusRepository extends BaseRepository {
 			session.beginTransaction();
 			 
 			for(MaintenanceReceiptJPA receipt : receiptList) {
-				Query query = session.createQuery("update MaintenanceReceiptJPA set billStatus=:billStatus where receipId=:receipId");
+				Query query = session.createQuery("update MaintenanceReceiptJPA set billStatus=:billStatus,paidAmount=:paidAmount  where receipId=:receipId");
 				query.setParameter("billStatus", receipt.getBillStatus());
 				query.setParameter("receipId", receipt.getReceipId());
+				query.setParameter("paidAmount", receipt.getPaidAmount());
 				query.executeUpdate();
 			}
 			

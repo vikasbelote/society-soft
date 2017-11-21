@@ -187,6 +187,8 @@ public class MaintenanceRepository extends BaseRepository {
 				}
 			}
 			
+			
+			
 			session.getTransaction().commit();
 			return true;
 		}
@@ -309,13 +311,14 @@ public class MaintenanceRepository extends BaseRepository {
 	}
 	
 	@Transactional
-	public boolean updateActiveFlagForBill(MaintenanceDomain maintenanceDomain) {
-		
+	public boolean updateActiveFlag(MaintenanceDomain maintenanceDomain) {
+				
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaUpdate<MaintenanceReceiptJPA> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(MaintenanceReceiptJPA.class);
 		Root<MaintenanceReceiptJPA> root = criteriaUpdate.from(MaintenanceReceiptJPA.class);
 		criteriaUpdate.set(root.<Boolean>get("isActive"), false);
 		
+		//sub query section start
 		Subquery<MaintenanceCycleJPA> subquery = criteriaUpdate.subquery(MaintenanceCycleJPA.class);
 		Root<MaintenanceCycleJPA> subqueryRoot = subquery.from(MaintenanceCycleJPA.class);
 		subquery.select(subqueryRoot.get("cycleId"));
@@ -325,14 +328,26 @@ public class MaintenanceRepository extends BaseRepository {
 		Predicate equalSocietyIdPredicate = criteriaBuilder.equal(subqueryRoot.<Integer>get("society").get("societyId"), maintenanceDomain.getSocietyId());
 		
 		subquery.where(startDatePredicate, endDatePredicate, equalSocietyIdPredicate);
+		//sub query section end
 		
 		Predicate cycleIdPredicate = root.get("cycle").in(subquery);
-		
 		criteriaUpdate.where(cycleIdPredicate);
+		
+		//Update active flag for maintenance cycle
+		CriteriaUpdate<MaintenanceCycleJPA> criteriaUpdateCycle = criteriaBuilder.createCriteriaUpdate(MaintenanceCycleJPA.class);
+		Root<MaintenanceCycleJPA> rootCycle = criteriaUpdateCycle.from(MaintenanceCycleJPA.class);
+		criteriaUpdateCycle.set(rootCycle.<Boolean>get("isActive"), false);
+		
+		Predicate startDatePredicateCycle = criteriaBuilder.between(rootCycle.<Date>get("startDate"), maintenanceDomain.getPaymentCycleStartDate(), maintenanceDomain.getCycleStartDate());
+		Predicate endDatePredicateCycle = criteriaBuilder.between(rootCycle.<Date>get("endDate"), maintenanceDomain.getPaymentCycleStartDate(), maintenanceDomain.getCycleStartDate());
+		Predicate equalSocietyIdPredicateCycle = criteriaBuilder.equal(rootCycle.<Integer>get("society").get("societyId"), maintenanceDomain.getSocietyId());
+		
+		criteriaUpdateCycle.where(startDatePredicateCycle, endDatePredicateCycle, equalSocietyIdPredicateCycle);
 	
 		boolean isSuccess = false;
 		try {
 			entityManager.createQuery(criteriaUpdate).executeUpdate();
+			entityManager.createQuery(criteriaUpdateCycle).executeUpdate();
 			isSuccess = true;;
 		}
 		catch(Exception e) {

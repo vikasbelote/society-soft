@@ -27,6 +27,8 @@ public class MaintenanceReceiptDomain {
 	private Double outstandingAmount;
 	
 	private Boolean isActive;
+	
+	private Double paidAmount;
 
 	public Integer getMemberId() {
 		return memberId;
@@ -122,5 +124,13 @@ public class MaintenanceReceiptDomain {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Double getPaidAmount() {
+		return paidAmount;
+	}
+
+	public void setPaidAmount(Double paidAmount) {
+		this.paidAmount = paidAmount;
 	}
 }
