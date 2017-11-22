@@ -159,4 +159,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/maintenance/billStatus/cycle_bill_status.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/maintenance/billStatus/bill_status_inline.jsp" />
 	</definition>
+	
+	<!-- Member -->	
+	<definition name="member" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/member/member.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/member/member_inline.jsp" />
+	</definition>
 </tiles-definitions>

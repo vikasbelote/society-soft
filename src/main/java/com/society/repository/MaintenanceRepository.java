@@ -274,14 +274,18 @@ public class MaintenanceRepository extends BaseRepository {
 		Root<MaintenanceCycleJPA> root = criteriaQuery.from(MaintenanceCycleJPA.class);	
 		Join<MaintenanceCycleJPA, MaintenanceReceiptJPA> receipt = root.join("receiptList", JoinType.INNER);
 		
-		Expression<Double> sumExpression1 = criteriaBuilder.sum(receipt.<Double>get("totalAmount"), receipt.<Double>get("outAmount"));
-		Expression<Double> sumExpression2 = receipt.<Double>get("totalAmount");
+		Predicate isNullOutAmount = criteriaBuilder.isNull(receipt.<Double>get("outAmount"));
+		Predicate isNullPaidAmount = criteriaBuilder.isNull(receipt.<Double>get("paidAmount"));
+		Predicate isNullOutAndPaidAmount = criteriaBuilder.and(isNullOutAmount, isNullPaidAmount);
 		
+		Expression<Double> diffTotalAndPaidAmount = criteriaBuilder.diff(receipt.<Double>get("totalAmount"), receipt.<Double>get("paidAmount"));
+		Expression<Double> addTotalAndOutAmount = criteriaBuilder.sum(receipt.<Double>get("totalAmount"), receipt.<Double>get("outAmount"));
+		Expression<Double> addTotalAndOutAmountAndDiffPaid = criteriaBuilder.diff(addTotalAndOutAmount, receipt.<Double>get("paidAmount"));
 		
-		Expression<Double> sumExpression = criteriaBuilder.<Double>selectCase().when((criteriaBuilder.isNull(receipt.<Double>get("outAmount"))), sumExpression2)
-																			   .otherwise(sumExpression1);
-		
-		//Expression<Double> sumExpression = criteriaBuilder.sum(criteriaBuilder.sum(receipt.<Double>get("totalAmount"), nullOutAmount));
+		Expression<Double> sumExpression = criteriaBuilder.<Double>selectCase().when(isNullOutAndPaidAmount, receipt.<Double>get("totalAmount"))
+																			   .when(isNullOutAmount, diffTotalAndPaidAmount)
+																			   .when(isNullPaidAmount, addTotalAndOutAmount)
+																			   .otherwise(addTotalAndOutAmountAndDiffPaid);
 		
 		criteriaQuery.multiselect(receipt.<Integer>get("member").get("memberId"), sumExpression);
 		

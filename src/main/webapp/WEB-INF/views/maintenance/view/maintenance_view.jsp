@@ -35,7 +35,7 @@
 							<i class="ace-icon fa fa-times"></i>
 						</button>
 						<strong> <i class="ace-icon fa fa-times"></i> Oh snap!
-						</strong> This general head details is already exist for that section. <br />
+						</strong> There is problem with deleting cycle details. <br />
 					</div>
 				</c:otherwise>
 			</c:choose>

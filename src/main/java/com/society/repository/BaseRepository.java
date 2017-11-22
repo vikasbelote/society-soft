@@ -15,6 +15,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.society.model.jpa.MaintenanceCycleJPA;
+
 @Repository
 public class BaseRepository {
 
@@ -61,5 +63,32 @@ public class BaseRepository {
 	        return true;
 	    }
 	    return false;
+	}
+	
+	public boolean deleteObjectById(Class<?> type, Integer deletedId) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			Serializable id = new Integer(deletedId);
+			Object persistentInstance = session.load(type, id);
+			if (persistentInstance != null) 
+			    session.delete(persistentInstance);			
+			else
+				return false;
+			
+			session.getTransaction().commit();
+			return true;
+		}
+		catch(Exception e) {
+			if(session != null)
+				session.getTransaction().rollback();
+			return false;
+		}
+		finally {
+			if(session != null)
+				session.close();
+		}
 	}
 }

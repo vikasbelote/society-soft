@@ -27,7 +27,7 @@
 		<div class="col-sm-12" style="padding-top: 12px; padding-bottom: 12px; background-color: #EFF3F8;">
 			<c:if test="${cycle.isActive}">
 				<div class="col-sm-1">
-					<button id="saveBillStatusId" type="button" class="btn btn-success btn-sm pull-right">
+					<button id="saveBillStatusId" type="button" class="btn btn-success btn-sm pull-right disabled">
 							<span class="ace-icon fa fa-floppy-o icon-on-right bigger-110"></span>
 							Save
 					</button>
@@ -123,7 +123,7 @@
 								<td>${receipt.totalValue}</td>
 								<td>${receipt.outstandingAmount}</td>
 								<td>${receipt.outstandingAmount + receipt.totalValue}</td>
-								<td class="numeric" contenteditable="true">${receipt.paidAmount}</td>
+								<td class="numeric" contenteditable="true" oninput="onRowChanged(event)">${receipt.paidAmount}</td>
 								<td>
 									<c:choose>
 										<c:when test="${receipt.isActive}">
