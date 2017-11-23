@@ -270,7 +270,7 @@
 		<c:if test="${sessionScope.MENURIGHTS.isEnableFacilityBookingMenu()}">
 			<li class=""><a href="reminder"> <i
 					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
-						Helpdesk </span>
+						Facility Booking </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
 		<!-- Directory -->
