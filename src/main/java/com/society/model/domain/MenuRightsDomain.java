@@ -1,5 +1,6 @@
 package com.society.model.domain;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class MenuRightsDomain {
@@ -60,19 +61,60 @@ public class MenuRightsDomain {
 	private boolean isEnableMasterAdditionalAreaMenu = false;
 	//21 Menu Id
 	private boolean isEnableMaintenanceBillStatusMenu = false;
+	//22 Menu Id
+	private boolean isEnableAdminFourmMenu = false;
+	//23 Menu Id
+	private boolean isEnableAdminFilesMenu = false;
+	//24 Menu Id
+	private boolean isEnableHelpDeskTrackerMenu = false;
+	//25 Menu Id
+	private boolean isEnableAssetTrackerMenu = false;
+	//26 Menu Id
+	private boolean isEnableMaintenanceContactMenu = false;
+	//27 Menu Id
+	private boolean isEnableRoomRentTrackerMenu = false;
+	//28 Menu Id
+	private boolean isEnableStaffManagerMenu = false;
+	//29 Menu Id
+	private boolean isEnableParkingMangerMenu = false;
+	//30 Menu Id
+	private boolean isEnabledFlatMenu = false;
+	//31 Menu Id
+	private boolean isEnableConversationMenu = false;
+	//32 Menu Id
+	private boolean isEnableNoticeMenu = false;
+	//33 Menu Id
+	private boolean isEnableIstanvtPoll = false;
+	//34 Menu Id
+	private boolean isEnableBazzarMenu = false;
+	//35 Menu Id
+	private boolean isEnableHelpdekMenu = false;
+	//36 Menu Id
+	private boolean isEnableEventMenu = false;
+	//37 Menu Id
+	private boolean isEnableFacilityBookingMenu = false;
+	//38 Menu Id
+	private boolean isEnableDirectoryMenu = false;
 
+	private boolean isEnableCommunicationMenu = false;
+	
+	
 	public void initMenuRights(LoginDomain loginDomain) {
 
 		if (loginDomain.getRoleName().equals("Owner"))
 			isEnabledRegistrationMenu = true;
 
 		if (loginDomain.getRoleName().equals("Admin")) {
-			isEnabledCreateUserMenu = isEnabledReminderMenu = isEnabledReportMenu = isEnabledBlanceSheetMenu = isEnabledIncomeAndExpenseMenu = 
-					isEnabledMaintainceReport = isEnabledUserListMenu = isEnabledGeneralHeadMenu = isEnabledReocrdTransactionMenu = 
-					isEnableSocietyConfigurationMenu = isEnableCreateMaintenacneReport = isEnableViewMaintenacneReport = isEnableEmailNotificationReportMenu = 
-					isEnableMessageNotificationReportMenu = isEnableNotificationReport = isEnableMaintenanceHeadMenu = isEnableMaintenanceInterestPolicyMenu =
-					isEnableMaintenancePenalitiesPolicyMenu = isEnableMaintenanceRebatePolicyMenu = isEnableMaintenanceAdditionalAreaMenu = isEnableSocietyMemberMenu = 
-					isEnableMasterAdditionalAreaMenu = isEnableMasterMenu = isEnableMaintenanceBillStatusMenu = true;
+			
+			Class<MenuRightsDomain>  menuRightsDomain = MenuRightsDomain.class;
+			Field[] fields = menuRightsDomain.getDeclaredFields();
+			for(Field field : fields) {
+				try {
+					field.set(this, true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+			}
 		}
 
 		if (loginDomain.getRoleName().equals("User")) {
@@ -399,6 +441,150 @@ public class MenuRightsDomain {
 
 	public void setEnableMaintenanceBillStatusMenu(boolean isEnableMaintenanceBillStatusMenu) {
 		this.isEnableMaintenanceBillStatusMenu = isEnableMaintenanceBillStatusMenu;
+	}
+
+	public boolean isEnableAdminFourmMenu() {
+		return isEnableAdminFourmMenu;
+	}
+
+	public void setEnableAdminFourmMenu(boolean isEnableAdminFourmMenu) {
+		this.isEnableAdminFourmMenu = isEnableAdminFourmMenu;
+	}
+
+	public boolean isEnableAdminFilesMenu() {
+		return isEnableAdminFilesMenu;
+	}
+
+	public void setEnableAdminFilesMenu(boolean isEnableAdminFilesMenu) {
+		this.isEnableAdminFilesMenu = isEnableAdminFilesMenu;
+	}
+
+	public boolean isEnableHelpDeskTrackerMenu() {
+		return isEnableHelpDeskTrackerMenu;
+	}
+
+	public void setEnableHelpDeskTrackerMenu(boolean isEnableHelpDeskTrackerMenu) {
+		this.isEnableHelpDeskTrackerMenu = isEnableHelpDeskTrackerMenu;
+	}
+
+	public boolean isEnableAssetTrackerMenu() {
+		return isEnableAssetTrackerMenu;
+	}
+
+	public void setEnableAssetTrackerMenu(boolean isEnableAssetTrackerMenu) {
+		this.isEnableAssetTrackerMenu = isEnableAssetTrackerMenu;
+	}
+
+	public boolean isEnableMaintenanceContactMenu() {
+		return isEnableMaintenanceContactMenu;
+	}
+
+	public void setEnableMaintenanceContactMenu(boolean isEnableMaintenanceContactMenu) {
+		this.isEnableMaintenanceContactMenu = isEnableMaintenanceContactMenu;
+	}
+
+	public boolean isEnableRoomRentTrackerMenu() {
+		return isEnableRoomRentTrackerMenu;
+	}
+
+	public void setEnableRoomRentTrackerMenu(boolean isEnableRoomRentTrackerMenu) {
+		this.isEnableRoomRentTrackerMenu = isEnableRoomRentTrackerMenu;
+	}
+
+	public boolean isEnableStaffManagerMenu() {
+		return isEnableStaffManagerMenu;
+	}
+
+	public void setEnableStaffManagerMenu(boolean isEnableStaffManagerMenu) {
+		this.isEnableStaffManagerMenu = isEnableStaffManagerMenu;
+	}
+
+	public boolean isEnableParkingMangerMenu() {
+		return isEnableParkingMangerMenu;
+	}
+
+	public void setEnableParkingMangerMenu(boolean isEnableParkingMangerMenu) {
+		this.isEnableParkingMangerMenu = isEnableParkingMangerMenu;
+	}
+
+	public boolean isEnabledFlatMenu() {
+		return isEnabledFlatMenu;
+	}
+
+	public void setEnabledFlatMenu(boolean isEnabledFlatMenu) {
+		this.isEnabledFlatMenu = isEnabledFlatMenu;
+	}
+
+	public boolean isEnableConversationMenu() {
+		return isEnableConversationMenu;
+	}
+
+	public void setEnableConversationMenu(boolean isEnableConversationMenu) {
+		this.isEnableConversationMenu = isEnableConversationMenu;
+	}
+
+	public boolean isEnableNoticeMenu() {
+		return isEnableNoticeMenu;
+	}
+
+	public void setEnableNoticeMenu(boolean isEnableNoticeMenu) {
+		this.isEnableNoticeMenu = isEnableNoticeMenu;
+	}
+
+	public boolean isEnableIstanvtPoll() {
+		return isEnableIstanvtPoll;
+	}
+
+	public void setEnableIstanvtPoll(boolean isEnableIstanvtPoll) {
+		this.isEnableIstanvtPoll = isEnableIstanvtPoll;
+	}
+
+	public boolean isEnableBazzarMenu() {
+		return isEnableBazzarMenu;
+	}
+
+	public void setEnableBazzarMenu(boolean isEnableBazzarMenu) {
+		this.isEnableBazzarMenu = isEnableBazzarMenu;
+	}
+
+	public boolean isEnableHelpdekMenu() {
+		return isEnableHelpdekMenu;
+	}
+
+	public void setEnableHelpdekMenu(boolean isEnableHelpdekMenu) {
+		this.isEnableHelpdekMenu = isEnableHelpdekMenu;
+	}
+
+	public boolean isEnableEventMenu() {
+		return isEnableEventMenu;
+	}
+
+	public void setEnableEventMenu(boolean isEnableEventMenu) {
+		this.isEnableEventMenu = isEnableEventMenu;
+	}
+
+	public boolean isEnableFacilityBookingMenu() {
+		return isEnableFacilityBookingMenu;
+	}
+
+	public void setEnableFacilityBookingMenu(boolean isEnableFacilityBookingMenu) {
+		this.isEnableFacilityBookingMenu = isEnableFacilityBookingMenu;
+	}
+
+	public boolean isEnableDirectoryMenu() {
+		return isEnableDirectoryMenu;
+	}
+
+	public void setEnableDirectoryMenu(boolean isEnableDirectoryMenu) {
+		this.isEnableDirectoryMenu = isEnableDirectoryMenu;
+	}
+
+	public boolean isEnableCommunicationMenu() {
+		return isEnableCommunicationMenu;
+	}
+
+	public void setEnableCommunicationMenu(boolean isEnableCommunicationMenu) {
+		this.isEnableCommunicationMenu = isEnableCommunicationMenu;
 	}
 
 	

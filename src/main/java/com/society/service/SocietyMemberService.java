@@ -86,7 +86,7 @@ public class SocietyMemberService {
 			memberDomain.setFirstName(member.getPerson().getFirstName());
 			memberDomain.setMiddleName(member.getPerson().getMiddleName());
 			memberDomain.setLastName(member.getPerson().getLastName());
-			memberDomain.setMobileNumber( member.getPerson().getContactNumber());
+			memberDomain.setMobileNumber(member.getPerson().getContactNumber());
 			memberDomain.setEmailId(member.getPerson().getEmailId());
 		}
 		memberDomain.setWingNumber(member.getWingNumber());
@@ -106,8 +106,8 @@ public class SocietyMemberService {
 		
 		SocietyMemberJPA member = memberRepository.checkMemberExist(memberDomain);
 		if(member == null)
-			return true;
-		return false;
+			return false;
+		return true;
 	}
 	
 }

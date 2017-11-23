@@ -77,9 +77,9 @@ public class SocietyMemberController {
 	}
 	
 	@RequestMapping(value = "deleteMember", method = RequestMethod.POST)
-	public String deleteMemberDetails(@RequestParam(value="id", required=true)Integer memberId, RedirectAttributes redirectAttributes) {
+	public String deleteMemberDetails(@ModelAttribute("societyMemberDomain") SocietyMemberDomain societyMemberDomain, RedirectAttributes redirectAttributes) {
 		
-		if(memberService.deleteMemberDetails(memberId)) {
+		if(societyMemberDomain.getMemberId() != null && memberService.deleteMemberDetails(societyMemberDomain.getMemberId())) {
 			redirectAttributes.addFlashAttribute("deleted", true);
 		}
 		else {

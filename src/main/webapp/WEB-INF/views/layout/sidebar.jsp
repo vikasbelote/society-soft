@@ -69,13 +69,90 @@
 								class="menu-icon fa fa-user"></i> User List
 						</a> <b class="arrow"></b></li>
 					</c:if>
-					
-					<c:if test="${sessionScope.MENURIGHTS.isEnableSocietyMemberMenu()}">
+
+					<c:if test="${sessionScope.MENURIGHTS.isEnableAdminFourmMenu()}">
 						<li class=""><a href="member"> <i
-								class="menu-icon fa fa-user"></i> Member
+								class="menu-icon fa fa-user"></i> Forum
 						</a> <b class="arrow"></b></li>
 					</c:if>
 
+
+					<c:if test="${sessionScope.MENURIGHTS.isEnableAdminFilesMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Upload Files
+						</a> <b class="arrow"></b></li>
+					</c:if>
+
+					<c:if
+						test="${sessionScope.MENURIGHTS.isEnableHelpDeskTrackerMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> HelpDesk Tracker
+						</a> <b class="arrow"></b></li>
+					</c:if>
+
+					<c:if test="${sessionScope.MENURIGHTS.isEnableAssetTrackerMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Asset & Inventory Tracker
+						</a> <b class="arrow"></b></li>
+					</c:if>
+
+					<c:if
+						test="${sessionScope.MENURIGHTS.isEnableRoomRentTrackerMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Rent Room Tracker
+						</a> <b class="arrow"></b></li>
+					</c:if>
+
+					<c:if test="${sessionScope.MENURIGHTS.isEnableStaffManagerMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Staff Manager
+						</a> <b class="arrow"></b></li>
+					</c:if>
+
+
+					<c:if test="${sessionScope.MENURIGHTS.isEnableParkingMangerMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Parking Manager
+						</a> <b class="arrow"></b></li>
+					</c:if>
+
+				</ul></li>
+		</c:if>
+		<!-- Flat -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnabledFlatMenu()}">
+			<li class=""><a href="reminder"> <i
+					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+						Flat </span>
+			</a> <b class="arrow"></b></li>
+		</c:if>
+		<!-- Communication -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnableCommunicationMenu()}">
+			<li class=""><a href="#" class="dropdown-toggle"> <i
+					class="menu-icon fa fa-desktop"></i> <span class="menu-text">
+						Communication </span> <b class="arrow fa fa-angle-down"></b>
+			</a> <b class="arrow"></b>
+
+				<ul class="submenu">
+					
+					<c:if test="${sessionScope.MENURIGHTS.isEnableConversationMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Conversation
+						</a> <b class="arrow"></b></li>
+					</c:if>
+					
+					<c:if test="${sessionScope.MENURIGHTS.isEnableNoticeMenu()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Notices
+						</a> <b class="arrow"></b></li>
+					</c:if>
+					
+					<c:if test="${sessionScope.MENURIGHTS.isEnableIstanvtPoll()}">
+						<li class=""><a href="member"> <i
+								class="menu-icon fa fa-user"></i> Instant Poll
+						</a> <b class="arrow"></b></li>
+					</c:if>
+				
+				
 				</ul></li>
 		</c:if>
 		<!-- Reminder -->
@@ -85,7 +162,7 @@
 						Reminder </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
-		
+
 		<!-- Maintenance Bill -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnabledMaintainceReport()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i
@@ -141,8 +218,8 @@
 								class="menu-icon fa fa-caret-right"></i> Additional Area
 						</a> <b class="arrow"></b></li>
 					</c:if>
-					
-					
+
+
 				</ul></li>
 		</c:if>
 		<!-- Report -->
@@ -168,6 +245,42 @@
 
 				</ul></li>
 		</c:if>
+		<!-- Bazzar -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnableBazzarMenu()}">
+			<li class=""><a href="reminder"> <i
+					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+						Bazzar </span>
+			</a> <b class="arrow"></b></li>
+		</c:if>
+		<!-- Helpdesk -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnableHelpdekMenu()}">
+			<li class=""><a href="reminder"> <i
+					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+						Helpdesk </span>
+			</a> <b class="arrow"></b></li>
+		</c:if>
+		<!-- Event -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnableEventMenu()}">
+			<li class=""><a href="reminder"> <i
+					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+						Event </span>
+			</a> <b class="arrow"></b></li>
+		</c:if>
+		<!-- Facility Booking -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnableFacilityBookingMenu()}">
+			<li class=""><a href="reminder"> <i
+					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+						Helpdesk </span>
+			</a> <b class="arrow"></b></li>
+		</c:if>
+		<!-- Directory -->
+		<c:if test="${sessionScope.MENURIGHTS.isEnableDirectoryMenu()}">
+			<li class=""><a href="reminder"> <i
+					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+						Directory </span>
+			</a> <b class="arrow"></b></li>
+		</c:if>
+		
 		<!-- Notification -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableNotificationReport()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i
@@ -224,7 +337,7 @@
 		<!-- Master -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableMasterMenu()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i
-					class="menu-icon fa fa-database" style="color:green"></i> Master
+					class="menu-icon fa fa-database" style="color: green"></i> Master
 			</a> <b class="arrow"></b>
 
 				<ul class="submenu">
