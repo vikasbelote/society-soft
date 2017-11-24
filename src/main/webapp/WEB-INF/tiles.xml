@@ -165,4 +165,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/member/member.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/member/member_inline.jsp" />
 	</definition>
+	
+	<!-- Upload File -->	
+	<definition name="uploadFile" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/society/upload_file/upload_file.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/society/upload_file/upload_file_inline.jsp" />
+	</definition>
 </tiles-definitions>

@@ -46,7 +46,7 @@
 		<!-- Society -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnabledSocietyMenu()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i
-					class="menu-icon fa fa-desktop"></i> <span class="menu-text">
+					class="menu-icon fa fa-building"></i> <span class="menu-text">
 						Society </span> <b class="arrow fa fa-angle-down"></b>
 			</a> <b class="arrow"></b>
 
@@ -78,7 +78,7 @@
 
 
 					<c:if test="${sessionScope.MENURIGHTS.isEnableAdminFilesMenu()}">
-						<li class=""><a href="member"> <i
+						<li class=""><a href="uploadFile"> <i
 								class="menu-icon fa fa-user"></i> Upload Files
 						</a> <b class="arrow"></b></li>
 					</c:if>
@@ -121,14 +121,14 @@
 		<!-- Flat -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnabledFlatMenu()}">
 			<li class=""><a href="reminder"> <i
-					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+					class="menu-icon fa fa-home" style="color: #438eb9;"></i> <span class="menu-text"> 
 						Flat </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
 		<!-- Communication -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableCommunicationMenu()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i
-					class="menu-icon fa fa-desktop"></i> <span class="menu-text">
+					class="menu-icon fa fa-comment" style="color: #87b87f;"></i> <span class="menu-text">
 						Communication </span> <b class="arrow fa fa-angle-down"></b>
 			</a> <b class="arrow"></b>
 
@@ -248,21 +248,21 @@
 		<!-- Bazzar -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableBazzarMenu()}">
 			<li class=""><a href="reminder"> <i
-					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+					class="menu-icon fa fa-shopping-bag"></i> <span class="menu-text">
 						Bazzar </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
 		<!-- Helpdesk -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableHelpdekMenu()}">
 			<li class=""><a href="reminder"> <i
-					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+					class="menu-icon fa fa-life-ring"></i> <span class="menu-text">
 						Helpdesk </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
 		<!-- Event -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableEventMenu()}">
 			<li class=""><a href="reminder"> <i
-					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+					class="menu-icon fa fa-industry"></i> <span class="menu-text">
 						Event </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
@@ -276,7 +276,7 @@
 		<!-- Directory -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableDirectoryMenu()}">
 			<li class=""><a href="reminder"> <i
-					class="menu-icon fa fa-envelope"></i> <span class="menu-text">
+					class="menu-icon fa fa-folder"></i> <span class="menu-text">
 						Directory </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>

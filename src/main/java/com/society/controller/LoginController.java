@@ -35,6 +35,7 @@ public class LoginController {
 			MenuRightsDomain menuRightsDomain = new MenuRightsDomain();
 			menuRightsDomain.initMenuRights(loginDomain);
 			
+			session.setAttribute("USERID", loginDomain.getUserId());
 			session.setAttribute("USERNAME", loginDomain.getUserName());
 			session.setAttribute("ROLENAME", loginDomain.getRoleName());
 			session.setAttribute("DISPLAYNAME", loginDomain.getDisplayName());

@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/society/upload_file.js"></script>

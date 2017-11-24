@@ -30,6 +30,7 @@ public class LoginService {
 		
 		if(userJPADB != null){
 			RoleJPA role = userJPADB.getRole();
+			loginDomain.setUserId(userJPADB.getUserId());
 			loginDomain.setRoleName(role.getRoleName());
 			if(role != null && role.getRoleName().equals("Owner")) 
 				loginDomain.setDisplayName("Application " + role.getRoleName());
@@ -38,6 +39,7 @@ public class LoginService {
 				if(society != null){
 					loginDomain.setSocietyId(society.getSocietyId());
 					loginDomain.setDisplayName(society.getSocietyName());
+					
 				}
 				if(role.getRoleName().equals("User")) {
 					List<SocietyUserAccessRightsJPA> rights = loginRepository.getMenuAccess(userJPADB);
