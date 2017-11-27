@@ -59,4 +59,26 @@ public class AdminUploadRepository extends BaseRepository {
 				session.close();
 		}
 	}
+	
+	public AdminUploadJPA getFile(AdminUploadDomain uploadDomain) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<AdminUploadJPA> criteriaQuery = criteriaBuilder.createQuery(AdminUploadJPA.class);
+		Root<AdminUploadJPA> root = criteriaQuery.from(AdminUploadJPA.class);
+		criteriaQuery.select(root);
+		
+		Predicate fileIdPredicate = criteriaBuilder.equal(root.<Integer>get("fileId"), uploadDomain.getFileId());
+		Predicate societyIdPredicate = criteriaBuilder.equal(root.<Integer>get("society").get("societyId"), uploadDomain.getSocietyId());
+		
+		criteriaQuery.where(fileIdPredicate, societyIdPredicate);
+		
+		AdminUploadJPA uploadFile;
+		try {
+			uploadFile = entityManager.createQuery(criteriaQuery).getSingleResult();
+		}
+		catch(Exception e) {
+			uploadFile = null;
+		}
+		return uploadFile;
+	}	
 }

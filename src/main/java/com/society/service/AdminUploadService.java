@@ -111,5 +111,15 @@ public class AdminUploadService {
 		return uploadRepository.saveUploadFileDetails(upload);
 	}
 	
+	public void getUploadFile(AdminUploadDomain uploadDomain) {
+		
+		AdminUploadJPA upload = uploadRepository.getFile(uploadDomain);
+		if(upload != null)
+			uploadDomain.setFileName(upload.getFileName());
+	}
+	
+	public boolean deleteFile(AdminUploadDomain uploadDomain) {
+		return uploadRepository.deleteObjectById(AdminUploadJPA.class, uploadDomain.getFileId());
+	}
 	
 }

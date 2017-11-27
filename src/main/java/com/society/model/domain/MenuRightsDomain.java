@@ -67,8 +67,12 @@ public class MenuRightsDomain {
 	private boolean isEnableAdminFilesMenu = false;
 	//24 Menu Id
 	private boolean isEnableHelpDeskTrackerMenu = false;
-	//25 Menu Id
+	
 	private boolean isEnableAssetTrackerMenu = false;
+	//25 Menu Id
+	private boolean isEnableAssetTrackerCreateMenu = false;
+	//25 Menu Id
+	private boolean isEnableAssetTrackerViewMenu = false;
 	//26 Menu Id
 	private boolean isEnableMaintenanceContactMenu = false;
 	//27 Menu Id
@@ -206,11 +210,14 @@ public class MenuRightsDomain {
 			}
 		}
 		
+		if(isEnableAssetTrackerViewMenu || isEnableAssetTrackerCreateMenu())
+			isEnableAssetTrackerMenu = true;
+		
 		if(isEnableCreateMaintenacneReport || isEnableViewMaintenacneReport || isEnableMaintenanceHeadMenu || isEnableMaintenanceInterestPolicyMenu || 
 				isEnableMaintenancePenalitiesPolicyMenu || isEnableMaintenanceRebatePolicyMenu || isEnableMaintenanceAdditionalAreaMenu || isEnableMaintenanceBillStatusMenu)
 			isEnabledMaintainceReport = true;
 		
-		if(isEnabledRegistrationMenu || isEnabledCreateUserMenu || isEnabledUserListMenu || isEnableSocietyMemberMenu)
+		if(isEnabledRegistrationMenu || isEnabledCreateUserMenu || isEnabledUserListMenu || isEnableSocietyMemberMenu || isEnableAssetTrackerMenu || isEnableAdminFilesMenu)
 			isEnabledSocietyMenu = true;
 		
 		if(isEnabledBlanceSheetMenu || isEnabledIncomeAndExpenseMenu)
@@ -585,6 +592,22 @@ public class MenuRightsDomain {
 
 	public void setEnableCommunicationMenu(boolean isEnableCommunicationMenu) {
 		this.isEnableCommunicationMenu = isEnableCommunicationMenu;
+	}
+
+	public boolean isEnableAssetTrackerCreateMenu() {
+		return isEnableAssetTrackerCreateMenu;
+	}
+
+	public void setEnableAssetTrackerCreateMenu(boolean isEnableAssetTrackerCreateMenu) {
+		this.isEnableAssetTrackerCreateMenu = isEnableAssetTrackerCreateMenu;
+	}
+
+	public boolean isEnableAssetTrackerViewMenu() {
+		return isEnableAssetTrackerViewMenu;
+	}
+
+	public void setEnableAssetTrackerViewMenu(boolean isEnableAssetTrackerViewMenu) {
+		this.isEnableAssetTrackerViewMenu = isEnableAssetTrackerViewMenu;
 	}
 
 	

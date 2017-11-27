@@ -41,6 +41,32 @@
 			</c:choose>
 		</c:if>
 		
+		<c:if test="${not empty deleteSuccess}">
+			<c:choose>
+				<c:when test="${deleteSuccess}">
+					<div class="alert alert-block alert-success">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+
+						<p>
+							<strong> <i class="ace-icon fa fa-check"></i> Well done!
+							</strong> You successfully delete file.
+						</p>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="alert alert-danger">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<strong> <i class="ace-icon fa fa-times"></i> Oh snap!
+						</strong> There is problem with deleting file. <br />
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</c:if>
+		
 		
 		<div class="row">
 			<div class="col-sm-12">
@@ -122,8 +148,11 @@
 													<td>${uploadFile.uploadedDate}</td>
 													<td>${uploadFile.userName}</td>
 													<td>
-														<a href="viewUploadFile?id=${uploadFile.fileId}&type=${uploadFile.fileType}" class="btn btn-xs btn-purple" target="_blank" data-rel="tooltip" title="View File">
-															<i class="ace-icon fa fa-pencil bigger-120"></i>
+														<a href="viewUploadFile?id=${uploadFile.fileId}" class="btn btn-xs btn-purple" data-rel="tooltip" title="View File">
+															<i class="ace-icon fa fa-cloud-download bigger-120"></i>
+														</a>
+														<a class="btn btn-xs btn-danger" href="deleteUploadFile?id=${uploadFile.fileId}" data-rel="tooltip" title="Delete Upload Details">
+															<i class="ace-icon fa fa-trash-o bigger-120"></i>
 														</a>
 													</td>
 												</tr>
@@ -162,7 +191,7 @@
 													<td>${uploadFile.uploadedDate}</td>
 													<td>${uploadFile.userName}</td>
 													<td>
-														<a href="viewUploadFile?id=${uploadFile.fileId}&type=${uploadFile.fileType}" class="btn btn-xs btn-purple" target="_blank" data-rel="tooltip" title="View File">
+														<a href="viewUploadFile?id=${uploadFile.fileId}&type=${uploadFile.fileType}" class="btn btn-xs btn-purple" data-rel="tooltip" title="View File">
 															<i class="ace-icon fa fa-pencil bigger-120"></i>
 														</a>
 													</td>
@@ -202,7 +231,7 @@
 													<td>${uploadFile.uploadedDate}</td>
 													<td>${uploadFile.userName}</td>
 													<td>
-														<a href="viewUploadFile?id=${uploadFile.fileId}&type=${uploadFile.fileType}" class="btn btn-xs btn-purple" target="_blank" data-rel="tooltip" title="View File">
+														<a href="viewUploadFile?id=${uploadFile.fileId}&type=${uploadFile.fileType}" class="btn btn-xs btn-purple" data-rel="tooltip" title="View File">
 															<i class="ace-icon fa fa-pencil bigger-120"></i>
 														</a>
 													</td>

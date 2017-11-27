@@ -171,4 +171,9 @@
 		<put-attribute name="body" value="/WEB-INF/views/society/upload_file/upload_file.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/society/upload_file/upload_file_inline.jsp" />
 	</definition>
+	<!-- Asset & Inventory Tracker -->	
+	<definition name="createAsset" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/society/asset_inventory_tracker/asset_tracker.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/society/asset_inventory_tracker/asset_tracker_inline.jsp" />
+	</definition>
 </tiles-definitions>

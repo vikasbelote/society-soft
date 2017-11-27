@@ -91,9 +91,24 @@
 					</c:if>
 
 					<c:if test="${sessionScope.MENURIGHTS.isEnableAssetTrackerMenu()}">
-						<li class=""><a href="member"> <i
-								class="menu-icon fa fa-user"></i> Asset & Inventory Tracker
-						</a> <b class="arrow"></b></li>
+						<li class=""><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-user"></i> <span class="menu-text">Asset
+									& Inventory Tracker</span> <b class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<c:if
+									test="${sessionScope.MENURIGHTS.isEnableAssetTrackerCreateMenu()}">
+									<li class=""><a href="createAsset"> <i
+											class="menu-icon fa fa-user"></i> Create
+									</a> <b class="arrow"></b></li>
+								</c:if>
+								<c:if
+									test="${sessionScope.MENURIGHTS.isEnableAssetTrackerViewMenu()}">
+									<li class=""><a href="viewAsset"> <i
+											class="menu-icon fa fa-user"></i> View
+									</a> <b class="arrow"></b></li>
+								</c:if>
+							</ul></li>
 					</c:if>
 
 					<c:if
@@ -121,38 +136,39 @@
 		<!-- Flat -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnabledFlatMenu()}">
 			<li class=""><a href="reminder"> <i
-					class="menu-icon fa fa-home" style="color: #438eb9;"></i> <span class="menu-text"> 
-						Flat </span>
+					class="menu-icon fa fa-home" style="color: #438eb9;"></i> <span
+					class="menu-text"> Flat </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
 		<!-- Communication -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableCommunicationMenu()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i
-					class="menu-icon fa fa-comment" style="color: #87b87f;"></i> <span class="menu-text">
-						Communication </span> <b class="arrow fa fa-angle-down"></b>
+					class="menu-icon fa fa-comment" style="color: #87b87f;"></i> <span
+					class="menu-text"> Communication </span> <b
+					class="arrow fa fa-angle-down"></b>
 			</a> <b class="arrow"></b>
 
 				<ul class="submenu">
-					
+
 					<c:if test="${sessionScope.MENURIGHTS.isEnableConversationMenu()}">
 						<li class=""><a href="member"> <i
 								class="menu-icon fa fa-user"></i> Conversation
 						</a> <b class="arrow"></b></li>
 					</c:if>
-					
+
 					<c:if test="${sessionScope.MENURIGHTS.isEnableNoticeMenu()}">
 						<li class=""><a href="member"> <i
 								class="menu-icon fa fa-user"></i> Notices
 						</a> <b class="arrow"></b></li>
 					</c:if>
-					
+
 					<c:if test="${sessionScope.MENURIGHTS.isEnableIstanvtPoll()}">
 						<li class=""><a href="member"> <i
 								class="menu-icon fa fa-user"></i> Instant Poll
 						</a> <b class="arrow"></b></li>
 					</c:if>
-				
-				
+
+
 				</ul></li>
 		</c:if>
 		<!-- Reminder -->
@@ -280,7 +296,7 @@
 						Directory </span>
 			</a> <b class="arrow"></b></li>
 		</c:if>
-		
+
 		<!-- Notification -->
 		<c:if test="${sessionScope.MENURIGHTS.isEnableNotificationReport()}">
 			<li class=""><a href="#" class="dropdown-toggle"> <i

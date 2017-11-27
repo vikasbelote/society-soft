@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/society/asset_tracker.js"></script>
