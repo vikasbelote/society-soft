@@ -20,11 +20,11 @@
 	$("#saveContactBtn").click(function(){
 		
 		var obj = {};
-		obj.firstName = $("#firstNameId").val();
-		obj.middleName = $("#middleNameId").val();
-		obj.lastName = $("#lastNameId").val();
-		obj.mobileNumber = $("#mobileNumberId").val();
-		obj.emailId = $("#emailId").val();
+		obj.contactFirstName = $("#firstNameId").val();
+		obj.contactMiddleName = $("#middleNameId").val();
+		obj.contactLastName = $("#lastNameId").val();
+		obj.contactMobileNumber = $("#mobileNumberId").val();
+		obj.contactEmailId = $("#emailId").val();
 		
 		var rowStr = getTableRow(obj,'modal-contact','editContact');
 		$("#contactTableId").append(rowStr);
@@ -84,11 +84,11 @@
 		
 		var obj = {};
 		obj.historyDate = $("#historyDateId").val();
-		obj.firstName = $("#serviceFirstNameId").val();
-		obj.middleName = $("#serviceMiddleNameId").val();
-		obj.lastName = $("#serviceLastNameId").val();
-		obj.mobileNumber = $("#serviceMobileNumberId").val();
-		obj.emailId = $("#serviceEmailId").val();
+		obj.serviceFirstName = $("#serviceFirstNameId").val();
+		obj.serviceMiddleName = $("#serviceMiddleNameId").val();
+		obj.serviceLastName = $("#serviceLastNameId").val();
+		obj.serviceMobileNumber = $("#serviceMobileNumberId").val();
+		obj.serviceEmailId = $("#serviceEmailId").val();
 		
 		var rowStr = getTableRow(obj,'modal-history','editHistory');
 		$("#historyTableId").append(rowStr);
@@ -140,10 +140,31 @@
 		updateRow(obj, $editRow);
 	});
 	
+	$("#addFileBtnId").click(function(){
+		$("#scanFileDivId input[type=file]").ace_file_input('reset_input');
+	});
+	
+	$("#saveFileBtn").click(function(){
+		
+		var rowStr = "<tr>";
+		rowStr = rowStr + "<td>";
+		rowStr = rowStr + $("#scanFileDivId").html();
+		rowStr = rowStr + "</td>";
+		rowStr = rowStr + "<td>";
+		rowStr = rowStr + '<a onclick="deleteRow(event)" href="#" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
+		rowStr = rowStr + "</td>";
+		rowStr = rowStr + "</tr>";
+		
+		$("#assetFileTable tbody").append(rowStr);
+		$("#assetFileTable").removeClass("hide");
+	});
+	
 	function getTableRow(obj, modelId, rowClass) {
 		var rowStr = "<tr>";
 		$.each(obj, function(key, value) {
-			rowStr = rowStr + "<td>" + value + "</td>" ;
+			rowStr = rowStr + "<td>";
+			rowStr = rowStr + '<input type="hidden" name="'+key+'" value="'+value+'" />'+value;
+			rowStr = rowStr + "</td>";
 		});
 		rowStr = rowStr + "<td>";
 		rowStr = rowStr + '<a href="#'+modelId+'" data-toggle="modal" class="btn btn-xs btn-info '+rowClass+'"><i class="ace-icon fa fa-pencil bigger-120"></i></a>';

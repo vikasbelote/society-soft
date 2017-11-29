@@ -28,6 +28,9 @@ public class AssetScanFileJPA {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "uploaded_by")
 	private UserJPA user;
+	
+	@Column(name = "upload_status")
+	private Boolean uploadStatus;
 
 	public Integer getFileId() {
 		return fileId;
@@ -59,5 +62,13 @@ public class AssetScanFileJPA {
 
 	public void setUser(UserJPA user) {
 		this.user = user;
+	}
+
+	public Boolean getUploadStatus() {
+		return uploadStatus;
+	}
+
+	public void setUploadStatus(Boolean uploadStatus) {
+		this.uploadStatus = uploadStatus;
 	}
 }
