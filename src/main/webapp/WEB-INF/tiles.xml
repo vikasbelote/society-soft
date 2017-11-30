@@ -176,4 +176,12 @@
 		<put-attribute name="body" value="/WEB-INF/views/society/asset_inventory_tracker/asset_tracker.jsp" />
 		<put-attribute name="inline" value="/WEB-INF/views/society/asset_inventory_tracker/asset_tracker_inline.jsp" />
 	</definition>
+	<definition name="viewAsset" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/society/asset_inventory_tracker/view_asset_tracker.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/society/asset_inventory_tracker/asset_tracker_inline.jsp" />
+	</definition>
+	<definition name="editAsset" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/society/asset_inventory_tracker/edit_asset_tracker.jsp" />
+		<put-attribute name="inline" value="/WEB-INF/views/society/asset_inventory_tracker/asset_tracker_inline.jsp" />
+	</definition>
 </tiles-definitions>

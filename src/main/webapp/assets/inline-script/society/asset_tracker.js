@@ -144,6 +144,12 @@
 		$("#scanFileDivId input[type=file]").ace_file_input('reset_input');
 	});
 	
+	$("#scanFileDivId input[type=file]").change(function(){
+		 var fileName = $("#scanFileDivId").find(".ace-file-name").attr("data-title");
+		 var scanFileName = $("#scanFileDivId").find("input[type=hidden]");
+		 scanFileName.val(fileName);
+	});
+	
 	$("#saveFileBtn").click(function(){
 		
 		var rowStr = "<tr>";

@@ -110,21 +110,47 @@
 			<h3 class="header smaller lighter green">Contact</h3>
 			<a id="addContactId" href="#modal-contact" role="button" class="btn btn-sm btn-info"
 				data-toggle="modal"> Add Contact </a>
-			<input type="hidden" id="contactRowIndexId" />	
-			<table id="contactTableId" class="table table-bordered table-hover hide">
-				<thead>
-					<tr>
-						<th><strong>First Name</strong></th>
-						<th><strong>Middle Name</strong></th>
-						<th><strong>Last Name</strong></th>
-						<th><strong>Mobile Number</strong></th>
-						<th><strong>Email Id</strong></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>	
+			<input type="hidden" id="contactRowIndexId" />
+			<c:choose>
+				<c:when test="${not empty adminAssetTrackerDomain.contactDomainList}">
+					<table id="contactTableId" class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th><strong>First Name</strong></th>
+								<th><strong>Middle Name</strong></th>
+								<th><strong>Last Name</strong></th>
+								<th><strong>Mobile Number</strong></th>
+								<th><strong>Email Id</strong></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${adminAssetTrackerDomain.contactDomainList}" var="contact">
+								<tr>
+									<td>${contact.person. }</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<table id="contactTableId" class="table table-bordered table-hover hide">
+						<thead>
+							<tr>
+								<th><strong>First Name</strong></th>
+								<th><strong>Middle Name</strong></th>
+								<th><strong>Last Name</strong></th>
+								<th><strong>Mobile Number</strong></th>
+								<th><strong>Email Id</strong></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</c:otherwise>
+			</c:choose>	
+				
 			<h3 class="header smaller lighter green">Service History</h3>
 			<a id="addServiceHistoryId" href="#modal-history" role="button" class="btn btn-sm btn-info"
 				data-toggle="modal"> Add Service History </a>
