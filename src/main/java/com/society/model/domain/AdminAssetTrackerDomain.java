@@ -61,7 +61,15 @@ public class AdminAssetTrackerDomain {
 	
 	private String[] serviceEmailId;
 	
+	private String deletedContactId;
+	
+	private String deletedServiceHistoryId;
+	
+	private String deletedScanFileId;
+	
 	private String rootPath;
+	
+	private String assetJson;
 
 	public Integer getAssetId() {
 		return assetId;
@@ -293,6 +301,38 @@ public class AdminAssetTrackerDomain {
 
 	public void setRootPath(String rootPath) {
 		this.rootPath = rootPath;
+	}
+
+	public String getDeletedContactId() {
+		return deletedContactId;
+	}
+
+	public void setDeletedContactId(String deletedContactId) {
+		this.deletedContactId = deletedContactId;
+	}
+
+	public String getDeletedServiceHistoryId() {
+		return deletedServiceHistoryId;
+	}
+
+	public void setDeletedServiceHistoryId(String deletedServiceHistoryId) {
+		this.deletedServiceHistoryId = deletedServiceHistoryId;
+	}
+
+	public String getDeletedScanFileId() {
+		return deletedScanFileId;
+	}
+
+	public void setDeletedScanFileId(String deletedScanFileId) {
+		this.deletedScanFileId = deletedScanFileId;
+	}
+
+	public String getAssetJson() {
+		return assetJson;
+	}
+
+	public void setAssetJson(String assetJson) {
+		this.assetJson = assetJson;
 	}
 
 }

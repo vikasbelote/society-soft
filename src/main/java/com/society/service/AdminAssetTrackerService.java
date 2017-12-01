@@ -3,10 +3,12 @@ package com.society.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.society.model.domain.AdminAssertContactDomain;
 import com.society.model.domain.AdminAssetAlertDomain;
 import com.society.model.domain.AdminAssetScanFileDomain;
@@ -282,5 +285,82 @@ public class AdminAssetTrackerService {
 		assetDomain.setScanFileDomainList(scanFileDomainList);
 		
 		return assetDomain;
+	}
+	
+	public boolean updateAssetDetail(AdminAssetTrackerDomain adminAssetTrackerDomain, MultipartFile[] files, String[] scanFileNames) {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		AdminAssetTrackerDomain assetDomain = null;
+		try {
+			assetDomain = mapper.readValue(adminAssetTrackerDomain.getAssetJson(), AdminAssetTrackerDomain.class);
+		} catch (IOException e) {
+			logger.error("Unable to map JSON to object " + e.getMessage());
+			return false;
+		}
+		
+		UserDomain userDomain = new UserDomain();
+		userDomain.setUserId(adminAssetTrackerDomain.getUserId());
+		
+		//Delete file first
+		Iterator<AdminAssetScanFileDomain> scanFileItrator = assetDomain.getScanFileDomainList().iterator();
+		while(scanFileItrator.hasNext()) {
+			AdminAssetScanFileDomain scanFileDomain = scanFileItrator.next();
+			
+			scanFileDomain.setUser(userDomain);
+			if(scanFileDomain.getIsDeleted()) {
+				String directoryName = adminAssetTrackerDomain.getRootPath().concat(adminAssetTrackerDomain.getSocietyName());
+				Path path = Paths.get(directoryName + "/" + scanFileDomain.getFileName());
+				try {
+					Files.delete(path);
+				} 
+				catch (NoSuchFileException e) {
+					scanFileDomain.setIsDeleted(true);
+					logger.error("File is already deleted.");
+				}
+				catch (IOException e) {
+					scanFileDomain.setIsDeleted(false);
+					logger.error("Unable to delete file " + e.getMessage());
+				}
+			}
+		}
+		
+		//Upload newly added file list
+		if(ArrayUtils.isNotEmpty(files) && StringUtils.isNotBlank(adminAssetTrackerDomain.getRootPath())) {
+			
+			if(CollectionUtils.isEmpty(assetDomain.getScanFileDomainList()))
+				assetDomain.setScanFileDomainList(new ArrayList<AdminAssetScanFileDomain>());
+			
+			String directoryName = adminAssetTrackerDomain.getRootPath().concat(adminAssetTrackerDomain.getSocietyName());
+			File directory = new File(directoryName);
+			if (!directory.exists()) {
+		    	logger.info("Directory does not exist");
+		        directory.mkdir();
+		        logger.info("Directory get created : " + directoryName);
+		    }
+			
+			for (int i = 0; i < files.length; i++) {
+				
+				MultipartFile file = files[i];
+				String fileName = scanFileNames[i];
+				
+				AdminAssetScanFileDomain scanFileDomain = new AdminAssetScanFileDomain();
+				scanFileDomain.setUser(userDomain);
+				scanFileDomain.setFileName(fileName);
+				try {
+			        byte[] bytes = file.getBytes();
+			        Path path = Paths.get(directoryName + "/" + fileName);
+			        logger.info("writing file content");
+			        Files.write(path, bytes);
+			        logger.info("successfuly write file content");
+			        scanFileDomain.setUploadStatus(true);
+			    }
+			    catch (IOException e){
+			    	logger.debug("error in uploading file : " + e.getMessage());
+			    	scanFileDomain.setUploadStatus(false);
+			    }
+				assetDomain.getScanFileDomainList().add(scanFileDomain);
+			}
+		}
+		return adminAssetTrackerRepository.updateAssetDetails(assetDomain);
 	}
 }

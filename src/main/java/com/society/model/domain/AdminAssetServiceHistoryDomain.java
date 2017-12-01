@@ -13,6 +13,10 @@ public class AdminAssetServiceHistoryDomain {
 	private PersonDomain person;
 	
 	private String addtionalInfo;
+	
+	private Boolean isDeleted;
+	
+	private Boolean isUpdated;
 
 	public Integer getServiceHistoryId() {
 		return serviceHistoryId;
@@ -52,6 +56,22 @@ public class AdminAssetServiceHistoryDomain {
 
 	public void setAddtionalInfo(String addtionalInfo) {
 		this.addtionalInfo = addtionalInfo;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public Boolean getIsUpdated() {
+		return isUpdated;
+	}
+
+	public void setIsUpdated(Boolean isUpdated) {
+		this.isUpdated = isUpdated;
 	}
 
 }

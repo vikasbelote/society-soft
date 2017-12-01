@@ -39,8 +39,9 @@
 		</c:if>
 		<!-- PAGE CONTENT BEGINS -->
 		<form:form id="some-form" commandName="adminAssetTrackerDomain" method="post"
-					class="form-horizontal" action="createAsset" enctype="multipart/form-data">
+					class="form-horizontal" action="updateAssetDetail" enctype="multipart/form-data">
 			<h3 class="header smaller lighter green">Asset info</h3>
+			<form:hidden path="assetId" />
 			<div class="form-group">
 				<label class="col-sm-3 control-label" for="form-field-1">Asset
 					Name </label>
@@ -126,8 +127,16 @@
 						</thead>
 						<tbody>
 							<c:forEach items="${adminAssetTrackerDomain.contactDomainList}" var="contact">
-								<tr>
-									<td>${contact.person. }</td>
+								<tr data-rowId="${contact.contactId}" data-personId="${contact.person.personId}">
+									<td>${contact.person.firstName}</td>
+									<td>${contact.person.middleName}</td>
+									<td>${contact.person.lastName}</td>
+									<td>${contact.person.contactNumber}</td>
+									<td>${contact.person.emailId}</td>
+									<td>
+										<a href="#modal-contact" data-toggle="modal" class="btn btn-xs btn-info editContact"><i class="ace-icon fa fa-pencil bigger-120"></i></a>
+										<a onclick="deleteDbRow(event)" href="#" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -155,37 +164,120 @@
 			<a id="addServiceHistoryId" href="#modal-history" role="button" class="btn btn-sm btn-info"
 				data-toggle="modal"> Add Service History </a>
 			<input type="hidden" id="historyRowIndexId" />	
-			<table id="historyTableId" class="table table-bordered table-hover hide">
-				<thead>
-					<tr>
-						<th><strong>History Date</strong></th>
-						<th><strong>First Name</strong></th>
-						<th><strong>Middle Name</strong></th>
-						<th><strong>Last Name</strong></th>
-						<th><strong>Mobile Number</strong></th>
-						<th><strong>Email Id</strong></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>	
+			<c:choose>
+				<c:when test="${not empty adminAssetTrackerDomain.serviceHistoryDomainList}">
+					<table id="historyTableId" class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th><strong>History Date</strong></th>
+								<th><strong>First Name</strong></th>
+								<th><strong>Middle Name</strong></th>
+								<th><strong>Last Name</strong></th>
+								<th><strong>Mobile Number</strong></th>
+								<th><strong>Email Id</strong></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${adminAssetTrackerDomain.serviceHistoryDomainList}" var="serviceHistory">
+								<tr data-historyId="${serviceHistory.serviceHistoryId}" data-personId="${contact.person.personId}">
+									<td>${serviceHistory.historyDate}</td>
+									<td>${serviceHistory.person.firstName}</td>
+									<td>${serviceHistory.person.middleName}</td>
+									<td>${serviceHistory.person.lastName}</td>
+									<td>${serviceHistory.person.contactNumber}</td>
+									<td>${serviceHistory.person.emailId}</td>
+									<td>
+										<a href="#modal-history" data-toggle="modal" class="btn btn-xs btn-info editContact"><i class="ace-icon fa fa-pencil bigger-120"></i></a>
+										<a onclick="deleteDbRow(event)" href="#" class="btn btn-xs btn-danger "><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<table id="historyTableId" class="table table-bordered table-hover hide">
+						<thead>
+							<tr>
+								<th><strong>History Date</strong></th>
+								<th><strong>First Name</strong></th>
+								<th><strong>Middle Name</strong></th>
+								<th><strong>Last Name</strong></th>
+								<th><strong>Mobile Number</strong></th>
+								<th><strong>Email Id</strong></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</c:otherwise>
+			</c:choose>
+			
+			<c:if test="${not empty alertDomainList}">
+				<h3 class="header smaller lighter green">Alert</h3>
+				<table id="assetAlertTable" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th><strong>Alert Message</strong></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${adminAssetTrackerDomain.alertDomainList}" var="alert"> 
+							<tr>
+								<td>${alert.alertMessage}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>	
+			</c:if>
+				
 			<h3 class="header smaller lighter green">Scanned Document</h3>
 			<a id="addFileBtnId" href="#modal-file" role="button" class="btn btn-sm btn-info"
 				data-toggle="modal"> Add File </a>
-			<table id="assetFileTable" class="table table-bordered table-hover hide">
-				<thead>
-					<tr>
-						<th><strong>File Name</strong></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>	
+				
+			<c:choose>
+				<c:when test="${not empty adminAssetTrackerDomain.scanFileDomainList}">
+					<table id="assetFileTable" class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th><strong>File Name</strong></th>
+								<th><strong>Uploaded by</strong></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>	
+							<c:forEach items="${adminAssetTrackerDomain.scanFileDomainList}" var="scanFile">
+								<tr data-rowId="${scanFile.fileId}">
+									<td>${scanFile.fileName}</td>
+									<td>${scanFile.user.userName}</td>
+									<td>
+										<a onclick="deleteDbRow(event)" href="#" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<table id="assetFileTable" class="table table-bordered table-hover hide">
+						<thead>
+							<tr>
+								<th><strong>File Name</strong></th>
+								<th><strong>Uploaded by</strong></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</c:otherwise>
+			</c:choose>
+			<input type="hidden" name="assetJson" id="assetJsonId" />  
 			<div class="">
 				<div class="col-sm-offset-4">
-					<button id="generateMaintenanceReportBtn" type="submit"
+					<button id="updateAssetData" type="submit"
 						class="btn btn-sm btn-success">
 						<i class="ace-icon fa fa-check bigger-110"></i>Submit
 					</button>

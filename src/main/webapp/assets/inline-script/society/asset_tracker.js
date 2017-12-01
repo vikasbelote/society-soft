@@ -157,6 +157,8 @@
 		rowStr = rowStr + $("#scanFileDivId").html();
 		rowStr = rowStr + "</td>";
 		rowStr = rowStr + "<td>";
+		rowStr = rowStr + "</td>";
+		rowStr = rowStr + "<td>";
 		rowStr = rowStr + '<a onclick="deleteRow(event)" href="#" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
 		rowStr = rowStr + "</td>";
 		rowStr = rowStr + "</tr>";
@@ -186,9 +188,109 @@
 	
 	function updateRow(obj, row) {
 		$.each(obj, function(index, value) {
-			row.find("td:eq("+index+")").html(value);
+			var td = row.find("td:eq("+index+")");
+			var input = td.find("input");
+			input.val(value);
+			td.text(value);
+			td.append(input);
 		});
+		row.attr("data-updated", true);
+		row.removeAttr("style");
+		row.removeAttr("data-deleted");
 	 }
+	
+	//////////////////////Update Asset Data//////////////////////////////
+	$("#updateAssetData").click(function(){
+		
+		var adminAssetTrackerDomain = {};
+		adminAssetTrackerDomain.assetId = $("#assetId").val();
+		adminAssetTrackerDomain.assetName = $("#assetName").val();
+		adminAssetTrackerDomain.assetTagNumber = $("#assetTagNumber").val();
+		adminAssetTrackerDomain.vendorName = $("#vendorName").val();
+		adminAssetTrackerDomain.categoryId = $("#categoryId").val();
+		adminAssetTrackerDomain.assetLocation = $("#assetLocation").val();
+		adminAssetTrackerDomain.purchaseDate = $("#purchaseDate").val();
+		adminAssetTrackerDomain.assetCost = $("#assetCost").val();
+		adminAssetTrackerDomain.assetStatus = $("#assetStatus").val();
+		
+		adminAssetTrackerDomain.contactDomainList = $("#contactTableId tbody").find("tr").map(function(){
+			
+			var contact = {};
+			contact.contactId = $(this).attr("data-rowId");
+			contact.person = {};
+			contact.person.personId = $(this).attr("data-personId");
+			contact.person.firstName = $(this).find("td:eq(0)").text();
+			contact.person.middleName = $(this).find("td:eq(1)").text();
+			contact.person.lastName = $(this).find("td:eq(2)").text();
+			contact.person.contactNumber = $(this).find("td:eq(3)").text();
+			contact.person.emailId = $(this).find("td:eq(4)").text();
+			
+			var isUpdated = $(this).attr("data-updated");
+			if(isUpdated)
+				contact.isUpdated = true;
+			else
+				contact.isUpdated = false;
+			
+			var isDeleted = $(this).attr("data-deleted");
+			if(isDeleted)
+				contact.isDeleted = true;
+			else
+				contact.isDeleted = false;
+			
+			return contact;
+		}).get();
+		
+		adminAssetTrackerDomain.serviceHistoryDomainList = $("#historyTableId tbody").find("tr").map(function(){
+			
+			var history = {};
+			history.serviceHistoryId = $(this).attr("data-historyId");
+			history.historyDate =  $(this).find("td:eq(0)").text();
+			history.person = {};
+			history.person.personId = $(this).attr("data-personId");
+			history.person.firstName = $(this).find("td:eq(1)").text();
+			history.person.middleName = $(this).find("td:eq(2)").text();
+			history.person.lastName = $(this).find("td:eq(3)").text();
+			history.person.contactNumber = $(this).find("td:eq(4)").text();
+			history.person.emailId = $(this).find("td:eq(5)").text();
+			
+			var isUpdated = $(this).attr("data-updated");
+			if(isUpdated)
+				history.isUpdated = true;
+			else
+				history.isUpdated = false;
+			
+			var isDeleted = $(this).attr("data-deleted");
+			if(isDeleted)
+				history.isDeleted = true;
+			else
+				history.isDeleted = false;
+			
+			return history;
+		}).get();
+		
+		adminAssetTrackerDomain.scanFileDomainList = $("#assetFileTable tbody").find("tr").map(function(){
+			
+			var scanFile = {};
+			scanFile.fileId = $(this).attr("data-rowId");
+			scanFile.fileName = $(this).find("td:eq(0)").text();
+			
+			var isDeleted = $(this).attr("data-deleted");
+			if(isDeleted)
+				scanFile.isDeleted = true;
+			else
+				scanFile.isDeleted = false;
+			
+			if(scanFile.fileId != "")
+				return scanFile;
+			
+		}).get();
+		
+		var assetJson = JSON.stringify(adminAssetTrackerDomain);
+		$("#assetJsonId").val(assetJson);
+		return true;
+	});
+	
+	
 	
 })(jQuery);
 
@@ -200,4 +302,16 @@ function deleteRow(event) {
 	var rowCount = table.find('tbody').find('tr').length;
 	if(rowCount == 0)
 		table.addClass("hide");
+}
+
+function deleteDbRow(event) {
+	
+	var row = $(event.target).parents('tr');
+	var isDeleted = row.attr("data-deleted");
+	if(isDeleted)
+		return false;
+
+	row.attr("style", "background-color: #f2dede;");
+	row.attr("data-deleted", true);
+	row.removeAttr("data-updated");
 }

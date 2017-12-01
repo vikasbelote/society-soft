@@ -9,6 +9,12 @@ public class AdminAssetScanFileDomain {
 	private String fileName;
 	
 	private UserDomain user;
+	
+	private Boolean isDeleted;
+	
+	private Boolean isUpdated;
+	
+	private Boolean uploadStatus;
 
 	public Integer getFileId() {
 		return fileId;
@@ -40,5 +46,29 @@ public class AdminAssetScanFileDomain {
 
 	public void setUser(UserDomain user) {
 		this.user = user;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public Boolean getIsUpdated() {
+		return isUpdated;
+	}
+
+	public void setIsUpdated(Boolean isUpdated) {
+		this.isUpdated = isUpdated;
+	}
+
+	public Boolean getUploadStatus() {
+		return uploadStatus;
+	}
+
+	public void setUploadStatus(Boolean uploadStatus) {
+		this.uploadStatus = uploadStatus;
 	}
 }

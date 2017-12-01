@@ -1,10 +1,15 @@
 package com.society.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.model.domain.AdminAssetTrackerDomain;
+import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.service.AdminAssetTrackerService;
 
 @Controller
@@ -74,5 +80,29 @@ public class AdminAssetTrackerController {
 		ModelAndView modelAndView = new ModelAndView("editAsset", "adminAssetTrackerDomain", adminAssetTrackerDomain);
 		modelAndView.addObject("categoryList", adminAssetTrackerService.getCategoryList());
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "updateAssetDetail", method = RequestMethod.POST)
+	public String updateAssetDetail(@RequestParam(required=false, name="scanFile") MultipartFile[] files, RedirectAttributes redirectAttributes,
+			@RequestParam(required=false, name="scanFileName") String[] scanFileNames, @ModelAttribute("adminAssetTrackerDomain")AdminAssetTrackerDomain adminAssetTrackerDomain, HttpSession session) {
+		
+//		if (files.length != scanFileNames.length) {
+//			redirectAttributes.addFlashAttribute("save", false);
+//			return "redirect:/createAsset";
+//		}
+		
+		String societyName = (String)session.getAttribute("DISPLAYNAME");
+		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
+		Integer userId = (Integer)session.getAttribute("USERID");
+		String rootPath = session.getServletContext().getRealPath("/");
+		
+		adminAssetTrackerDomain.setSocietyName(societyName);
+		adminAssetTrackerDomain.setSocietyId(societyId);
+		adminAssetTrackerDomain.setUserId(userId);
+		adminAssetTrackerDomain.setRootPath(rootPath);
+		
+		adminAssetTrackerService.updateAssetDetail(adminAssetTrackerDomain, files, scanFileNames);
+
+		return "redirect:/viewAsset";
 	}
 }

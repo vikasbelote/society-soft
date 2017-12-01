@@ -7,6 +7,10 @@ public class AdminAssertContactDomain {
 	private PersonDomain person;
 	
 	private Integer assetId;
+	
+	private Boolean isDeleted;
+	
+	private Boolean isUpdated;
 
 	public Integer getContactId() {
 		return contactId;
@@ -30,6 +34,22 @@ public class AdminAssertContactDomain {
 
 	public void setAssetId(Integer assetId) {
 		this.assetId = assetId;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public Boolean getIsUpdated() {
+		return isUpdated;
+	}
+
+	public void setIsUpdated(Boolean isUpdated) {
+		this.isUpdated = isUpdated;
 	}
 
 }
