@@ -46,6 +46,30 @@ public class SocietyMemberService {
 		return memberDomainList;
 	}
 	
+	public List<SocietyMemberDomain> getSocietyMemberSelectList(Integer societyId) {
+		
+		List<SocietyMemberJPA> memberList = memberRepository.getSocietyMemberList(societyId);
+		if(CollectionUtils.isEmpty(memberList))
+			return null;
+		
+		List<SocietyMemberDomain> memberDomainList = new ArrayList<SocietyMemberDomain>();
+		for(SocietyMemberJPA member : memberList) {
+			SocietyMemberDomain memberDomain = new SocietyMemberDomain();
+			memberDomain.setMemberId(member.getMemberId());
+			if(member.getPerson() != null) {
+				memberDomain.setPersonId(member.getPerson().getPersonId());
+				memberDomain.setFirstName(member.getPerson().getFirstName());
+				memberDomain.setMiddleName(member.getPerson().getMiddleName());
+				memberDomain.setLastName(member.getPerson().getLastName());
+				memberDomain.setMobileNumber( member.getPerson().getContactNumber());
+				memberDomain.setEmailId(member.getPerson().getEmailId());
+				
+				memberDomainList.add(memberDomain);
+			}
+		}
+		return memberDomainList;
+	}
+	
 	public boolean saveOrUpdateSocietyMemberDetails(SocietyMemberDomain memberDomain) {
 		
 		PersonJPA person = new PersonJPA();
@@ -108,6 +132,17 @@ public class SocietyMemberService {
 		if(member == null)
 			return false;
 		return true;
+	}
+	
+	private String getPersonName(PersonJPA person) {
+		
+		if(person == null)
+			return "";
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(person.getFirstName() + " ");
+		sb.append(person.getLastName());
+		return sb.toString();
 	}
 	
 }

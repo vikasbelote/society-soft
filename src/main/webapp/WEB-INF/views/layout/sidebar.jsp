@@ -126,7 +126,7 @@
 
 
 					<c:if test="${sessionScope.MENURIGHTS.isEnableParkingMangerMenu()}">
-						<li class=""><a href="member"> <i
+						<li class=""><a href="parkingManager"> <i
 								class="menu-icon fa fa-user"></i> Parking Manager
 						</a> <b class="arrow"></b></li>
 					</c:if>

@@ -363,4 +363,9 @@ public class AdminAssetTrackerService {
 		}
 		return adminAssetTrackerRepository.updateAssetDetails(assetDomain);
 	}
+	
+	public boolean deleteAsset(AdminAssetTrackerDomain assetDomain) {
+		return adminAssetTrackerRepository.deleteObjectById(AssetTrackerJPA.class, assetDomain.getAssetId());
+	}
+	
 }

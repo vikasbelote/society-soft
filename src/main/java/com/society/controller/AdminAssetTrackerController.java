@@ -1,15 +1,10 @@
 package com.society.controller;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.society.model.domain.AdminAssetTrackerDomain;
-import com.society.model.domain.MaintenanceCycleReceiptDomain;
 import com.society.service.AdminAssetTrackerService;
 
 @Controller
@@ -67,7 +61,7 @@ public class AdminAssetTrackerController {
 		
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
 		
-		ModelAndView modelAndView = new ModelAndView("viewAsset");
+		ModelAndView modelAndView = new ModelAndView("viewAsset", "adminAssetTrackerDomain", new AdminAssetTrackerDomain());
 		modelAndView.addObject("assetList", adminAssetTrackerService.getAssetList(societyId));
 		return modelAndView;
 	}
@@ -86,10 +80,10 @@ public class AdminAssetTrackerController {
 	public String updateAssetDetail(@RequestParam(required=false, name="scanFile") MultipartFile[] files, RedirectAttributes redirectAttributes,
 			@RequestParam(required=false, name="scanFileName") String[] scanFileNames, @ModelAttribute("adminAssetTrackerDomain")AdminAssetTrackerDomain adminAssetTrackerDomain, HttpSession session) {
 		
-//		if (files.length != scanFileNames.length) {
-//			redirectAttributes.addFlashAttribute("save", false);
-//			return "redirect:/createAsset";
-//		}
+		if (files.length != scanFileNames.length) {
+			redirectAttributes.addFlashAttribute("update", false);
+			return "redirect:/viewAsset";
+		}
 		
 		String societyName = (String)session.getAttribute("DISPLAYNAME");
 		Integer societyId = (Integer)session.getAttribute("SOCIETYID");
@@ -101,7 +95,21 @@ public class AdminAssetTrackerController {
 		adminAssetTrackerDomain.setUserId(userId);
 		adminAssetTrackerDomain.setRootPath(rootPath);
 		
-		adminAssetTrackerService.updateAssetDetail(adminAssetTrackerDomain, files, scanFileNames);
+		if(adminAssetTrackerService.updateAssetDetail(adminAssetTrackerDomain, files, scanFileNames))
+			redirectAttributes.addFlashAttribute("update", true);
+		else
+			redirectAttributes.addFlashAttribute("update", false);
+
+		return "redirect:/viewAsset";
+	}
+	
+	@RequestMapping(value = "deleteAssetDetail", method = RequestMethod.POST)
+	public String deleteAssetDetail(@ModelAttribute("adminAssetTrackerDomain")AdminAssetTrackerDomain adminAssetTrackerDomain, RedirectAttributes redirectAttributes){
+		
+		if(adminAssetTrackerService.deleteAsset(adminAssetTrackerDomain))
+			redirectAttributes.addFlashAttribute("deleted", true);
+		else
+			redirectAttributes.addFlashAttribute("deleted", false);
 
 		return "redirect:/viewAsset";
 	}

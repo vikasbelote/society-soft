@@ -152,7 +152,7 @@
 	
 	$("#saveFileBtn").click(function(){
 		
-		var rowStr = "<tr>";
+		var rowStr = '<tr class="new-file">';
 		rowStr = rowStr + "<td>";
 		rowStr = rowStr + $("#scanFileDivId").html();
 		rowStr = rowStr + "</td>";
@@ -270,19 +270,18 @@
 		
 		adminAssetTrackerDomain.scanFileDomainList = $("#assetFileTable tbody").find("tr").map(function(){
 			
-			var scanFile = {};
-			scanFile.fileId = $(this).attr("data-rowId");
-			scanFile.fileName = $(this).find("td:eq(0)").text();
-			
-			var isDeleted = $(this).attr("data-deleted");
-			if(isDeleted)
-				scanFile.isDeleted = true;
-			else
-				scanFile.isDeleted = false;
-			
-			if(scanFile.fileId != "")
+			if($(this).hasClass("old-file")) {
+				var scanFile = {};
+				scanFile.fileId = $(this).attr("data-rowId");
+				scanFile.fileName = $(this).find("td:eq(0)").text();
+				
+				var isDeleted = $(this).attr("data-deleted");
+				if(isDeleted)
+					scanFile.isDeleted = true;
+				else
+					scanFile.isDeleted = false;
 				return scanFile;
-			
+			}
 		}).get();
 		
 		var assetJson = JSON.stringify(adminAssetTrackerDomain);
@@ -290,7 +289,15 @@
 		return true;
 	});
 	
-	
+	$(".deleteAsset").click(function(){
+		var assetId = $(this).attr("data-assetId");
+		bootbox.confirm("Are you sure?", function(result) {
+			if(result) {
+				$("#assetId").val(assetId);
+				$("#deleteAssetBtn").trigger("click");
+			}
+		});
+	});
 	
 })(jQuery);
 

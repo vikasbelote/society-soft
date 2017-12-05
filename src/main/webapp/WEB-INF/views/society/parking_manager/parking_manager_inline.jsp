@@ -1,0 +1,1 @@
+<script src="./assets/inline-script/society/parking_manager.js"></script>

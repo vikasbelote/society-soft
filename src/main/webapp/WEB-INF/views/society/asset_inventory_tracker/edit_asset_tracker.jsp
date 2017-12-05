@@ -12,31 +12,6 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<c:if test="${not empty save}">
-			<c:choose>
-				<c:when test="${save}">
-					<div class="alert alert-block alert-success">
-						<button type="button" class="close" data-dismiss="alert">
-							<i class="ace-icon fa fa-times"></i>
-						</button>
-
-						<p>
-							<strong> <i class="ace-icon fa fa-check"></i> Well done!
-							</strong> You successfully save asset information.
-						</p>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="alert alert-danger">
-						<button type="button" class="close" data-dismiss="alert">
-							<i class="ace-icon fa fa-times"></i>
-						</button>
-						<strong> <i class="ace-icon fa fa-times"></i> Oh snap!
-						</strong> There is problem with inserting asset information. <br />
-					</div>
-				</c:otherwise>
-			</c:choose>
-		</c:if>
 		<!-- PAGE CONTENT BEGINS -->
 		<form:form id="some-form" commandName="adminAssetTrackerDomain" method="post"
 					class="form-horizontal" action="updateAssetDetail" enctype="multipart/form-data">
@@ -249,7 +224,7 @@
 						</thead>
 						<tbody>	
 							<c:forEach items="${adminAssetTrackerDomain.scanFileDomainList}" var="scanFile">
-								<tr data-rowId="${scanFile.fileId}">
+								<tr class="old-file" data-rowId="${scanFile.fileId}">
 									<td>${scanFile.fileName}</td>
 									<td>${scanFile.user.userName}</td>
 									<td>

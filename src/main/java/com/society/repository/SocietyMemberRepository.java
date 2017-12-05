@@ -1,6 +1,5 @@
 package com.society.repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
